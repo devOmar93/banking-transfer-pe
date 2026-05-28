@@ -1,5 +1,5 @@
 import { LitElement, css, html } from 'lit'
-import './compositions/type-header.js'
+import './compositions/type-header/type-header.js'
 
 /**
  * An example element.
