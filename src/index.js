@@ -1,4 +1,5 @@
 import { LitElement, css, html } from 'lit'
+import './compositions/type-header.js'
 
 /**
  * An example element.
@@ -22,6 +23,19 @@ export class MyElement extends LitElement {
   render() {
     return html`
       <p>banking-transfer-pe</p>
+
+   <type-header
+  title="Transferencias"
+  subtitle="Selecciona una cuenta para comenzar"
+  align="left"
+></type-header>
+
+ <type-header
+  title="¡Transferencia Exitosa!"
+  subtitle="Tu dinero ha sido enviando correctamente"
+  align="center"
+></type-header>
+
     `
   }
 }
