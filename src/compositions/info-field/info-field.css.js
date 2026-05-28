@@ -6,7 +6,7 @@ export const infoFieldStyles = css`
   justify-content: space-between;
   align-items: center;
 
-  border: 1px solid var(--border-color, #d9d9d9);
+  border: none;
   padding: var(--padding, 12px);
   gap: var(--gap, 12px);
 
