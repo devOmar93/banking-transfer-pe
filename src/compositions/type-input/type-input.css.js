@@ -3,13 +3,12 @@ import { css } from "lit";
 export default css`
 
     :host {
-        --color-error: #FF0000;
-        --icon-color: blue;
-        --color-border-field: #adb5bd;
+        --icon-color: var(--text-muted);
+        --color-border-field: var(--text-muted);
     }
 
     :host .invalid {
-        --icon-color: var(--color-error);
+        --icon-color: var(--text-error);
     }
 
     .field {
@@ -37,12 +36,12 @@ export default css`
         }
 
         .content-input.invalid {
-            border-color: var(--color-error);
+            border-color: var(--text-error);
         }
     }
 
     .invalid {
-        color: var(--color-error);
+        color: var(--text-error);
         font-weight: 600;
     }
 

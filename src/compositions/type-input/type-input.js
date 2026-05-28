@@ -46,9 +46,9 @@ export class TypeInput extends LitElement {
 
     constructor() {
         super();
-        this.textLabel = 'Prueba label';
+        this.textLabel = 'Cuenta destino';
         this.idInput ='PruebaInput';
-        this.placeholderInput = 'Prueba placeholder';
+        this.placeholderInput = '000000000000000';
         this.typeInput = 'text';
         this.nameField = '';
         this.requiredInput = true;
