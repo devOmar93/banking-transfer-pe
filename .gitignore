@@ -23,3 +23,8 @@ package-lock
 *.njsproj
 *.sln
 *.sw?
+package-lock.json
+src/index.js
+src/index.css
+src/demo/
+index.html
