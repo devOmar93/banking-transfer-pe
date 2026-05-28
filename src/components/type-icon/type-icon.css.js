@@ -2,8 +2,7 @@ import { css } from "lit";
 
 export default css`
   :host {
-    --icon-color: #594ae1;
-    --icon-bg-color: #e0e4fd;
+
     display: inline-flex;
     width: min-content;
     height: min-content;

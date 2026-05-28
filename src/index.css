@@ -1,6 +1,8 @@
 :root {
   color-scheme: light dark;
   background-color: #ffffff;
+  --icon-color: #594ae1;
+  --icon-bg-color: #e0e4fd;
 }
 
 @media (prefers-color-scheme: dark) {
