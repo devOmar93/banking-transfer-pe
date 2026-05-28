@@ -19,23 +19,23 @@ export const styles = css`
   }
 
   .size-xs {
-    font-size: 0.5rem;
+    font-size: 0.75rem;
   }
 
   .size-s {
-    font-size: 1rem;
+    font-size: 0.875rem;
   }
 
   .size-m {
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
 
   .size-l {
-    font-size: 2rem;
+    font-size: 2.25rem;
   }
 
   .size-xl {
-    font-size: 2.5em;
+    font-size: 3.25rem;
   }
 
   .weight-regular {

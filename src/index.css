@@ -1,6 +1,14 @@
 :root {
   color-scheme: light dark;
   background-color: #ffffff;
+
+  /* text-color */
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --text-success: #16a34a;
+  --text-error: #dc2626;
+  --text-link: #7c3aed;
 }
 
 @media (prefers-color-scheme: dark) {
