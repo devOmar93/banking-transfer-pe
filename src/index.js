@@ -24,10 +24,16 @@ export class MyElement extends LitElement {
     return html`
       <p>banking-transfer-pe</p>
 
-<type-header
-        title="Transferencias"
-        subtitle="Selecciona una cuenta para comenzar"
-      ></type-header>
+   <type-header
+  title="Transferencias"
+  subtitle="Selecciona una cuenta para comenzar"
+  align="right"
+></type-header>
+ <type-header
+  title="REALIZO TRANFERENCIA EXITOSA"
+  subtitle="felicidades, tu transferencia se ha realizado con éxito"
+  align="center"
+></type-header>
 
     `
   }
