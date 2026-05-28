@@ -35,6 +35,7 @@ export class TypeHeader extends LitElement {
           weight="regular"
           align="${this.align}"
           text="${this.subtitle}"
+          class="subtitle"
         ></type-text>
       </div>
     `;

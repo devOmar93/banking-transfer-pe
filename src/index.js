@@ -27,11 +27,12 @@ export class MyElement extends LitElement {
    <type-header
   title="Transferencias"
   subtitle="Selecciona una cuenta para comenzar"
-  align="right"
+  align="left"
 ></type-header>
+
  <type-header
-  title="REALIZO TRANFERENCIA EXITOSA"
-  subtitle="felicidades, tu transferencia se ha realizado con éxito"
+  title="¡Transferencia Exitosa!"
+  subtitle="Tu dinero ha sido enviando correctamente"
   align="center"
 ></type-header>
 
