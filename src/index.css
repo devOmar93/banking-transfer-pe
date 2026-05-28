@@ -1,6 +1,10 @@
 :root {
   color-scheme: light dark;
   background-color: #ffffff;
+  
+  /* icon-color */
+  --icon-color: #594ae1;
+  --icon-bg-color: #e0e4fd;
 
   /* text-color */
   --text-primary: #1a1a1a;
