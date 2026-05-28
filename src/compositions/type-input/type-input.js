@@ -1,5 +1,8 @@
 import { html, LitElement, nothing } from "lit";
 import { classMap } from "lit/directives/class-map.js";
+import "../../components/type-text/type-text.js";
+
+import styles  from "./type-input.css.js";
 
 export class TypeInput extends LitElement {
 
@@ -38,7 +41,7 @@ export class TypeInput extends LitElement {
 
         errorMessage: {
             type: String
-        },
+        }
     }
 
     constructor() {
@@ -46,7 +49,7 @@ export class TypeInput extends LitElement {
         this.textLabel = 'Prueba label';
         this.idInput ='PruebaInput';
         this.placeholderInput = 'Prueba placeholder';
-        this.typeInput = 'email';
+        this.typeInput = 'text';
         this.nameField = '';
         this.requiredInput = true;
         this.errorMessage = 'Probando mostrar error';
@@ -76,15 +79,19 @@ export class TypeInput extends LitElement {
         return this._nativeValid;
     }
 
+    static get styles() {
+        return styles;
+    }
+
     _renderField() {
-        const isInvalid = this._isValid === false;
+        const invalid = this._isValid === false;
         const fieldClass = {
-            'form-field': true,
-            'invalid': isInvalid
+            'field': true,
+            'invalid': invalid
         };
         const contentInputClass = {
             'content-input': true,
-            'invalid': isInvalid
+            'invalid': invalid
         };
 
         return html `
@@ -100,7 +107,14 @@ export class TypeInput extends LitElement {
                         @input=${this._onInput}
                     >
                 </div>
-                ${isInvalid && this.errorMessage ? html`<span>${this.errorMessage}</span>`
+                ${invalid && this.errorMessage ? html`
+                    <type-text
+                        .tag="span"
+                        .text=${this.errorMessage}
+                        weight="medium"
+                    >
+                    </type-text>
+                    `
                 : nothing}
             </div>
         `
