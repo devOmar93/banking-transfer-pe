@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { styles } from "./type-header/type-header.css.js";
+import { styles } from "./type-header.css.js";
 import "../../components/type-text/type-text.js";
 
 export class TypeHeader extends LitElement {
