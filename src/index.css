@@ -1,7 +1,7 @@
 :root {
   color-scheme: light dark;
   background-color: #ffffff;
-  
+
   /* icon-color */
   --icon-color: #594ae1;
   --icon-bg-color: #e0e4fd;
@@ -16,6 +16,25 @@
   /* info-card-color */
   --info-card-bg: #f3f4f6;
   --info-card-border: #c3c7ca;
+
+  /* button-color */
+  /* default*/
+  --btn-bg-color: #4f38fb;
+  --btn-text-color: #ffffff;
+  --btn-disabled-bg-color: #2c1f8d;
+  --btn-disabled-text-color: #b4b4b4;
+
+  /* secondary*/
+  --btn-secondary-bg-color: #dadadaff;
+  --btn-secondary-text-color: #000000;
+  --btn-secondary-disabled-bg-color: #c5c5c5;
+  --btn-secondary-disabled-text-color: #818181;
+
+  /* ghost*/
+  --btn-ghost-bg-color: transparent;
+  --btn-ghost-text-color: #000000;
+  --btn-ghost-disabled-bg-color: transparent;
+  --btn-ghost-disabled-text-color: #6e6e6e;
 }
 
 @media (prefers-color-scheme: dark) {

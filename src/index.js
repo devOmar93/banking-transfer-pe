@@ -3,6 +3,7 @@ import "./components/type-icon/type-icon";
 import "./components/type-text/type-text";
 import "./compositions/info-card/info-card";
 import "./compositions/type-input/type-input";
+import './compositions/type-header/type-header.js'
 
 /**
  * An example element.
@@ -24,10 +25,20 @@ export class MyElement extends LitElement {
 
   render() {
     return html`
-      <info-card
-        message="Tus transferencias estan protegias con encriptacion de extremo a extremo"
-        icon="info"
-      ></info-card>
+      <p>banking-transfer-pe</p>
+
+   <type-header
+  title="Transferencias"
+  subtitle="Selecciona una cuenta para comenzar"
+  .align="${'Prueba'}"
+></type-header>
+
+ <type-header
+  title="¡Transferencia Exitosa!"
+  subtitle="Tu dinero ha sido enviando correctamente"
+  .align="${'Prueba'}"
+></type-header>
+
     `
   }
 }
