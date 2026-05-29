@@ -13,6 +13,9 @@
   --text-success: #16a34a;
   --text-error: #dc2626;
   --text-link: #7c3aed;
+  /* info-card-color */
+  --info-card-bg: #f3f4f6;
+  --info-card-border: #c3c7ca;
 
   /* button-color */
   /* default*/

@@ -87,7 +87,7 @@ export class TypeIcon extends LitElement {
       <div
         focusable="false"
         class="container-icon"
-        role=${this.ariaRole}
+        .role=${this.ariaRole}
         aria-label=${this.accessibleLabel}
         aria-hidden=${this.ariaHidden}
       >
