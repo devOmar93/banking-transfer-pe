@@ -65,7 +65,6 @@ export class TypeInput extends LitElement {
                 value: input.value
                 
             },
-
             bubbles: true,
             composed: true
         }))
@@ -101,7 +100,7 @@ export class TypeInput extends LitElement {
                     <slot name="prefix"></slot>
                     <input
                         id=${`input${this.idInput}`}
-                        type=${this.typeInput}
+                        .type=${this.typeInput}
                         placeholder=${this.placeholderInput}
                         ?required=${this.requiredInput}
                         @input=${this._onInput}
@@ -109,7 +108,7 @@ export class TypeInput extends LitElement {
                 </div>
                 ${invalid && this.errorMessage ? html`
                     <type-text
-                        .tag="span"
+                        tag="span"
                         .text=${this.errorMessage}
                         weight="medium"
                     >

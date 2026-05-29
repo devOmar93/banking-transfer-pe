@@ -1,4 +1,8 @@
 import { LitElement, css, html } from 'lit'
+import "./components/type-icon/type-icon";
+import "./components/type-text/type-text";
+import "./compositions/info-card/info-card";
+import "./compositions/type-input/type-input";
 
 /**
  * An example element.
@@ -14,16 +18,17 @@ export class MyElement extends LitElement {
        */
     }
   }
-
   constructor() {
     super()
   }
 
   render() {
     return html`
-      <p>banking-transfer-pe</p>
+      <info-card
+        message="Tus transferencias estan protegias con encriptacion de extremo a extremo"
+        icon="info"
+      ></info-card>
     `
   }
 }
-
 window.customElements.define('my-element', MyElement)
