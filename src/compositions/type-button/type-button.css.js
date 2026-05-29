@@ -1,0 +1,56 @@
+import { css } from "lit";
+
+export default css`
+  .btn {
+    border: 0px;
+    font-weight: 600;
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    cursor: pointer;
+  }
+
+  .btn:disabled {
+    cursor: not-allowed;
+  }
+
+  .btn-default {
+    background-color: var(--btn-bg-color);
+    color: var(--btn-text-color);
+    --icon-color: var(--btn-text-color);
+  }
+
+  .btn-default:disabled {
+    background-color: var(--btn-disabled-bg-color);
+    color: var(--btn-disabled-text-color);
+    --icon-color: var(--btn-disabled-text-color);
+  }
+
+  .btn-secondary {
+    background-color: var(--btn-secondary-bg-color);
+    color: var(--btn-secondary-text-color);
+    --icon-color: var(--btn-secondary-text-color);
+  }
+
+  .btn-secondary:disabled {
+    background-color: var(--btn-secondary-disabled-bg-color);
+    color: var(--btn-secondary-disabled-text-color);
+    --icon-color: var(--btn-secondary-disabled-text-color);
+  }
+
+  .btn-ghost {
+    background-color: var(--btn-ghost-bg-color);
+    color: var(--btn-ghost-text-color);
+    --icon-color: var(--btn-ghost-text-color);
+  }
+
+  .btn-ghost:disabled {
+    background-color: var(--btn-ghost-disabled-bg-color);
+    color: var(--btn-ghost-disabled-text-color);
+    --icon-color: var(--btn-ghost-disabled-text-color);
+  }
+`;
