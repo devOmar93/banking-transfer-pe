@@ -1,4 +1,9 @@
 import { LitElement, css, html } from 'lit'
+import "./components/type-icon/type-icon";
+import "./components/type-text/type-text";
+import "./compositions/info-card/info-card";
+import "./compositions/type-input/type-input";
+import './compositions/type-header/type-header.js'
 
 /**
  * An example element.
@@ -14,7 +19,6 @@ export class MyElement extends LitElement {
        */
     }
   }
-
   constructor() {
     super()
   }
@@ -25,5 +29,4 @@ export class MyElement extends LitElement {
     `
   }
 }
-
 window.customElements.define('my-element', MyElement)
