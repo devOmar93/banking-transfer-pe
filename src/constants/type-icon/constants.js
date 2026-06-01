@@ -1,6 +1,6 @@
 export const ICON_CONFIG = {
   size: {
-    allowed: ["s", "m", "l", "xl"],
+    allowed: ["xs", "s", "m", "l", "xl"],
     default: "m",
   },
 
@@ -11,6 +11,10 @@ export const ICON_CONFIG = {
 
   iconName: {
     default: "check-circle",
+  },
+
+  ariaLabel: {
+    default: null,
   },
 };
 
