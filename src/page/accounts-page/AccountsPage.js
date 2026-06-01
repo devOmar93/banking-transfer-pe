@@ -11,14 +11,14 @@ import { ACCOUNTS_PAGE_CONFIG as CONFIG } from "../../constants/accounts-page/co
 
 export class AccountsPage extends LitElement {
   static properties = {
-    _accounts: {type: Object},
+    accounts: {type: Object},
     _loading: {type: Boolean},
     _error: {type: Boolean}
   }
 
   constructor(){
     super();
-    this._accounts = {};
+    this.accounts = {};
     this._loading = true;
     this._error = false;
   }
@@ -28,9 +28,9 @@ export class AccountsPage extends LitElement {
   async firstUpdated() {
     try {
       const response = await getAccounts(accounts_base_case);
-      this._accounts = response.accounts;
+      this.accounts = response.accounts;
       this._loading = false;
-      console.log(this._accounts)
+      console.log(this.accounts)
     } catch (error) {
       this._error = true;
     }
@@ -52,7 +52,7 @@ export class AccountsPage extends LitElement {
   _renderAccountsList(){
     return html`
       <account-list
-        .accounts=${this._accounts}
+        .accounts=${this.accounts}
       ></account-list>
     `
   }
