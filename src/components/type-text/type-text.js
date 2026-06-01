@@ -15,10 +15,10 @@ export class TypeText extends LitElement {
   constructor() {
     super();
     this.text = "";
-    this.tag = "span";
-    this.size = "s";
-    this.align = "left";
-    this.weight = "regular";
+    this.tag = TYPOGRAPHY_CONFIG.tag.default;
+    this.size = TYPOGRAPHY_CONFIG.size.default;
+    this.align = TYPOGRAPHY_CONFIG.align.default;
+    this.weight = TYPOGRAPHY_CONFIG.weight.default;
   }
   
   static styles = styles;
