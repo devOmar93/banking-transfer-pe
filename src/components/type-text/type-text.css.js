@@ -30,6 +30,10 @@ export const styles = css`
     font-size: 1rem;
   }
 
+  .size-ml {
+    font-size: 1.25rem;
+  }
+  
   .size-l {
     font-size: 2.25rem;
   }
