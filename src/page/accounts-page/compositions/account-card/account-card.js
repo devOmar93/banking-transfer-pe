@@ -6,7 +6,7 @@ import "../../../../components/type-text/type-text.js";
 
 
 export class AccountCard extends LitElement {
-    
+
 /**
    * Component properties (inputs)
    */
@@ -15,7 +15,9 @@ export class AccountCard extends LitElement {
     title: { type: String },
     number: { type: String },
     type: { type: String },
-    amount: { type: String },
+    currency: { type: String },
+    amount: { type: Number },
+    status: { type: String },
   };
 
   constructor() {
@@ -24,10 +26,11 @@ export class AccountCard extends LitElement {
     this.number = "";
     this.type = "";
     this.amount = "";
+    this.status = "";
   }
 
   static styles = styles;
-  
+
 /**
    * Renders the account card content
    */
@@ -79,6 +82,13 @@ export class AccountCard extends LitElement {
             tag="p"
             size="ml"
             weight="bold"
+            text="${this.currency}"
+          ></type-text>
+          
+          <type-text
+            tag="p"
+            size="ml"
+            weight="bold"
             text="${this.amount}"
           ></type-text>
 
@@ -92,7 +102,7 @@ export class AccountCard extends LitElement {
     `;
   }
 
- /**
+/**
    * Handles click event
    * Dispatches a custom event with account data
    */
@@ -105,6 +115,8 @@ export class AccountCard extends LitElement {
           number: this.number,
           type: this.type,
           amount: this.amount,
+          currency: this.currency,
+          status: this.status,
         },
         bubbles: true,
         composed: true,
@@ -112,7 +124,7 @@ export class AccountCard extends LitElement {
     );
   }
 
- /**
+/**
    * Handles keyboard interaction (Enter / Space)
    * Enables accessibility for non-mouse users
    */
@@ -124,7 +136,7 @@ export class AccountCard extends LitElement {
     }
   }
 
- /**
+/**
    * Main render method
    */
 
@@ -134,3 +146,4 @@ export class AccountCard extends LitElement {
 }
 
 customElements.define("account-card", AccountCard);
+ 

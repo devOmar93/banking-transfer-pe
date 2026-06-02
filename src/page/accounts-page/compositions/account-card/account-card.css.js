@@ -54,9 +54,8 @@ export const styles = css`
 
   .account-right {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.25rem;
+    align-items: center;
+    gap: 0.5rem;
   }
     
 .account-right type-icon {
