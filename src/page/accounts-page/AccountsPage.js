@@ -14,7 +14,6 @@ export class AccountsPage extends LitElement {
     accounts: {type: Array},
     _loading: {type: Boolean},
     _error: {type: Boolean},
-    selectedAccount: {type: Object},
     _errorState: {type: String},
   }
 
@@ -23,7 +22,6 @@ export class AccountsPage extends LitElement {
     this.accounts = [];
     this._loading = true;
     this._error = false;
-    this.selectedAccount = {};
     this._errorState = "";
   }
 
@@ -32,7 +30,7 @@ export class AccountsPage extends LitElement {
   async firstUpdated() {
     try {
       const { accounts } = await getAccounts(accounts_base_case);
-      this.accounts = this._topAccounts(accounts);
+      this.accounts = this._filterTopAccounts(accounts);
       
       if (!this.accounts.length) {
         this._errorState = STATES.ERROR_TYPES.NO_ACCOUNTS;
@@ -40,7 +38,7 @@ export class AccountsPage extends LitElement {
       }
 
       if (this.accounts.length === 1) {
-        this._validateSingleAccount(this.accounts);
+        this._validateSingleAccount(this.accounts[0]);
         return;
       }
 
@@ -55,15 +53,15 @@ export class AccountsPage extends LitElement {
     }
   }
   
-  _priorityAccounts(accounts) {
+  _filterPriorityAccounts(accounts) {
     const isActive = accounts.status === STATES.SUCCESS.ACTIVE;
     const hasBalance = accounts.availableBalance > 0;
     return (isActive ? 0 : 2) + (hasBalance ? 0 : 1) + 1;
   }
 
-  _topAccounts(accounts){
+  _filterTopAccounts(accounts){
     return [...accounts]
-      .sort((a, b) => this._priorityAccounts(a) - this._priorityAccounts(b))
+      .sort((a, b) => this._filterPriorityAccounts(a) - this._filterPriorityAccounts(b))
       .slice(0, 5);
   }
 
@@ -71,31 +69,27 @@ export class AccountsPage extends LitElement {
     console.log("GO NEXT", account);
   }
 
-  _validateSingleAccount(accounts){
-    const error = this._validateAccount(accounts[0]);
-
+  _validateSingleAccount(account){
+    const error = this._validateAccount(account);
+    console.log(error)
     if(error){
       this._errorState = error;
       return;
     }
 
-    this._goToNextStep(accounts[0]);
+    this._goToNextStep(account);
   }
 
   _validateAccount(account){
+    console.log("validation error",account)
     const validation = VALIDATIONS_ERROR.find(val => val.condition(account));
     return validation ? validation.error : null;
   }
 
   _selectedAccount(e){
     const account = e.detail;
-    const error = this._validateAccount(account);
-    if(error){
-      this._errorState = error;
-      return;
-    }
-    this.selectedAccount = account;
-    console.log(this.selectedAccount)
+    console.log(account)
+    this._validateSingleAccount(account)
   }
 
   _renderErrorState() {
