@@ -35,7 +35,7 @@ export const accounts_base_case = {
     { 
       id: 4, 
       accountNumber: "11112222", 
-      accountName: "Cuenta 4", 
+      accountName: "Cuenta Corriente", 
       accountType: "Corriente", 
       availableBalance: 4000, 
       currency: "USD", 
@@ -44,7 +44,7 @@ export const accounts_base_case = {
     { 
       id: 5, 
       accountNumber: "33334444", 
-      accountName: "Cuenta 5", 
+      accountName: "Cuenta de Ahorros", 
       accountType: "Ahorros", 
       availableBalance: 5000, 
       currency: "USD", 
@@ -53,7 +53,7 @@ export const accounts_base_case = {
     { 
       id: 6, 
       accountNumber: "55556666", 
-      accountName: "Cuenta 6", 
+      accountName: "Cuenta Corriente", 
       accountType: "Corriente", 
       availableBalance: 0, 
       currency: "USD", 
@@ -62,7 +62,7 @@ export const accounts_base_case = {
     { 
       id: 7, 
       accountNumber: "55556666", 
-      accountName: "Cuenta 6", 
+      accountName: "Cuenta Corriente", 
       accountType: "Corriente", 
       availableBalance: 6000, 
       currency: "USD", 
@@ -142,6 +142,21 @@ export const accounts_case_5 = {
       availableBalance: 0,
       currency: "USD",
       status: "ACTIVE"
+    }
+  ]
+};
+
+/* Case 6: Single account that is inactive */
+export const accounts_case_6 = {
+  accounts: [
+    {
+      id: 1,
+      accountNumber: "12341234",
+      accountName: "Cuenta Corriente",
+      accountType: "Corriente",
+      availableBalance: 5250.00,
+      currency: "USD",
+      status: "INACTIVE"
     }
   ]
 };

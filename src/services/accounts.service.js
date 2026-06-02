@@ -6,3 +6,9 @@ export async function getAccounts(mock) {
   });
 }
 
+export async function getAccountsError() {
+  return new Promise((_, reject) => {
+    setTimeout(() => reject(new Error('Error técnico')), 3000);
+  });
+}
+

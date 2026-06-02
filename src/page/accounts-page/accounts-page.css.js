@@ -5,6 +5,18 @@ export const styles = css`
   --icon-color: #3366CC;
   --icon-bg-color: #d9e2f5;
 }
+
+.modal-accounts{
+  --type-modal-bg-color: #e0e4fd;
+  --type-modal-backdrop-color: #e0e4fd;
+}
+
+.container-footer{
+  display:flex;
+  width:5rem;
+  height:5rem;
+}
+
 .icon-container{
   display:flex;
   flex-direction:column;
