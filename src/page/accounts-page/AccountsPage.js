@@ -29,7 +29,6 @@ export class AccountsPage extends LitElement {
 
   static styles = styles;
 
-  
   async firstUpdated() {
     try {
       const { accounts } = await getAccounts(accounts_base_case);
@@ -40,15 +39,15 @@ export class AccountsPage extends LitElement {
         return;
       }
 
+      if (this.accounts.length === 1) {
+        this._validateSingleAccount(this.accounts);
+        return;
+      }
+
       if (this.accounts.every(acc => acc.availableBalance === 0)) {
         this._errorState = STATES.ERROR_TYPES.ALL_NO_BALANCE;
         return;
       }
-
-      if (this.accounts.length === 1) {
-        this._validateSingleAccount(this.accounts)
-      }
-
     } catch {
       this._error = true;
     } finally {
