@@ -6,7 +6,7 @@ import {
 import ICONS from "../../utils/icons";
 import { html, LitElement, nothing } from "lit";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
-import styles from "./type-icon.css";
+import styles from "./type-icon.css.js";
 
 export class TypeIcon extends LitElement {
   static properties = {
@@ -44,7 +44,7 @@ export class TypeIcon extends LitElement {
     this.iconName = ICON_CONFIG.iconName.default;
     this.variant = ICON_CONFIG.variant.default;
     this.size = ICON_CONFIG.size.default;
-    this.ariaLabel = null;
+    this.ariaLabel = ICON_CONFIG.ariaLabel.default;
   }
 
   get svg() {
