@@ -26,6 +26,10 @@ export class TypeInput extends LitElement {
       type: String,
     },
 
+    formatCurrency: {
+      type: String,
+    },
+
     requiredInput: {
       type: Boolean,
     },
@@ -45,13 +49,14 @@ export class TypeInput extends LitElement {
 
   constructor() {
     super();
-    this.textLabel = "Cuenta destino";
-    this.idInput = "PruebaInput";
-    this.placeholderInput = "000000000000000";
-    this.typeInput = "text";
+    this.textLabel = "";
+    this.idInput = "";
+    this.placeholderInput = "";
+    this.typeInput = "";
     this.nameField = "";
     this.requiredInput = true;
-    this.errorMessage = "Probando mostrar error";
+    this.errorMessage = "";
+    this.formatCurrency = "";
   }
 
   _onInput(event) {
@@ -103,6 +108,7 @@ export class TypeInput extends LitElement {
             placeholder=${this.placeholderInput}
             ?required=${this.requiredInput}
             @input=${this._onInput}
+            step="${this.formatCurrency}"
           />
         </div>
         ${invalid && this.errorMessage
