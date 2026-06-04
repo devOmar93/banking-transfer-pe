@@ -1,13 +1,12 @@
 import { html, LitElement, nothing } from "lit";
 import { styles } from "./accounts-page.css.js";
-import "../../compositions/type-modal/type-modal.js";
-import "../../compositions/type-header/type-header.js";
+import "@compositions/type-modal/type-modal.js";
+import "@compositions/type-header/type-header.js";
 import "./compositions/account-list/account-list.js";
-import "../../components/type-icon/type-icon.js"; 
-import { ES } from "../../locales/es.js";
-import { accounts_base_case } from "../../mocks/accounts.mock.js";
-import { getAccounts } from "../../services/accounts.service.js";
-import { ACCOUNTS_PAGE_CONFIG as CONFIG, STATES, VALIDATIONS_ERROR } from "../../constants/accounts-page/constants.js";
+import "@components/type-icon/type-icon.js"; 
+import { accounts_base_case } from "@mocks/accounts.mock.js";
+import { getAccounts } from "@services/accounts.service.js";
+import { ACCOUNTS_PAGE_ES as ES, ACCOUNTS_PAGE_CONFIG as CONFIG, STATES, PROCESS_ACCOUNT_RULES } from "@utils/config-accounts-page.js";
 
 export class AccountsPage extends LitElement {
   static properties = {
@@ -20,42 +19,53 @@ export class AccountsPage extends LitElement {
   constructor(){
     super();
     this.accounts = [];
-    this._loading = true;
+    this._loading = false;
     this._error = false;
     this._errorState = "";
   }
 
   static styles = styles;
 
+  connectedCallback() {
+    super.connectedCallback();
+    this._loading = true;
+  }
+
   async firstUpdated() {
     try {
       const { accounts } = await getAccounts(accounts_base_case);
-      this.accounts = this._filterTopAccounts(accounts);
-      
-      if (!this.accounts.length) {
-        this._errorState = STATES.ERROR_TYPES.NO_ACCOUNTS;
+      const result = this._processAccounts(this._filterTopAccounts(accounts));
+      if (result.errorState) {
+        this._errorState = result.errorState;
         return;
       }
 
-      if (this.accounts.length === 1) {
-        this._validateSingleAccount(this.accounts[0]);
+      if (result.singleAccount) {
+        this._validateSingleAccount(result.singleAccount);
         return;
       }
 
-      if (this.accounts.every(acc => acc.availableBalance === 0)) {
-        this._errorState = STATES.ERROR_TYPES.ALL_NO_BALANCE;
-        return;
-      }
+      this.accounts = result.accounts;
     } catch {
       this._error = true;
     } finally {
       this._loading = false;
     }
   }
-  
-  _filterPriorityAccounts(accounts) {
-    const isActive = accounts.status === STATES.SUCCESS.ACTIVE;
-    const hasBalance = accounts.availableBalance > 0;
+
+  _processAccounts(filtered) {
+    const rule = PROCESS_ACCOUNT_RULES.find(r => r.condition(filtered));
+
+    return rule
+      ? (typeof rule.result === "function"
+          ? rule.result(filtered)
+          : rule.result)
+      : { accounts: filtered };
+  }
+
+  _filterPriorityAccounts(account) {
+    const isActive = account.status === STATES.SUCCESS.ACTIVE;
+    const hasBalance = account.availableBalance > 0;
     return (isActive ? 0 : 2) + (hasBalance ? 0 : 1) + 1;
   }
 
@@ -66,12 +76,16 @@ export class AccountsPage extends LitElement {
   }
 
   _goToNextStep(account) {
-    console.log("GO NEXT", account);
+    this.dispatchEvent(new CustomEvent('account',{
+      detail: account,
+      bubbles: true,
+      composed: true
+    }))
   }
 
   _validateSingleAccount(account){
     const error = this._validateAccount(account);
-    console.log(error)
+
     if(error){
       this._errorState = error;
       return;
@@ -80,20 +94,29 @@ export class AccountsPage extends LitElement {
     this._goToNextStep(account);
   }
 
-  _validateAccount(account){
-    console.log("validation error",account)
-    const validation = VALIDATIONS_ERROR.find(val => val.condition(account));
-    return validation ? validation.error : null;
+  _validateAccount(account) {
+    return this._getStatusError(account) ?? this._getBalanceError(account);
+  }
+
+  _getStatusError(account) {
+    return account.status !== STATES.SUCCESS.ACTIVE
+      ? STATES.ERROR_TYPES[account.status]
+      : null;
+  }
+
+  _getBalanceError(account) {
+    return account.amount === 0
+      ? STATES.ERROR_TYPES.NO_BALANCE
+      : null;
   }
 
   _selectedAccount(e){
     const account = e.detail;
-    console.log(account)
     this._validateSingleAccount(account)
   }
 
   _renderErrorState() {
-    const error = ES.accountsPage.errors[this._errorState];
+    const error = ES.errors[this._errorState];
     return html`
       <type-modal
         ?open=${true}
@@ -111,7 +134,7 @@ export class AccountsPage extends LitElement {
   }
 
   _renderTechnicalError() {
-    const error = ES.accountsPage.errors.ERROR_TECHNICAL;
+    const error = ES.errors.ERROR_TECHNICAL;
     return html`
       <type-modal
         ?open=${true}
@@ -163,8 +186,8 @@ export class AccountsPage extends LitElement {
         >
           <type-header
             slot="header"
-            .title=${ES.accountsPage.header.title}
-            .subtitle=${ES.accountsPage.header.subtitle}
+            .title=${ES.header.title}
+            .subtitle=${ES.header.subtitle}
           ></type-header>
 
           <div slot="body">
@@ -172,7 +195,7 @@ export class AccountsPage extends LitElement {
           </div>
           <info-card
             slot="footer"
-            .message=${ES.accountsPage.messageSecurity}
+            .message=${ES.messageSecurity}
             icon-name=${CONFIG.infoCard.iconName}
             class="info-card"
           ></info-card>
