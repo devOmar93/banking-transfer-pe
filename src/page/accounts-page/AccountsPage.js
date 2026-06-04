@@ -35,7 +35,6 @@ export class AccountsPage extends LitElement {
     try {
       const { accounts } = await getAccounts(accounts_base_case);
       const result = this._processAccounts(this._filterTopAccounts(accounts));
-
       if (result.errorState) {
         this._errorState = result.errorState;
         return;
@@ -55,10 +54,13 @@ export class AccountsPage extends LitElement {
   }
 
   _processAccounts(filtered) {
-    const rule = PROCESS_ACCOUNT_RULES.find(rule => rule.condition(filtered));
-    return typeof rule.result === "function"
-      ? rule.result(filtered)
-      : rule?.result || { accounts: filtered };
+    const rule = PROCESS_ACCOUNT_RULES.find(r => r.condition(filtered));
+
+    return rule
+      ? (typeof rule.result === "function"
+          ? rule.result(filtered)
+          : rule.result)
+      : { accounts: filtered };
   }
 
   _filterPriorityAccounts(account) {
@@ -103,7 +105,7 @@ export class AccountsPage extends LitElement {
   }
 
   _getBalanceError(account) {
-    return account.availableBalance === 0
+    return account.amount === 0
       ? STATES.ERROR_TYPES.NO_BALANCE
       : null;
   }
