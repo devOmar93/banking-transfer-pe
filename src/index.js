@@ -27,7 +27,6 @@ export class MyElement extends LitElement {
   render() {
     return html`
       <p>banking-transfer-pe</p>
-     
     `;
   }
 }

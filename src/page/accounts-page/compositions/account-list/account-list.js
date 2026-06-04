@@ -40,11 +40,11 @@ export class AccountList extends LitElement{
             (account) => account.id,
             (account) => html`
               <account-card
-                title=${account.accountName}
-                number=${account.accountNumber}
-                type=${account.accountType}
+                accountName=${account.accountName}
+                accountNumber=${account.accountNumber}
+                accountType=${account.accountType}
                 status=${account.status}
-                amount= ${account.availableBalance}
+                availableBalance=${account.availableBalance}
                 currency=${this._formatCurrency(account.currency)}
                 @account-selected=${this._onSelect}
               ></account-card>
