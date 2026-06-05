@@ -9,6 +9,7 @@ import { ACCOUNTS_BASE_CASE } from "@mocks/accounts.mock.js";
 import { getAccounts } from "@services/accounts.service.js";
 import { ACCOUNTS_PAGE_ES as ES, ACCOUNTS_PAGE_CONFIG as CONFIG, STATES, PROCESS_ACCOUNT_RULES } from "@utils/accounts-page/accounts.config.js";
 import { processAccounts, filterTopAccounts, validateAccount } from "@utils/accounts-page/accounts.utils.js";
+import { fireEvent } from "@utils/utils.js";
 
 export class AccountsPage extends LitElement {
   static properties = {
@@ -58,12 +59,7 @@ export class AccountsPage extends LitElement {
   }
 
   _goToNextStep(account) {
-    this.dispatchEvent(new CustomEvent('account',{
-      detail: account,
-      bubbles: true,
-      composed: true
-    }))
-    console.log("Cuenta seleccionada:", account);
+    fireEvent(this, 'account', account);
   }
 
   _validateSingleAccount(account){
