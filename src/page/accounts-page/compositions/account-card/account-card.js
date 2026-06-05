@@ -54,7 +54,7 @@ export class AccountCard extends LitElement {
       >
         <!-- Left section: icon + account info -->
         <div class="account-left">
-          <type-icon icon-name="wallet" size="m"></type-icon>
+          <type-icon variant ="secondary" icon-name="wallet" size="m"></type-icon>
 
           <div class="account-info">
             <type-text
