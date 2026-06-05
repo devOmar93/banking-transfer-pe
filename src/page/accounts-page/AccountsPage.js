@@ -73,6 +73,22 @@ export class AccountsPage extends LitElement {
     this._goToNextStep(account);
   }
 
+  _validateAccount(account) {
+    return this._getStatusError(account) ?? this._getBalanceError(account);
+  }
+
+  _getStatusError(account) {
+    return account.status !== STATES.SUCCESS.ACTIVE
+      ? STATES.ERROR_TYPES[account.status]
+      : null;
+  }
+
+  _getBalanceError(account) {
+    return account.availableBalance === 0
+      ? STATES.ERROR_TYPES.NO_BALANCE
+      : null;
+  }
+
   _selectedAccount(e){
     const account = e.detail;
     this._validateSingleAccount(account)

@@ -4,37 +4,44 @@ import { styles } from "./account-card.css.js";
 import "../../../../components/type-icon/type-icon.js";
 import "../../../../components/type-text/type-text.js";
 
-
 export class AccountCard extends LitElement {
-
-/**
+  /**
    * Component properties (inputs)
    */
 
   static properties = {
-    title: { type: String },
-    number: { type: String },
-    type: { type: String },
+    accountName: { type: String },
+    accountNumber: { type: String },
+    accountType: { type: String },
     currency: { type: String },
-    amount: { type: Number },
+    availableBalance: { type: Number },
     status: { type: String },
   };
 
   constructor() {
     super();
-    this.title = "";
-    this.number = "";
-    this.type = "";
-    this.amount = "";
+    this.accountName = "";
+    this.accountNumber = "";
+    this.accountType = "";
+    this.currency = "";
+    this.availableBalance = 0;
     this.status = "";
   }
 
   static styles = styles;
 
-/**
+  
+  _formatCurrency(currency = this.currency) {
+    const symbols = {
+      PEN: 'S/',
+      USD: '$'
+    };
+    return symbols[currency] || '';
+  }
+
+  /**
    * Renders the account card content
    */
-
 
   _renderContent() {
     return html`
@@ -45,16 +52,16 @@ export class AccountCard extends LitElement {
         @click=${this._onClick}
         @keydown=${this._onKeyDown}
       >
-          <!-- Left section: icon + account info -->
+        <!-- Left section: icon + account info -->
         <div class="account-left">
-          <type-icon icon-name="wallet" size="m"></type-icon>
+          <type-icon variant ="secondary" icon-name="wallet" size="m"></type-icon>
 
           <div class="account-info">
             <type-text
               tag="p"
               size="m"
               weight="semibold"
-              text="${this.title}"
+              .text=${this.accountName}
             ></type-text>
 
             <type-text
@@ -62,7 +69,7 @@ export class AccountCard extends LitElement {
               size="s"
               weight="medium"
               class="p-subtitle"
-              text="${this.number}"
+              .text=${this.accountNumber}
             ></type-text>
 
             <type-text
@@ -70,7 +77,7 @@ export class AccountCard extends LitElement {
               size="xs"
               class="p-subtitle"
               weight="regular"
-              text="${this.type}"
+              .text=${this.accountType}
             ></type-text>
           </div>
         </div>
@@ -82,14 +89,7 @@ export class AccountCard extends LitElement {
             tag="p"
             size="ml"
             weight="bold"
-            text="${this.currency}"
-          ></type-text>
-          
-          <type-text
-            tag="p"
-            size="ml"
-            weight="bold"
-            text="${this.amount}"
+            .text=${`${this._formatCurrency()} ${this.availableBalance}`}
           ></type-text>
 
           <type-icon
@@ -102,7 +102,9 @@ export class AccountCard extends LitElement {
     `;
   }
 
-/**
+ 
+
+  /**
    * Handles click event
    * Dispatches a custom event with account data
    */
@@ -111,20 +113,21 @@ export class AccountCard extends LitElement {
     this.dispatchEvent(
       new CustomEvent("account-selected", {
         detail: {
-          title: this.title,
-          number: this.number,
-          type: this.type,
-          amount: this.amount,
+          accountName: this.accountName,
+          accountNumber: this.accountNumber,
+          accountType: this.accountType,
+          availableBalance: this.availableBalance,
           currency: this.currency,
           status: this.status,
         },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 
-/**
+
+  /**
    * Handles keyboard interaction (Enter / Space)
    * Enables accessibility for non-mouse users
    */
@@ -136,7 +139,7 @@ export class AccountCard extends LitElement {
     }
   }
 
-/**
+  /**
    * Main render method
    */
 
@@ -146,4 +149,3 @@ export class AccountCard extends LitElement {
 }
 
 customElements.define("account-card", AccountCard);
- 
