@@ -1,96 +1,75 @@
-import {
-  ICON_CONFIG,
-  ICON_SIZES,
-  ICON_VARIANTS,
-} from "../../constants/type-icon/constants";
-import ICONS from "../../utils/icons";
+import { ICONS, ICONS_RUTE } from "./utils/icons.js";
 import { html, LitElement, nothing } from "lit";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
-import styles from "./type-icon.css.js";
+import styles from "./type-icon.css";
+import { validateAllowedProp } from "@utils/utils.js";
+import { validateRequiredProp } from "@utils/utils";
+import { fireError } from "../../utils/utils";
+
+const ALLOWED_VARIANTS = ["default", "secondary"];
+const ALLOWED_SIZES = ["xs", "s", "m", "l", "xl"];
 
 export class TypeIcon extends LitElement {
   static properties = {
     /**
      * Icon name
      * @type { String }
-     * @default "check-circle"
+     * @default ""
      */
     iconName: { type: String, attribute: "icon-name" },
 
     /**
-     * Controls colors and background styles (default, ghost, etc)
+     * Controls colors and background styles
      * @type { String }
-     * @default "default"
+     * @default ""
      */
     variant: { type: String, reflect: true },
 
     /**
-     * Controls size (s, m, l, xl)
+     * Controls size
      * @type { String }
-     * @default "m"
+     * @default ""
      */
     size: { type: String, reflect: true },
-
-    /**
-     * Accessible label for screen readers.
-     * When provided, the icon is treated as informative.
-     * @type { String | null }
-     */
-    ariaLabel: { type: String, attribute: "aria-label" },
   };
 
   constructor() {
     super();
-    this.iconName = ICON_CONFIG.iconName.default;
-    this.variant = ICON_CONFIG.variant.default;
-    this.size = ICON_CONFIG.size.default;
-    this.ariaLabel = ICON_CONFIG.ariaLabel.default;
+    this.iconName = "";
+    this.variant = "";
+    this.size = "";
   }
 
   get svg() {
-    const key = `../assets/icons/${this.iconName}.svg`;
-    return ICONS[key] ?? ICONS["check-circle"];
+    const key = `${ICONS_RUTE}/${this.iconName}.svg`;
+    return ICONS[key] || null;
   }
 
-  willUpdate(changedProps) {
-    if (changedProps.has("size") && !ICON_SIZES.includes(this.size)) {
-      this.size = ICON_CONFIG.size.default;
+  willUpdate(changedProperties) {
+    if (changedProperties.has("iconName")) {
+      validateRequiredProp("iconName", this.iconName);
     }
 
-    if (changedProps.has("variant") && !ICON_VARIANTS.includes(this.variant)) {
-      this.variant = ICON_CONFIG.variant.default;
+    if (changedProperties.has("variant")) {
+      validateAllowedProp("variant", this.variant, ALLOWED_VARIANTS);
     }
-  }
 
-  get hasAccessibleLabel() {
-    return (
-      typeof this.ariaLabel === "string" && this.ariaLabel.trim().length > 0
-    );
-  }
+    if (changedProperties.has("size")) {
+      validateAllowedProp("size", this.size, ALLOWED_SIZES);
+    }
 
-  get ariaRole() {
-    return this.hasAccessibleLabel ? "img" : nothing;
-  }
-
-  get accessibleLabel() {
-    return this.hasAccessibleLabel ? this.ariaLabel : nothing;
-  }
-
-  get ariaHidden() {
-    return this.hasAccessibleLabel ? "false" : "true";
+    if (changedProperties.has("iconName") && this.iconName) {
+      if (!this.svg) {
+        fireError(`No se encontró el ícono: ${this.iconName}`);
+      }
+    }
   }
 
   static styles = styles;
 
   render() {
     return html`
-      <div
-        focusable="false"
-        class="container-icon"
-        .role=${this.ariaRole}
-        aria-label=${this.accessibleLabel}
-        aria-hidden=${this.ariaHidden}
-      >
+      <div class="container-icon" aria-hidden="true">
         ${unsafeSVG(this.svg)}
       </div>
     `;
