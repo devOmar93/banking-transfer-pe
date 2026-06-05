@@ -3,7 +3,86 @@ import { actionModalStyles } from "./action-modal.css.js";
 import "../../components/type-icon/type-icon.js";
 import "../../components/type-text/type-text.js";
 import "../../compositions/type-button/type-button.js";
-import { MODAL_TYPES, ACTION_MODALS } from "./action-modal.constants.js";
+const MODAL_TYPES = {
+  error: {
+    iconName: "triangle-alert",
+    iconVariant: "secondary",
+    primaryButtonText: "Reintentar",
+    secondaryButtonText: "Salir",
+  },
+  information: {
+    iconName: "info",
+    iconVariant: "secondary",
+    primaryButtonText: "Entendido",
+    secondaryButtonText: "Salir",
+  },
+};
+const ACTION_MODALS = {
+  insufficientBalance: {
+    modalType: "error",
+    title: "SALDO INSUFICIENTE",
+    message:
+      "La cuenta no cuenta con saldo suficiente para realizar la operación.",
+    showPrimaryButton: false,
+    showSecondaryButton: true,
+    secondaryButtonAction: "exit",
+  },
+  blockedAccount: {
+    modalType: "error",
+    title: "CUENTA BLOQUEADA O INACTIVA",
+    message:
+      "La cuenta se encuentra bloqueada o inactiva y no permite realizar operaciones.",
+    showPrimaryButton: false,
+    showSecondaryButton: true,
+    secondaryButtonAction: "exit",
+  },
+  noAccountsAvailable: {
+    modalType: "error",
+    title: "NO TIENE CUENTAS DISPONIBLES",
+    message:
+      "No se encontraron cuentas asociadas para realizar transferencias.",
+    showPrimaryButton: false,
+    showSecondaryButton: true,
+    secondaryButtonAction: "exit",
+  },
+  loadAccountsError: {
+    modalType: "error",
+    title: "ERROR AL CARGAR CUENTAS",
+    message: "Ocurrió un problema al obtener sus cuentas. Intente nuevamente.",
+    showPrimaryButton: true,
+    showSecondaryButton: true,
+    primaryButtonAction: "retry",
+    secondaryButtonAction: "exit",
+  },
+  finalError: {
+    modalType: "error",
+    title: "NO SE PUDO COMPLETAR LA OPERACIÓN",
+    message: "Inténtelo más tarde.",
+    showPrimaryButton: false,
+    showSecondaryButton: true,
+    secondaryButtonAction: "exit",
+  },
+  accountsLimitInformation: {
+    modalType: "information",
+    title: "INFORMACIÓN",
+    message:
+      "Se mostrarán como máximo 5 cuentas disponibles para realizar la transferencia.",
+    showPrimaryButton: true,
+    showSecondaryButton: false,
+    primaryButtonAction: "understood",
+  },
+  singleValidAccountInformation: {
+    modalType: "information",
+    iconName: "circle-check-big",
+    title: "CUENTA DISPONIBLE",
+    message:
+      "Se encontró una cuenta disponible para continuar con la transferencia.",
+    showPrimaryButton: true,
+    showSecondaryButton: false,
+    primaryButtonText: "Continuar",
+    primaryButtonAction: "continue",
+  },
+};
 export class ActionModal extends LitElement {
   static styles = actionModalStyles;
   static properties = {
@@ -19,28 +98,45 @@ export class ActionModal extends LitElement {
   get modalType() {
     return MODAL_TYPES[this.actionData.modalType] || MODAL_TYPES.error;
   }
-  handlePrimaryAction() {
+  emitModalAction(buttonType, buttonAction, buttonText) {
+    const detail = {
+      actionType: this.actionType,
+      modalType: this.actionData.modalType,
+      buttonType,
+      buttonAction,
+      buttonText,
+    };
     this.dispatchEvent(
-      new CustomEvent("action-modal-primary-click", {
+      new CustomEvent("action-modal-action", {
         bubbles: true,
         composed: true,
-        detail: {
-          actionType: this.actionType,
-          modalType: this.actionData.modalType,
-        },
+        detail,
+      }),
+    );
+    this.dispatchEvent(
+      new CustomEvent(`action-modal-${buttonAction}`, {
+        bubbles: true,
+        composed: true,
+        detail,
       }),
     );
   }
+  handlePrimaryAction() {
+    const action = this.actionData;
+    const modalType = this.modalType;
+    this.emitModalAction(
+      "primary",
+      action.primaryButtonAction || "primary",
+      action.primaryButtonText || modalType.primaryButtonText,
+    );
+  }
   handleSecondaryAction() {
-    this.dispatchEvent(
-      new CustomEvent("action-modal-secondary-click", {
-        bubbles: true,
-        composed: true,
-        detail: {
-          actionType: this.actionType,
-          modalType: this.actionData.modalType,
-        },
-      }),
+    const action = this.actionData;
+    const modalType = this.modalType;
+    this.emitModalAction(
+      "secondary",
+      action.secondaryButtonAction || "secondary",
+      action.secondaryButtonText || modalType.secondaryButtonText,
     );
   }
   render() {
@@ -88,9 +184,10 @@ export class ActionModal extends LitElement {
           ${action.showPrimaryButton
             ? html`
                 <type-button
-                  text=${modalType.primaryButtonText}
+                  text=${action.primaryButtonText ||
+                  modalType.primaryButtonText}
                   variant="default"
-                  @click=${this.handlePrimaryAction}
+                  @click=${() => this.handlePrimaryAction()}
                 >
                 </type-button>
               `
@@ -98,9 +195,10 @@ export class ActionModal extends LitElement {
           ${action.showSecondaryButton
             ? html`
                 <type-button
-                  text=${modalType.secondaryButtonText}
+                  text=${action.secondaryButtonText ||
+                  modalType.secondaryButtonText}
                   variant="ghost"
-                  @click=${this.handleSecondaryAction}
+                  @click=${() => this.handleSecondaryAction()}
                 >
                 </type-button>
               `

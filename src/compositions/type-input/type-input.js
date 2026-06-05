@@ -61,13 +61,19 @@ export class TypeInput extends LitElement {
 
   _onInput(event) {
     const input = event.target;
+    let value = input.value;
     this._nativeValid = input.checkValidity();
+
+    if (this.typeInput === "number") {
+      value = value === "" ? null : parseFloat(value);
+    }
+
     this.dispatchEvent(
       new CustomEvent("text-change", {
         detail: {
           name: this.nameField,
           isValid: this._nativeValid,
-          value: input.value,
+          value: value,
         },
         bubbles: true,
         composed: true,

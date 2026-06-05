@@ -52,7 +52,7 @@ export const amountBusinessValidation = (
   configFormFields,
   context,
 ) => {
-  const amount = Number(newFieldState.value);
+  const amount = newFieldState.value;
   const remainingBalance = context.availableBalance - amount;
 
   if (amount <= 0) {
