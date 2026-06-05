@@ -6,7 +6,8 @@ import "./compositions/account-list/account-list.js";
 import "@components/type-icon/type-icon.js"; 
 import { accounts_base_case } from "@mocks/accounts.mock.js";
 import { getAccounts } from "@services/accounts.service.js";
-import { ACCOUNTS_PAGE_ES as ES, ACCOUNTS_PAGE_CONFIG as CONFIG, STATES, PROCESS_ACCOUNT_RULES } from "@utils/config-accounts-page.js";
+import { ACCOUNTS_PAGE_ES as ES, ACCOUNTS_PAGE_CONFIG as CONFIG, STATES, PROCESS_ACCOUNT_RULES } from "@utils/accounts-page/accounts.config.js";
+import { processAccounts, filterTopAccounts, validateAccount } from "@utils/accounts-page/accounts.utils.js";
 
 export class AccountsPage extends LitElement {
   static properties = {
@@ -34,7 +35,9 @@ export class AccountsPage extends LitElement {
   async firstUpdated() {
     try {
       const { accounts } = await getAccounts(accounts_base_case);
-      const result = this._processAccounts(this._filterTopAccounts(accounts));
+      const filteredAccounts = filterTopAccounts(accounts, CONFIG.accounts.limit, STATES.SUCCESS.ACTIVE);
+      const result = processAccounts(filteredAccounts, PROCESS_ACCOUNT_RULES);
+    
       if (result.errorState) {
         this._errorState = result.errorState;
         return;
@@ -53,38 +56,17 @@ export class AccountsPage extends LitElement {
     }
   }
 
-  _processAccounts(filtered) {
-    const rule = PROCESS_ACCOUNT_RULES.find(r => r.condition(filtered));
-
-    return rule
-      ? (typeof rule.result === "function"
-          ? rule.result(filtered)
-          : rule.result)
-      : { accounts: filtered };
-  }
-
-  _filterPriorityAccounts(account) {
-    const isActive = account.status === STATES.SUCCESS.ACTIVE;
-    const hasBalance = account.availableBalance > 0;
-    return (isActive ? 0 : 2) + (hasBalance ? 0 : 1) + 1;
-  }
-
-  _filterTopAccounts(accounts){
-    return [...accounts]
-      .sort((a, b) => this._filterPriorityAccounts(a) - this._filterPriorityAccounts(b))
-      .slice(0, 5);
-  }
-
   _goToNextStep(account) {
     this.dispatchEvent(new CustomEvent('account',{
       detail: account,
       bubbles: true,
       composed: true
     }))
+    console.log("Cuenta seleccionada:", account);
   }
 
   _validateSingleAccount(account){
-    const error = this._validateAccount(account);
+    const error = validateAccount(account, STATES.SUCCESS.ACTIVE, STATES.ERROR_TYPES);
 
     if(error){
       this._errorState = error;
@@ -92,22 +74,6 @@ export class AccountsPage extends LitElement {
     }
 
     this._goToNextStep(account);
-  }
-
-  _validateAccount(account) {
-    return this._getStatusError(account) ?? this._getBalanceError(account);
-  }
-
-  _getStatusError(account) {
-    return account.status !== STATES.SUCCESS.ACTIVE
-      ? STATES.ERROR_TYPES[account.status]
-      : null;
-  }
-
-  _getBalanceError(account) {
-    return account.amount === 0
-      ? STATES.ERROR_TYPES.NO_BALANCE
-      : null;
   }
 
   _selectedAccount(e){
