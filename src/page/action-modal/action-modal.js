@@ -16,6 +16,12 @@ const MODAL_TYPES = {
     primaryButtonText: "Entendido",
     secondaryButtonText: "Salir",
   },
+  confirmation: {
+    iconName: "circle-check-big",
+    iconVariant: "secondary",
+    primaryButtonText: "Confirmar",
+    secondaryButtonText: "Cancelar",
+  },
 };
 const ACTION_MODALS = {
   insufficientBalance: {
@@ -81,6 +87,15 @@ const ACTION_MODALS = {
     showSecondaryButton: false,
     primaryButtonText: "Continuar",
     primaryButtonAction: "continue",
+  },
+  transferConfirmation: {
+    modalType: "confirmation",
+    title: "CONFIRMAR OPERACIÓN",
+    message: "¿Está seguro de continuar con la operación?",
+    showPrimaryButton: true,
+    showSecondaryButton: true,
+    primaryButtonAction: "confirm",
+    secondaryButtonAction: "cancel",
   },
 };
 export class ActionModal extends LitElement {
@@ -184,7 +199,8 @@ export class ActionModal extends LitElement {
           ${action.showPrimaryButton
             ? html`
                 <type-button
-                  text=${action.primaryButtonText ||
+                  type="button"
+                  .text=${action.primaryButtonText ||
                   modalType.primaryButtonText}
                   variant="default"
                   @click=${() => this.handlePrimaryAction()}
@@ -195,7 +211,8 @@ export class ActionModal extends LitElement {
           ${action.showSecondaryButton
             ? html`
                 <type-button
-                  text=${action.secondaryButtonText ||
+                  type="button"
+                  .text=${action.secondaryButtonText ||
                   modalType.secondaryButtonText}
                   variant="ghost"
                   @click=${() => this.handleSecondaryAction()}
