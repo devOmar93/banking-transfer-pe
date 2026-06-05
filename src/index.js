@@ -133,6 +133,7 @@ export class MyElement extends LitElement {
       .status=${this.status}
       .isDataReady=${this.isDataReady}
       .isOpen=${this.isDataReady}
+      @return-home=${this._updateStep}
     ></successful-transfer-page>`;
   }
 
