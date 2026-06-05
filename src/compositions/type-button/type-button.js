@@ -1,14 +1,16 @@
 import { html, LitElement, nothing } from "lit";
 import styles from "./type-button.css";
-import "../../components/type-text/type-text.js";
-import "../../components/type-icon/type-icon.js";
-import {
-  BUTTON_CONFIG,
-  BUTTON_ICON_POSITIONS,
-  BUTTON_TYPES,
-  BUTTON_VARIANTS,
-} from "../../constants/type-button/constants.js";
+import "@components/type-text/type-text.js";
+import "@components/type-icon/type-icon.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import {
+  validateAllowedProp,
+  validateRequiredProp,
+} from "@utils/utils.js";
+
+const ALLOWED_VARIANTS = ["default", "secondary", "ghost"];
+const ALLOWED_POSITIONS = ["left", "right"];
+const ALLOWED_TYPES = ["button", "submit", "reset"];
 
 export class TypeButton extends LitElement {
   static properties = {
@@ -28,34 +30,24 @@ export class TypeButton extends LitElement {
 
     /**
      * Button visual variant.
-     * Allowed values: default, secondary, ghost.
      * @type {String}
-     * @default "default"
+     * @default ""
      */
-    variant: { type: String },
+    variant: { type: String, reflect: true },
 
     /**
      * Native button type attribute.
-     * Allowed values: button, submit, reset.
      * @type {String}
-     * @default "button"
+     * @default ""
      */
     type: { type: String },
 
     /**
      * Position of the icon relative to the text.
-     * Allowed values: left, right.
      * @type {String}
-     * @default "left"
+     * @default ""
      */
-    iconPosition: { type: String, attribute: "icon-position" },
-
-    /**
-     * Whether the button is disabled.
-     * @type {Boolean}
-     * @default false
-     */
-    disabled: { type: Boolean },
+    iconPosition: { type: String, attribute: "icon-position", reflect: true },
 
     /**
      * Accessible label for screen readers.
@@ -63,18 +55,42 @@ export class TypeButton extends LitElement {
      * @type {String}
      */
     ariaLabel: { type: String, attribute: "aria-label" },
+
+    /**
+     * Whether the button is disabled.
+     * @type {Boolean}
+     * @default false
+     */
+    disabled: { type: Boolean },
   };
 
   constructor() {
     super();
-    this.iconName = BUTTON_CONFIG.iconName.default;
-    this.text = BUTTON_CONFIG.text.default;
-    this.variant = BUTTON_CONFIG.variant.default;
-    this.type = BUTTON_CONFIG.type.default;
-    this.iconPosition = BUTTON_CONFIG.iconPosition.default;
-    this.disabled = BUTTON_CONFIG.disabled.default;
-    this.ariaLabel = BUTTON_CONFIG.ariaLabel.default;
+    this.iconName = "";
+    this.text = "";
+    this.variant = "";
+    this.type = "";
+    this.iconPosition = "";
+    this.ariaLabel = "";
+    this.disabled = false;
   }
+
+  willUpdate(changedProperties) {
+    if (changedProperties.has("text")) {
+      validateRequiredProp("text", this.text);
+    }
+    if (changedProperties.has("variant")) {
+      validateAllowedProp("variant", this.variant, ALLOWED_VARIANTS);
+    }
+    if (changedProperties.has("type")) {
+      validateAllowedProp("type", this.type, ALLOWED_TYPES);
+    }
+    if (changedProperties.has("iconPosition")) {
+      validateAllowedProp("iconPosition", this.iconPosition, ALLOWED_POSITIONS);
+    }
+  }
+
+  static styles = styles;
 
   _renderContent() {
     const hasIcon = Boolean(this.iconName);
@@ -91,57 +107,23 @@ export class TypeButton extends LitElement {
       : nothing;
 
     const text = hasText
-      ? html`<type-text text=${this.text} tag="p"></type-text>`
+      ? html`<type-text
+          text=${this.text}
+          tag="p"
+          .weight=${"medium"}
+        ></type-text>`
       : nothing;
 
-    return this.iconPosition === "right"
-      ? html`${text}${icon}`
-      : html`${icon}${text}`;
+    return html`${text}${icon}`;
   }
-
-  _validateProp(changedProps, propName, allowedValues, defaultValue) {
-    if (changedProps.has(propName) && !allowedValues.includes(this[propName])) {
-      this[propName] = defaultValue;
-    }
-  }
-
-  willUpdate(changedProps) {
-    this._validateProp(
-      changedProps,
-      "variant",
-      BUTTON_VARIANTS,
-      BUTTON_CONFIG.variant.default,
-    );
-
-    this._validateProp(
-      changedProps,
-      "iconPosition",
-      BUTTON_ICON_POSITIONS,
-      BUTTON_CONFIG.iconPosition.default,
-    );
-
-    this._validateProp(
-      changedProps,
-      "type",
-      BUTTON_TYPES,
-      BUTTON_CONFIG.type.default,
-    );
-  }
-
-  get accessibleLabel() {
-    if (this.text?.trim()) return undefined;
-    return this.ariaLabel || this.iconName || "button";
-  }
-
-  static styles = styles;
 
   render() {
     return html`
       <button
         type=${this.type}
-        class="btn btn-${this.variant}"
+        class="btn"
         ?disabled=${this.disabled}
-        aria-label=${ifDefined(this.accessibleLabel)}
+        aria-label=${ifDefined(this.ariaLabel || undefined)}
       >
         ${this._renderContent()}
       </button>
