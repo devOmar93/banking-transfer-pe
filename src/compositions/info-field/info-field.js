@@ -1,33 +1,25 @@
-
-import { LitElement, html } from 'lit'
-import { infoFieldStyles } from './info-field.css.js'
+import { LitElement, html } from "lit";
+import { styles } from "./info-field.css.js";
 
 export class InfoField extends LitElement {
- static styles = infoFieldStyles
+  constructor() {
+    super();
+  }
 
- static properties = {
-   variant: { type: String },
- }
+  static styles = styles;
 
- constructor() {
-   super()
-   this.variant = ''
- }
-
- render() {
-   return html`
-<div class="info-field ${this.variant}">
-<div class="label">
-<slot name="label"></slot>
-</div>
-
-<div class="value">
-<slot name="value"></slot>
-</div>
-</div>
-   `
- }
+  render() {
+    return html`
+      <div class="info-field">
+        <div class="label">
+          <slot name="label"></slot>
+        </div>
+        <div class="value">
+          <slot name="value"></slot>
+        </div>
+      </div>
+    `;
+  }
 }
 
-customElements.define('info-field', InfoField)
-
+customElements.define("info-field", InfoField);

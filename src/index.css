@@ -55,6 +55,11 @@
   /* type-tag */
   --type-tag-bg-color : #c8ffdb;
   --type-tag-text-color : #04a03b;
+
+  /* info-field */
+  --info-field-bg-color : #ffffff;
+  --info-field-label-color : #6b7280;
+  --info-field-value-color : #111827;
 }
 
 @media (prefers-color-scheme: dark) {
