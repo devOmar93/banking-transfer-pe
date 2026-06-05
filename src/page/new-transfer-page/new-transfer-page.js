@@ -6,8 +6,8 @@ import "./compositions/transfer-form/transfer-form.js";
 import { TRANSFER_FORM_FIELDS } from "../../utils/transfer-form/configTransferForm.js";
 import { resolveDestinationAccount } from "../../services/bankingTransferService.js";
 import "../../components/loading-overlay/loading-overlay.js";
-
-//import styles from "./new-transfer-page.css.js";
+import "../../compositions/type-button/type-button.js";
+import styles from "./new-transfer-page.css.js";
 export class NewTransferPage extends LitElement {
   static properties = {
     accountCustomer: {
@@ -69,6 +69,20 @@ export class NewTransferPage extends LitElement {
     }
   }
 
+  _returnPage() {
+    this.dispatchEvent(
+      new CustomEvent("return-page", {
+        detail: 0,
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  }
+
+  static get styles() {
+    return styles;
+  }
+
   render() {
     return html`
       ${this._loading ? html`<loading-overlay></loading-overlay>` : nothing}
@@ -81,13 +95,22 @@ export class NewTransferPage extends LitElement {
         class="modal-accounts"
       >
         <div slot="header">
+          <type-button
+            class="container-button"
+            icon-name="arrow-left"
+            icon-position="left"
+            text="Volver"
+            variant="secondary"
+            .type=${"button"}
+            @click=${this._returnPage}
+          ></type-button>
           <type-header
             .title=${"Nueva Transferencia"}
             .subtitle=${"Complete los datos de la transferencia"}
           ></type-header>
         </div>
 
-        <div slot="body">
+        <div slot="body" class="container-body">
           <from-account-card
             .account=${this.accountCustomer}
           ></from-account-card>
