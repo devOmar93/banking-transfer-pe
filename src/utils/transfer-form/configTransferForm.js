@@ -27,6 +27,7 @@ export const TRANSFER_FORM_FIELDS = {
     label: "Monto a transferir",
     placeholder: "0.00",
     formatCurrency: "0.01",
+    hasIcon: true,
 
     nativeValidation: {
       required: true,

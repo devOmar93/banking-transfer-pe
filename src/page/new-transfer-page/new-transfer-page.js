@@ -21,11 +21,7 @@ export class NewTransferPage extends LitElement {
 
   constructor() {
     super();
-    this.accountCustomer = {
-      availableBalance: 100,
-      accountNumber: 45151515151515,
-      currency: "USD",
-    };
+    this.accountCustomer = {};
     this._loading = false;
   }
 
@@ -64,6 +60,15 @@ export class NewTransferPage extends LitElement {
     console.log("responseDestinationAccount", responseDestinationAccount);
   }
 
+  _getCurrency(currency) {
+    if (currency === "USD") {
+      return "dollar-sign";
+    }
+    if (currency === "PEN") {
+      return "dollar-sign";
+    }
+  }
+
   render() {
     return html`
       ${this._loading ? html`<loading-overlay></loading-overlay>` : nothing}
@@ -75,17 +80,21 @@ export class NewTransferPage extends LitElement {
         ?has-footer=${true}
         class="modal-accounts"
       >
-        <type-header
-          slot="header"
-          .title=${"Nueva Transferencia"}
-          .subtitle=${"Complete los datos de la transferencia"}
-        ></type-header>
+        <div slot="header">
+          <type-header
+            .title=${"Nueva Transferencia"}
+            .subtitle=${"Complete los datos de la transferencia"}
+          ></type-header>
+        </div>
 
         <div slot="body">
-          <from-account-card></from-account-card>
+          <from-account-card
+            .account=${this.accountCustomer}
+          ></from-account-card>
           <transfer-form
             .configFormFields=${TRANSFER_FORM_FIELDS}
             .availableBalance=${this.accountCustomer.availableBalance}
+            .currency=${this._getCurrency(this.accountCustomer.currency)}
             @form-submit="${this._sendForm}"
           ></transfer-form>
         </div>

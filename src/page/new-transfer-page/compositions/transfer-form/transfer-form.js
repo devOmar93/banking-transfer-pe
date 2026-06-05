@@ -28,6 +28,10 @@ export class TransferForm extends LitElement {
     availableBalance: {
       type: Number,
     },
+
+    currency: {
+      type: String,
+    },
   };
 
   constructor() {
@@ -35,10 +39,12 @@ export class TransferForm extends LitElement {
     this.formFieldStates = {};
     this.configFormFields = {};
     this.availableBalance = 100;
+    this.currency = "";
   }
 
   firstUpdated() {
     this.formFieldStates = createInitialFormStates(this.configFormFields);
+    console.log("currency", this.currency);
   }
 
   _sendForm() {
@@ -82,8 +88,15 @@ export class TransferForm extends LitElement {
   }
 
   _renderFormField(field) {
-    const { name, label, placeholder, type, nativeValidation, formatCurrency } =
-      field;
+    const {
+      name,
+      label,
+      placeholder,
+      type,
+      nativeValidation,
+      formatCurrency,
+      hasIcon,
+    } = field;
     const invalidStateField = this.formFieldStates[name]?.isValid === false;
     const errorMessageField = this.formFieldStates[name]?.errorMessage ?? "";
     const isRequired = nativeValidation?.required ?? false;
@@ -101,7 +114,14 @@ export class TransferForm extends LitElement {
         .errorMessage=${errorMessageField}
         .valid=${this.formFieldStates[name]?.isValid}
       >
-        <type-icon slot="prefix" icon-name="user"></type-icon>
+        ${hasIcon
+          ? html`<type-icon
+              slot="prefix"
+              icon-name="${this.currency}"
+              variant="secondary"
+              size="s"
+            ></type-icon>`
+          : nothing}
       </type-input>
     `;
   }
@@ -115,13 +135,14 @@ export class TransferForm extends LitElement {
           )}
         </div>
         <type-button
-              .text=${"Continuar"}
-              .variant=${"default"}
-              .type=${"button"}
-              icon-name="arrow-right"
-              @click="${this._onSubmit}"
-              .iconPosition=${"right"}
-            ></type-button>
+          .text=${"Continuar"}
+          .variant=${"default"}
+          .type=${"button"}
+          icon-name="arrow-right"
+          @click="${this._onSubmit}"
+          .iconPosition=${"right"}
+          ?disabled="${!this.stateForm}"
+        ></type-button>
       </form>
     `;
   }

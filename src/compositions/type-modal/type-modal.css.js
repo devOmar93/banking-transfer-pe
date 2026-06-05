@@ -2,8 +2,8 @@ import { css } from "lit";
 
 export default css`
   :host {
-    --type-modal-bg-color: #ffffff;
-    --type-modal-backdrop-color: rgba(0, 0, 0.5, 0.5);
+    --type-modal-bg-color: #e0e4fd;
+    --type-modal-backdrop-color: #e0e4fd;
     --type-modal-width: 100%;
     --type-modal-max-width: 100%;
     --type-modal-min-width: auto;

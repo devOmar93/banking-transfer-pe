@@ -1,87 +1,55 @@
-import { LitElement, css, html } from "lit";
-import { validateAllowedProp } from "./utils/utils.js";
-import locales from "@locales/locales.json";
-import "@DM/entelgy-global-transfers-api-dm/entelgy-global-transfers-api-dm.js";
-import "@pages/successful-transfer-page/successful-transfer-page.js";
-
-const ALLOWED_LANGUAGES = ["es_LA"];
+import { LitElement, css, html, nothing } from 'lit'
+import "./components/type-icon/type-icon.js";
+import "./components/type-text/type-text";
+import "./compositions/info-card/info-card";
+import "./compositions/type-input/type-input";
+import './compositions/type-header/type-header.js'
+import "./page/new-transfer-page/new-transfer-page.js";
+import "./page/accounts-page/AccountsPage.js";
 
 export class MyElement extends LitElement {
   static properties = {
-    lang: { type: String },
-    current: { type: String },
-    amount: { type: String },
-    transactionNumber: { type: String },
-    time: { type: String },
-    date: { type: String },
-    originAccount: { type: String },
-    originAccountNumber: { type: String },
-    beneficiaryName: { type: String },
-    beneficiaryLastName: { type: String },
-    concept: { type: String },
-    status: { type: String },
-    isDataReady: { type: Boolean },
-  };
+    step : {
+      type: Number
+    },
+
+    accountCustomer : {
+      type: Object
+    }
+  }
 
   constructor() {
     super();
-    this.lang = "";
-    this.current = "";
-    this.amount = "";
-    this.transactionNumber = "";
-    this.time = "";
-    this.date = "";
-    this.originAccount = "";
-    this.originAccountNumber = "";
-    this.beneficiaryName = "";
-    this.beneficiaryLastName = "";
-    this.concept = "";
-    this.status = "";
-    this.isDataReady = false;
+    this.step = 0;
+    this.accountCustomer = {};
   }
 
-  async firstUpdated() {
-    const dataManager = this.shadowRoot.getElementById("successfulTransferDm");
-    if (dataManager) {
-      await dataManager.executeTransfer();
+  getAccountCustomer(event) {
+    this.accountCustomer = event.detail;
+    this.step = 1;
+    console.log('accountCustomer', this.accountCustomer);
+  }
+
+  _renderAcountsPage() {
+    return html`<accounts-page @account=${this.getAccountCustomer}></accounts-page>`
+  }
+
+  _renderNewTransferPage() {
+    return html`<new-transfer-page .accountCustomer=${this.accountCustomer}></new-transfer-page>`
+  }
+
+  _renderStep(page) {
+    const steps = {
+      0: this._renderAcountsPage(),
+      1: this._renderNewTransferPage()
     }
-  }
-
-  willUpdate(changedProperties) {
-    if (changedProperties.has("lang")) {
-      validateAllowedProp("lang", this.lang, ALLOWED_LANGUAGES);
-    }
-  }
-
-  _handleDataSuccess(event) {
-    const data = event.detail;
-    this.current = data.current;
-    this.amount = data.amount;
-    this.transactionNumber = data.transactionNumber;
-    this.date = data.date;
-    this.time = data.time;
-    this.originAccount = data.originAccount;
-    this.originAccountNumber = data.originAccountNumber;
-    this.beneficiaryName = data.beneficiaryName;
-    this.beneficiaryLastName = data.beneficiaryLastName;
-    this.concept = data.concept;
-    this.status = data.status;
-    this.isDataReady = true;
-  }
-
-  _handleError(event) {
-    console.error("Error cargando los datos de la transferencia", event);
-    this.isDataReady = true;
-  }
-
-  get locale() {
-    return locales[this.lang];
+    return steps[page] ?? nothing;
   }
 
   render() {
     return html`
-      <p>banking-transfer-pe</p>
-    `;
+    ${this._renderStep(this.step)}
+    `
   }
 }
-window.customElements.define("my-element", MyElement);
+window.customElements.define('my-element', MyElement)
