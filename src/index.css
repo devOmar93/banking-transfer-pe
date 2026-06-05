@@ -51,6 +51,10 @@
   --loading-overlay-bg-color : #ffffffd9;
   --loading-overlay-spiner-bg-color : #e0e0e0;
   --loading-overlay-spiner-color : #4f38fb;
+
+  /* type-tag */
+  --type-tag-bg-color : #c8ffdb;
+  --type-tag-text-color : #04a03b;
 }
 
 @media (prefers-color-scheme: dark) {
