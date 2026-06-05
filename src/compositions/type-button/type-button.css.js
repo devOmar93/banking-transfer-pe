@@ -2,8 +2,7 @@ import { css } from "lit";
 
 export default css`
   .btn {
-    border: 0px;
-    font-weight: 600;
+    border: 0;
     width: 100%;
     padding: 0.8rem 1rem;
     border-radius: 1.25rem;
@@ -18,39 +17,47 @@ export default css`
     cursor: not-allowed;
   }
 
-  .btn-default {
+  :host([variant="default"]) .btn {
     background-color: var(--btn-bg-color);
     color: var(--btn-text-color);
     --icon-color: var(--btn-text-color);
   }
 
-  .btn-default:disabled {
+  :host([variant="default"]) .btn:disabled {
     background-color: var(--btn-disabled-bg-color);
     color: var(--btn-disabled-text-color);
     --icon-color: var(--btn-disabled-text-color);
   }
 
-  .btn-secondary {
+  :host([variant="secondary"]) .btn {
     background-color: var(--btn-secondary-bg-color);
     color: var(--btn-secondary-text-color);
     --icon-color: var(--btn-secondary-text-color);
   }
 
-  .btn-secondary:disabled {
+  :host([variant="secondary"]) .btn:disabled {
     background-color: var(--btn-secondary-disabled-bg-color);
     color: var(--btn-secondary-disabled-text-color);
     --icon-color: var(--btn-secondary-disabled-text-color);
   }
 
-  .btn-ghost {
+  :host([variant="ghost"]) .btn {
     background-color: var(--btn-ghost-bg-color);
     color: var(--btn-ghost-text-color);
     --icon-color: var(--btn-ghost-text-color);
   }
 
-  .btn-ghost:disabled {
+  :host([variant="ghost"]) .btn:disabled {
     background-color: var(--btn-ghost-disabled-bg-color);
     color: var(--btn-ghost-disabled-text-color);
     --icon-color: var(--btn-ghost-disabled-text-color);
+  }
+
+  :host([icon-position="left"]) .btn {
+    flex-direction: row-reverse;
+  }
+
+  :host([icon-position="right"]) .btn {
+    flex-direction: row;
   }
 `;
