@@ -1,0 +1,12 @@
+{
+  "es_LA": {
+    "successful-transfer-page-amount-transferred": "Monto transferido",
+    "successful-transfer-page-transaction-number": "Número de transacción",
+    "successful-transfer-page-date": "Fecha",
+    "successful-transfer-page-time": "Hora",
+    "successful-transfer-page-origin-account": "Cuenta de origen",
+    "successful-transfer-page-beneficiary": "Beneficiario",
+    "successful-transfer-page-concept": "Concepto",
+    "successful-transfer-page-status": "Estado"
+  }
+}

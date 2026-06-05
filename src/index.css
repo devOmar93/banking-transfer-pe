@@ -48,18 +48,22 @@
   --type-modal-z-index: 1000;
 
   /* loading-overlay */
-  --loading-overlay-bg-color : #ffffffd9;
-  --loading-overlay-spiner-bg-color : #e0e0e0;
-  --loading-overlay-spiner-color : #4f38fb;
+  --loading-overlay-bg-color: #ffffffd9;
+  --loading-overlay-spiner-bg-color: #e0e0e0;
+  --loading-overlay-spiner-color: #4f38fb;
 
   /* type-tag */
-  --type-tag-bg-color : #c8ffdb;
-  --type-tag-text-color : #04a03b;
+  --type-tag-bg-color: #c8ffdb;
+  --type-tag-text-color: #04a03b;
 
   /* info-field */
-  --info-field-bg-color : #ffffff;
-  --info-field-label-color : #6b7280;
-  --info-field-value-color : #111827;
+  --info-field-bg-color: #ffffff;
+  --info-field-label-color: #6b7280;
+  --info-field-value-color: #111827;
+
+  /* field-list */
+  --field-list-primary-text-color: #1f1f1f;
+  --field-list-secondary-text-color: #808080;
 }
 
 @media (prefers-color-scheme: dark) {
