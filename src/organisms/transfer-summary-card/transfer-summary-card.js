@@ -1,11 +1,11 @@
-import { html, LitElement } from "lit";
+import { html, LitElement, nothing } from "lit";
 import { styles } from "./transfer-summary-card.css.js";
 import "@components/type-text/type-text.js";
 import "@compositions/transfer-summary-list/transfer-summary-list.js";
 
 class TransferSummaryCard extends LitElement {
   static properties = {
-    labels: {
+    locale: {
       type: Object,
     },
     current: { type: String },
@@ -18,12 +18,12 @@ class TransferSummaryCard extends LitElement {
     beneficiaryName: { type: String },
     beneficiaryLastName: { type: String },
     concept: { type: String },
-    status: { type: String }
+    status: { type: String },
   };
 
   constructor() {
     super();
-    this.labels = {};
+    this.locale = {};
     this.current = "";
     this.amount = "";
     this.transactionNumber = "";
@@ -45,7 +45,7 @@ class TransferSummaryCard extends LitElement {
         <header class="header-container">
           <type-text
             size="xs"
-            .text=${this.labels["successful-transfer-page-amount-transferred"]}
+            .text=${this.locale["successful-transfer-page-amount-transferred"]}
           ></type-text>
           <div class="amount-container">
             <type-text
@@ -63,7 +63,7 @@ class TransferSummaryCard extends LitElement {
 
         <section class="body-container">
           <transfer-summary-list
-            .labels=${this.labels}
+            .locale=${this.locale}
             .transactionNumber=${this.transactionNumber}
             .date=${this.date}
             .time=${this.time}
@@ -73,6 +73,7 @@ class TransferSummaryCard extends LitElement {
             .beneficiaryLastName=${this.beneficiaryLastName}
             .concept=${this.concept}
             .status=${this.status}
+            .isDataReady=${this.isDataReady}
           ></transfer-summary-list>
         </section>
       </div>

@@ -7,7 +7,7 @@ import { fireError } from "@utils/utils.js";
 
 export class TransferSummaryList extends LitElement {
   static properties = {
-    labels: { type: Object },
+    locale: { type: Object },
     transactionNumber: { type: String },
     time: { type: String },
     date: { type: String },
@@ -23,7 +23,7 @@ export class TransferSummaryList extends LitElement {
 
   constructor() {
     super();
-    this.labels = {};
+    this.locale = {};
     this.transactionNumber = "";
     this.time = "";
     this.date = "";
@@ -78,37 +78,37 @@ export class TransferSummaryList extends LitElement {
   get _fields() {
     return [
       {
-        label: this.labels["successful-transfer-page-transaction-number"],
+        label: this.locale["successful-transfer-page-transaction-number"],
         value: this._renderTextValue(this.transactionNumber),
       },
       {
-        label: this.labels["successful-transfer-page-date"],
+        label: this.locale["successful-transfer-page-date"],
         value: this._renderTextValue(this.date),
       },
       {
-        label: this.labels["successful-transfer-page-time"],
+        label: this.locale["successful-transfer-page-time"],
         value: this._renderTextValue(this.time),
       },
       {
-        label: this.labels["successful-transfer-page-origin-account"],
+        label: this.locale["successful-transfer-page-origin-account"],
         value: this._renderStackedText(
           this.originAccount,
           this.originAccountNumber,
         ),
       },
       {
-        label: this.labels["successful-transfer-page-beneficiary"],
+        label: this.locale["successful-transfer-page-beneficiary"],
         value: this._renderStackedText(
           this.beneficiaryName,
           this.beneficiaryLastName,
         ),
       },
       {
-        label: this.labels["successful-transfer-page-concept"],
+        label: this.locale["successful-transfer-page-concept"],
         value: this._renderTextValue(this.concept),
       },
       {
-        label: this.labels["successful-transfer-page-status"],
+        label: this.locale["successful-transfer-page-status"],
         value: this._renderStatusValue(this.status),
       },
     ];

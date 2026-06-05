@@ -1,5 +1,6 @@
 import jsPDF from "jspdf";
-export const generateTransferPDF = (data) => {
+
+export const generateTransferSummaryPdf = (amount, data) => {
   const doc = new jsPDF();
   doc.setFontSize(16);
   doc.setFont(undefined, "bold");
@@ -7,10 +8,10 @@ export const generateTransferPDF = (data) => {
   doc.line(15, 25, 195, 25);
   let y = 35;
   doc.setFont(undefined, "bold");
-  doc.text(`Monto: ${data.amount}`, 15, y);
+  doc.text(`Monto: ${amount}`, 15, y);
   y += 10;
   doc.setFont(undefined, "normal");
-  data.details.forEach((item) => {
+  data.forEach((item) => {
     doc.text(`${item.label}:`, 15, y);
     doc.text(`${item.value}`, 195, y, { align: "right" });
     y += 8;
