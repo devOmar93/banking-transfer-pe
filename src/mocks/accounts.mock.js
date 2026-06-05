@@ -3,7 +3,7 @@
 statuses (ACTIVE, BLOCKED, INACTIVE) 
 and different balances, including a scenario 
 exceeding the display limit */
-export const accounts_base_case = {
+export const ACCOUNTS_BASE_CASE = {
   accounts: [
     {
       id: 1,
@@ -72,7 +72,7 @@ export const accounts_base_case = {
 };
 
 /* Case 1: Single account with no available balance (balance = 0) */
-export const accounts_case_1 = {
+export const ACCOUNTS_CASE_1 = {
   accounts: [
     {
       id: 1,
@@ -87,7 +87,7 @@ export const accounts_case_1 = {
 };
 
 /* Case 2: Single account with sufficient available balance */
-export const accounts_case_2 = {
+export const ACCOUNTS_CASE_2 = {
   accounts: [
     {
       id: 1,
@@ -102,7 +102,7 @@ export const accounts_case_2 = {
 };
 
 /* Case 3: Single account that is blocked */
-export const accounts_case_3 = {
+export const ACCOUNTS_CASE_3 = {
   accounts: [
     {
       id: 1,
@@ -117,13 +117,13 @@ export const accounts_case_3 = {
 };
 
 /* Case 4: No accounts available for the user */
-export const accounts_case_4 = {
+export const ACCOUNTS_CASE_4 = {
   accounts: []
 };
 
 /* Case 5: Multiple accounts where all have zero 
 available balance (no valid account to operate)*/
-export const accounts_case_5 = {
+export const ACCOUNTS_CASE_5 = {
   accounts: [
     {
       id: 1,
@@ -147,7 +147,7 @@ export const accounts_case_5 = {
 };
 
 /* Case 6: Single account that is inactive */
-export const accounts_case_6 = {
+export const ACCOUNTS_CASE_6 = {
   accounts: [
     {
       id: 1,

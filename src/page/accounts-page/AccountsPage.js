@@ -3,8 +3,9 @@ import { styles } from "./accounts-page.css.js";
 import "@compositions/type-modal/type-modal.js";
 import "@compositions/type-header/type-header.js";
 import "./compositions/account-list/account-list.js";
-import "@components/type-icon/type-icon.js"; 
-import { accounts_base_case } from "@mocks/accounts.mock.js";
+import "@components/loading-overlay/loading-overlay.js";
+import "@compositions/info-card/info-card.js";
+import { ACCOUNTS_BASE_CASE } from "@mocks/accounts.mock.js";
 import { getAccounts } from "@services/accounts.service.js";
 import { ACCOUNTS_PAGE_ES as ES, ACCOUNTS_PAGE_CONFIG as CONFIG, STATES, PROCESS_ACCOUNT_RULES } from "@utils/accounts-page/accounts.config.js";
 import { processAccounts, filterTopAccounts, validateAccount } from "@utils/accounts-page/accounts.utils.js";
@@ -34,7 +35,7 @@ export class AccountsPage extends LitElement {
 
   async firstUpdated() {
     try {
-      const { accounts } = await getAccounts(accounts_base_case);
+      const { accounts } = await getAccounts(ACCOUNTS_BASE_CASE);
       const filteredAccounts = filterTopAccounts(accounts, CONFIG.accounts.limit, STATES.SUCCESS.ACTIVE);
       const result = processAccounts(filteredAccounts, PROCESS_ACCOUNT_RULES);
     
@@ -117,19 +118,6 @@ export class AccountsPage extends LitElement {
     `;
   }
 
-  _renderLoading(){
-    return html`
-    <div class="icon-container">
-      <type-icon
-        icon-name=${CONFIG.icon.iconName}
-        size=${CONFIG.icon.size}
-        ariaLabel=${CONFIG.icon.ariaLabel}
-        class="icon-loading"
-      ></type-icon>
-    </div>
-    `
-  }
-
   _renderAccountsList(){
     return html`
       <account-list
@@ -141,10 +129,11 @@ export class AccountsPage extends LitElement {
 
   render(){
     return html`
-      ${this._loading ? this._renderLoading() : html`
+      ${this._loading 
+        ? html`<loading-overlay></loading-overlay>` 
+        : html`
         <type-modal
           ?open=${true}
-          variant=${CONFIG.modal.variant}
           ?scrollable=${true}
           ?full-height=${true}
           ?has-footer=${true}
@@ -162,8 +151,7 @@ export class AccountsPage extends LitElement {
           <info-card
             slot="footer"
             .message=${ES.messageSecurity}
-            icon-name=${CONFIG.infoCard.iconName}
-            class="info-card"
+            ?hasIcon=${true}
           ></info-card>
         </type-modal>
       `}
