@@ -1,7 +1,7 @@
 import { html, LitElement } from "lit";
 import { styles } from "./from-account-card.css.js";
-import "../../../../components/type-text/type-text.js";
-import { formatAmount, maskAccountNumber } from "../../../../utils/format.js";
+import "@components/type-text/type-text.js";
+import { formatAmount, maskAccountNumber } from "@utils/format.js";
  
 export class FromAccountCard extends LitElement {
   static properties = {
