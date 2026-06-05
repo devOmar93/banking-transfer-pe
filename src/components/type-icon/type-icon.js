@@ -5,8 +5,9 @@ import styles from "./type-icon.css";
 import { validateAllowedProp } from "@utils/utils.js";
 import { validateRequiredProp } from "@utils/utils";
 import { fireError } from "../../utils/utils";
-const ALLOWED_VARIANTS = ["default", "secondary", "ghost"];
-const ALLOWED_SIZES = ["s", "m", "l", "xl"];
+
+const ALLOWED_VARIANTS = ["default", "secondary"];
+const ALLOWED_SIZES = ["xs", "s", "m", "l", "xl"];
 
 export class TypeIcon extends LitElement {
   static properties = {
@@ -22,7 +23,7 @@ export class TypeIcon extends LitElement {
      * @type { String }
      * @default ""
      */
-    variant: { type: "default" | "secondary" | "ghost", reflect: true },
+    variant: { type: String, reflect: true },
 
     /**
      * Controls size

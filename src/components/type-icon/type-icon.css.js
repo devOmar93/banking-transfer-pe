@@ -11,15 +11,9 @@ export default css`
     display: flex;
     align-items: center;
     justify-content: center;
+    width: min-content;
+    height: min-content;
     color: var(--icon-color);
-    box-sizing: border-box;
-    transition: all 0.2s ease-in-out;
-  }
-
-  .container-icon svg {
-    width: 100%;
-    height: 100%;
-    display: block;
   }
 
   :host([variant="default"]) .container-icon {
@@ -30,28 +24,29 @@ export default css`
 
   :host([variant="secondary"]) .container-icon {
     background-color: transparent;
-    padding: 0;
   }
 
-  :host([variant="ghost"]) .container-icon {
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
-    padding: 0.25rem;
-  }
-
-  :host([size="s"]) .container-icon {
+  :host([size="xs"]) svg {
     width: 0.6rem;
     height: 0.6rem;
   }
-  :host([size="m"]) .container-icon {
+
+  :host([size="s"]) svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  :host([size="m"]) svg {
     width: 1.4rem;
     height: 1.4rem;
   }
-  :host([size="l"]) .container-icon {
+
+  :host([size="l"]) svg {
     width: 2.2rem;
     height: 2.2rem;
   }
-  :host([size="xl"]) .container-icon {
+
+  :host([size="xl"]) svg {
     width: 3rem;
     height: 3rem;
   }
