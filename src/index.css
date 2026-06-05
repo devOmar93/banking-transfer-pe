@@ -35,6 +35,22 @@
   --btn-ghost-text-color: #000000;
   --btn-ghost-disabled-bg-color: transparent;
   --btn-ghost-disabled-text-color: #6e6e6e;
+
+  /* type-modal */
+  --type-modal-bg-color: #ffffff;
+  --type-modal-backdrop-color: rgba(0, 0, 0.5, 0.5);
+  --type-modal-width: 100%;
+  --type-modal-max-width: 100%;
+  --type-modal-min-width: auto;
+  --type-modal-border-radius: 0;
+  --type-modal-padding: 1.5rem;
+  --type-modal-gap: 1rem;
+  --type-modal-z-index: 1000;
+
+  /* loading-overlay */
+  --loading-overlay-bg-color : #ffffffd9;
+  --loading-overlay-spiner-bg-color : #e0e0e0;
+  --loading-overlay-spiner-color : #4f38fb;
 }
 
 @media (prefers-color-scheme: dark) {
