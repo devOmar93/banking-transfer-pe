@@ -1,6 +1,6 @@
 export const getAccountApi = (accountNumber) => {
   return new Promise((resolve, reject) => {
-    const operationSuccessful = false;
+    const operationSuccessful = true;
     setTimeout(() => {
       if (operationSuccessful) {
         resolve({
