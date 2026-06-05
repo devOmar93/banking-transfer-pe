@@ -3,10 +3,13 @@ import { styles } from "./accounts-page.css.js";
 import "@compositions/type-modal/type-modal.js";
 import "@compositions/type-header/type-header.js";
 import "./compositions/account-list/account-list.js";
-import "@components/type-icon/type-icon.js"; 
-import { accounts_base_case } from "@mocks/accounts.mock.js";
+import "@components/loading-overlay/loading-overlay.js";
+import "@compositions/info-card/info-card.js";
+import { ACCOUNTS_BASE_CASE } from "@mocks/accounts.mock.js";
 import { getAccounts } from "@services/accounts.service.js";
-import { ACCOUNTS_PAGE_ES as ES, ACCOUNTS_PAGE_CONFIG as CONFIG, STATES, PROCESS_ACCOUNT_RULES } from "@utils/config-accounts-page.js";
+import { ACCOUNTS_PAGE_ES as ES, ACCOUNTS_PAGE_CONFIG as CONFIG, STATES, PROCESS_ACCOUNT_RULES } from "@utils/accounts-page/accounts.config.js";
+import { processAccounts, filterTopAccounts, validateAccount } from "@utils/accounts-page/accounts.utils.js";
+import { fireEvent } from "@utils/utils.js";
 
 export class AccountsPage extends LitElement {
   static properties = {
@@ -33,8 +36,10 @@ export class AccountsPage extends LitElement {
 
   async firstUpdated() {
     try {
-      const { accounts } = await getAccounts(accounts_base_case);
-      const result = this._processAccounts(this._filterTopAccounts(accounts));
+      const { accounts } = await getAccounts(ACCOUNTS_BASE_CASE);
+      const filteredAccounts = filterTopAccounts(accounts, CONFIG.accounts.limit, STATES.SUCCESS.ACTIVE);
+      const result = processAccounts(filteredAccounts, PROCESS_ACCOUNT_RULES);
+    
       if (result.errorState) {
         this._errorState = result.errorState;
         return;
@@ -53,38 +58,12 @@ export class AccountsPage extends LitElement {
     }
   }
 
-  _processAccounts(filtered) {
-    const rule = PROCESS_ACCOUNT_RULES.find(r => r.condition(filtered));
-
-    return rule
-      ? (typeof rule.result === "function"
-          ? rule.result(filtered)
-          : rule.result)
-      : { accounts: filtered };
-  }
-
-  _filterPriorityAccounts(account) {
-    const isActive = account.status === STATES.SUCCESS.ACTIVE;
-    const hasBalance = account.availableBalance > 0;
-    return (isActive ? 0 : 2) + (hasBalance ? 0 : 1) + 1;
-  }
-
-  _filterTopAccounts(accounts){
-    return [...accounts]
-      .sort((a, b) => this._filterPriorityAccounts(a) - this._filterPriorityAccounts(b))
-      .slice(0, 5);
-  }
-
   _goToNextStep(account) {
-    this.dispatchEvent(new CustomEvent('account',{
-      detail: account,
-      bubbles: true,
-      composed: true
-    }))
+    fireEvent(this, 'account', account);
   }
 
   _validateSingleAccount(account){
-    const error = this._validateAccount(account);
+    const error = validateAccount(account, STATES.SUCCESS.ACTIVE, STATES.ERROR_TYPES);
 
     if(error){
       this._errorState = error;
@@ -151,19 +130,6 @@ export class AccountsPage extends LitElement {
     `;
   }
 
-  _renderLoading(){
-    return html`
-    <div class="icon-container">
-      <type-icon
-        icon-name=${CONFIG.icon.iconName}
-        size=${CONFIG.icon.size}
-        ariaLabel=${CONFIG.icon.ariaLabel}
-        class="icon-loading"
-      ></type-icon>
-    </div>
-    `
-  }
-
   _renderAccountsList(){
     return html`
       <account-list
@@ -175,10 +141,11 @@ export class AccountsPage extends LitElement {
 
   render(){
     return html`
-      ${this._loading ? this._renderLoading() : html`
+      ${this._loading 
+        ? html`<loading-overlay></loading-overlay>` 
+        : html`
         <type-modal
           ?open=${true}
-          variant=${CONFIG.modal.variant}
           ?scrollable=${true}
           ?full-height=${true}
           ?has-footer=${true}
@@ -196,8 +163,7 @@ export class AccountsPage extends LitElement {
           <info-card
             slot="footer"
             .message=${ES.messageSecurity}
-            icon-name=${CONFIG.infoCard.iconName}
-            class="info-card"
+            ?hasIcon=${true}
           ></info-card>
         </type-modal>
       `}

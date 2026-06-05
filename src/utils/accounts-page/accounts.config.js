@@ -1,5 +1,5 @@
-import ES from "../locales/es.json";
-const lang = ES["es-PE"];
+import ES from "@locales/locales.json";
+const lang = ES["es_LA"];
 
 export const ACCOUNTS_PAGE_ES = {
   header:{
@@ -46,6 +46,9 @@ export const ACCOUNTS_PAGE_CONFIG = {
   },
   infoCard:{
     iconName: "info",
+  },
+  accounts: {
+    limit: 5,
   }
 }
 

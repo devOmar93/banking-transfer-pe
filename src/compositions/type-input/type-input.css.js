@@ -32,6 +32,7 @@ export default css`
       input {
         border: none;
         outline: none;
+        width: 100%;
       }
     }
 

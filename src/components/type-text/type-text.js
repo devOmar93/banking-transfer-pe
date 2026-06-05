@@ -1,7 +1,7 @@
 import { html, LitElement } from "lit";
 import { styles } from "./type-text.css.js";
 import { unsafeStatic, html as staticHtml } from "lit/static-html.js";
-import { TYPOGRAPHY_CONFIG } from "@utils/config-type-text.js";
+import { TYPOGRAPHY_CONFIG, validateText} from "./utils/type-text.utils.js";
 
 export class TypeText extends LitElement {
   static properties = {
@@ -51,16 +51,12 @@ export class TypeText extends LitElement {
   
   static styles = styles;
 
-  _validate(value, config) {
-    return config.allowed.includes(value) ? value : config.default;
-  }
-
   willUpdate(changedProps) {
     for (const prop of changedProps.keys()) {
       const config = TYPOGRAPHY_CONFIG[prop];
       if (!config) continue;
 
-      const validValue = this._validate(this[prop], config);
+      const validValue = validateText(this[prop], config);
 
       if (this[prop] !== validValue) {
         this[prop] = validValue;

@@ -16,6 +16,7 @@ export default defineConfig({
       "@services": path.resolve(__dirname, "./src/services"),
       "@utils": path.resolve(__dirname, "./src/utils"),
       "@DM": path.resolve(__dirname, "./src/providers/data-managers"),
+      "@mocks": path.resolve(__dirname, "./src/mocks"),
     },
   },
 });

@@ -2,6 +2,8 @@ import { html, LitElement } from "lit";
 import { styles } from "./account-list.css.js"; 
 import { repeat } from "lit/directives/repeat.js";
 import "../account-card/account-card.js"
+import { fireEvent } from "@utils/utils.js";
+
 export class AccountList extends LitElement{
   static properties = {
     accounts: {type: Object}
@@ -13,14 +15,9 @@ export class AccountList extends LitElement{
   }
 
   static styles = styles;
-
   
   _onSelect(e){
-    this.dispatchEvent(new CustomEvent('select-account',{
-      detail: e.detail,
-      bubbles: true,
-      composed: true
-    }))
+    fireEvent(this, 'select-account', e.detail);
   }
 
   render(){

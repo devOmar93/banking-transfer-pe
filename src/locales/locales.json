@@ -16,6 +16,21 @@
     "successful-transfer-page-share-modal-title": "Transferencia exitosa",
     "successful-transfer-page-share-modal-subtitle": "Tu dinero ha sido transferido correctamente",
     "successful-transfer-page-share-modal-accept-button": "Aceptar",
-    "successful-transfer-page-message": "Guarde este comprobante para sus registros. El dinero será reflejado en la cuenta del beneficiario en un plazo de 24 horas."
+    "successful-transfer-page-message": "Guarde este comprobante para sus registros. El dinero será reflejado en la cuenta del beneficiario en un plazo de 24 horas.",
+    "account-page-header-title": "Transferencias",
+    "account-page-header-subtitle": "Selecciona una cuenta para comenzar",
+    "account-page-messageSecurity": "Tus transferencias están protegidas con encriptación de extremo a extremo",
+    "account-page-errors-no-accounts-title": "No tienes cuentas disponibles",
+    "account-page-errors-no-accounts-message": "No se encontraron cuentas asociadas",
+    "account-page-errors-blocked-title": "Cuenta bloqueada",
+    "account-page-errors-blocked-message": "La cuenta seleccionada está bloqueada",
+    "account-page-errors-no-balance-title": "Saldo Insuficiente",
+    "account-page-errors-no-balance-message": "La cuenta no tiene saldo suficiente",
+    "account-page-errors-all-no-balance-title": "Saldo Insuficiente",
+    "account-page-errors-all-no-balance-message": "Las cuentas no tiene saldo suficiente",
+    "account-page-errors-inactive-title": "Cuenta no disponible",
+    "account-page-errors-inactive-message": "La cuenta está inactiva",
+    "account-page-errors-error-technical-title": "Error al cargar las cuentas",
+    "account-page-errors-error-technical-message": "Ocurrió un problema al obtener sus cuentas. Intente nuevamente"
   }
 }
