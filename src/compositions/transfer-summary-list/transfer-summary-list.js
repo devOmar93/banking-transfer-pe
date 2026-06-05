@@ -1,11 +1,11 @@
 import { html, LitElement, nothing } from "lit";
-import { styles } from "./transaction-summary-list.css.js";
+import { styles } from "./transfer-summary-list.css.js";
 import "@components/type-text/type-text.js";
 import "@components/type-tag/type-tag.js";
 import "@compositions/info-field/info-field.js";
 import { fireError } from "@utils/utils.js";
 
-export class TransactionSummaryList extends LitElement {
+export class TransferSummaryList extends LitElement {
   static properties = {
     labels: { type: Object },
     transactionNumber: { type: String },
@@ -139,4 +139,4 @@ export class TransactionSummaryList extends LitElement {
   }
 }
 
-customElements.define("transaction-summary-list", TransactionSummaryList);
+customElements.define("transfer-summary-list", TransferSummaryList);
