@@ -5,6 +5,9 @@ import "./compositions/info-card/info-card";
 import "./compositions/type-input/type-input";
 import "./compositions/type-header/type-header.js";
 import "./page/accounts-page/compositions/account-card/account-card.js";
+import "./compositions/type-header/type-header";
+import "./page/successful-transfer-page/successful-transfer.js";
+import { SuccessfulTransferMock } from "../src/mocks/successful-transfer.mock.js";
 
 /**
  * An example element.
@@ -15,19 +18,20 @@ import "./page/accounts-page/compositions/account-card/account-card.js";
 export class MyElement extends LitElement {
   static get properties() {
     return {
+      data: { type: Object },
       /**
-       * The number of times the button has been clicked.
        */
     };
   }
   constructor() {
     super();
+    this.data = SuccessfulTransferMock();
   }
-
   render() {
     return html`
       <p>banking-transfer-pe</p>
-     
+      <successful-transfer .data=${this.data}></successful-transfer>
+      
     `;
   }
 }
