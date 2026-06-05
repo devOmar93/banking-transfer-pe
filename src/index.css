@@ -1,5 +1,4 @@
 :root {
-  color-scheme: light dark;
   background-color: #ffffff;
   --shadow-md:
     0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -15,9 +14,10 @@
   --text-success: #16a34a;
   --text-error: #dc2626;
   --text-link: #7c3aed;
+  --text-color: var(--text-primary);
   /* info-card-color */
-  --info-card-bg: #FFFFFF;
-  --info-card-border: rgba(0, 0, 0, 0.10);
+  --info-card-bg: #ffffff;
+  --info-card-border: rgba(0, 0, 0, 0.1);
 
   /* button-color */
   /* default*/
@@ -27,7 +27,7 @@
   --btn-disabled-text-color: #b4b4b4;
 
   /* secondary*/
-  --btn-secondary-bg-color: #dadadaff;
+  --btn-secondary-bg-color: rgb(255, 255, 255);
   --btn-secondary-text-color: #000000;
   --btn-secondary-disabled-bg-color: #c5c5c5;
   --btn-secondary-disabled-text-color: #818181;
@@ -90,4 +90,39 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* scroll */
+::-webkit-scrollbar {
+  width: 8px; 
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+  background-clip: padding-box;
+}
+
+@supports (scrollbar-width: thin) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
+  }
 }

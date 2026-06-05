@@ -105,8 +105,8 @@ export class AccountsPage extends LitElement {
         ?hasFooter=${false}
       >
       <div slot="body">
-        <span>${error.message}</span>
-        <span>${error.title}</span>
+        <type-text .text=${error.title}></type-text>
+        <type-text .text=${error.message}></type-text>
       </div>
       </type-modal>
     `;

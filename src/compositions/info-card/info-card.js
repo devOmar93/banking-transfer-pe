@@ -1,4 +1,4 @@
-import { html, LitElement,nothing } from "lit";
+import { html, LitElement, nothing } from "lit";
 import { styles } from "./info-card.css.js";
 import "../../components/type-icon/type-icon.js";
 import "../../components/type-text/type-text.js";
@@ -33,7 +33,7 @@ export class InfoCard extends LitElement {
         ${this.hasIcon
           ? html`
               <div class="icon-container">
-                <type-icon icon-name="info"></type-icon>
+                <type-icon icon-name="info" .size=${"s"} .variant=${"default"}></type-icon>
               </div>
             `
           : nothing}
