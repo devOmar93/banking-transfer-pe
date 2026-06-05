@@ -1,9 +1,10 @@
-import { LitElement, css, html } from 'lit'
+import { LitElement, css, html } from "lit";
 import "./components/type-icon/type-icon";
 import "./components/type-text/type-text";
 import "./compositions/info-card/info-card";
 import "./compositions/type-input/type-input";
-import './compositions/type-header/type-header.js'
+import "./compositions/type-header/type-header.js";
+import "./page/accounts-page/compositions/account-card/account-card.js";
 
 /**
  * An example element.
@@ -17,16 +18,17 @@ export class MyElement extends LitElement {
       /**
        * The number of times the button has been clicked.
        */
-    }
+    };
   }
   constructor() {
-    super()
+    super();
   }
 
   render() {
     return html`
       <p>banking-transfer-pe</p>
-    `
+     
+    `;
   }
 }
-window.customElements.define('my-element', MyElement)
+window.customElements.define("my-element", MyElement);
