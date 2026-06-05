@@ -16,3 +16,7 @@ export const TYPOGRAPHY_CONFIG = {
     default: "regular" 
   }
 };
+
+export const validateText = (value, config) => {
+  return config.allowed.includes(value) ? value : config.default;
+};

@@ -1,45 +1,76 @@
 import { html, LitElement } from "lit";
 import { styles } from "./type-text.css.js";
 import { unsafeStatic, html as staticHtml } from "lit/static-html.js";
-import { TYPOGRAPHY_CONFIG } from "../../constants/constants.js";
+import { TYPOGRAPHY_CONFIG, validateText} from "./utils/type-text.utils.js";
 
 export class TypeText extends LitElement {
   static properties = {
+    /**
+     * HTML tag to render
+     * @type { String }
+     * @default "span"
+     */
     tag: { type: String },
+
+    /**
+     * Text content to display
+     * @type { String }
+     */
     text: { type: String },
+
+    /**
+     * Typography size (s, m, l, xl)
+     * @type { String }
+     * @default "span"
+     */
     size: { type: String },
+
+    /**
+     * Horizontal alignment (left, center, right)
+     * @type { String }
+     * @default "left"
+     */
     align: { type: String },
+
+    /**
+     * Font weight (light, regular, semibold, bold)
+     * @type { String }
+     * @default "regular"
+     */
     weight: { type: String },
   };
 
   constructor() {
     super();
     this.text = "";
-    this.tag = TYPOGRAPHY_CONFIG.tag.default;
-    this.size = TYPOGRAPHY_CONFIG.size.default;
-    this.align = TYPOGRAPHY_CONFIG.align.default;
-    this.weight = TYPOGRAPHY_CONFIG.weight.default;
+    this.tag = "";
+    this.size = "";
+    this.align = "";
+    this.weight = "";
   }
   
   static styles = styles;
 
-  
-  _validate(value, config) {
-    return config.allowed.includes(value) ? value : config.default;
+  willUpdate(changedProps) {
+    for (const prop of changedProps.keys()) {
+      const config = TYPOGRAPHY_CONFIG[prop];
+      if (!config) continue;
+
+      const validValue = validateText(this[prop], config);
+
+      if (this[prop] !== validValue) {
+        this[prop] = validValue;
+      }
+    }
   }
 
   _renderContent() { 
-    const safeTag = this._validate(this.tag, TYPOGRAPHY_CONFIG.tag);
-    const tag = unsafeStatic(safeTag);
-
-    const size = this._validate(this.size, TYPOGRAPHY_CONFIG.size);
-    const align = this._validate(this.align, TYPOGRAPHY_CONFIG.align);
-    const weight = this._validate(this.weight, TYPOGRAPHY_CONFIG.weight);
-
+    const tag = unsafeStatic(this.tag);
+    
     const className = [
-      `size-${size}`,
-      `align-${align}`,
-      `weight-${weight}`
+      `size-${this.size}`,
+      `align-${this.align}`,
+      `weight-${this.weight}`
     ].join(" ");
 
     return staticHtml`

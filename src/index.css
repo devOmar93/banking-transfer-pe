@@ -16,8 +16,8 @@
   --text-error: #dc2626;
   --text-link: #7c3aed;
   /* info-card-color */
-  --info-card-bg: #f3f4f6;
-  --info-card-border: #c3c7ca;
+  --info-card-bg: #FFFFFF;
+  --info-card-border: rgba(0, 0, 0, 0.10);
 
   /* button-color */
   /* default*/
