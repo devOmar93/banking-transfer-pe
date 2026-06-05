@@ -7,6 +7,7 @@ import {
 } from "../../../../utils/transfer-form/transferFormUtil.js";
 import "../../../../compositions/type-input/type-input.js";
 import "../../../../compositions/type-button/type-button.js";
+import "../../../../components/type-icon/type-icon.js";
 
 import styles from "./transfer-form.css.js";
 
@@ -67,7 +68,6 @@ export class TransferForm extends LitElement {
         context: { availableBalance: this.availableBalance },
       }),
     };
-
     event.stopPropagation();
     this._validateForm();
   }
@@ -101,6 +101,7 @@ export class TransferForm extends LitElement {
         .errorMessage=${errorMessageField}
         .valid=${this.formFieldStates[name]?.isValid}
       >
+        <type-icon slot="prefix" icon-name="user"></type-icon>
       </type-input>
     `;
   }
