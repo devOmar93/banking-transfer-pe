@@ -1,35 +1,21 @@
-import {css} from 'lit';
-export const infoFieldStyles = css`
+import { css } from "lit";
 
-.info-field {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+export const styles = css`
+  .info-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    padding: 1rem;
+    gap: 1rem;
+    background-color: var(--info-field-bg-color);
+  }
 
-  border: none;
-  padding: var(--padding, 12px);
-  gap: var(--gap, 12px);
+  .label {
+    color: var(--info-field-label-color);
+  }
 
-  border-radius: 4px;
-  background-color:#ffffff;
-}
-
-.label {
-    font-size: 14px;
-    color: #6b7280;
-}    
-
-.value {
-    font-size: 14px;
-    font-weight: 600;
-    color: #111827;
-}
-
-.ingo-field.primary {
-    --border-color: #4f46e5;
-}
-
-.info-field.success {
-    --border-color: #16a34a;
-}
- `   
+  .value {
+    color: var(--info-field-value-color);
+  }
+`;

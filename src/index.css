@@ -1,6 +1,8 @@
 :root {
   color-scheme: light dark;
   background-color: #ffffff;
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
   /* icon-color */
   --icon-color: #594ae1;
@@ -35,6 +37,39 @@
   --btn-ghost-text-color: #000000;
   --btn-ghost-disabled-bg-color: transparent;
   --btn-ghost-disabled-text-color: #6e6e6e;
+
+  /* type-modal */
+  --type-modal-bg-color: #ffffff;
+  --type-modal-backdrop-color: rgba(0, 0, 0.5, 0.5);
+  --type-modal-width: 100%;
+  --type-modal-max-width: 100%;
+  --type-modal-min-width: auto;
+  --type-modal-border-radius: 0;
+  --type-modal-padding: 1.5rem;
+  --type-modal-gap: 1rem;
+  --type-modal-z-index: 1000;
+
+  /* loading-overlay */
+  --loading-overlay-bg-color: #ffffffd9;
+  --loading-overlay-spiner-bg-color: #e0e0e0;
+  --loading-overlay-spiner-color: #4f38fb;
+
+  /* type-tag */
+  --type-tag-bg-color: #c8ffdb;
+  --type-tag-text-color: #04a03b;
+
+  /* info-field */
+  --info-field-bg-color: #ffffff;
+  --info-field-label-color: #6b7280;
+  --info-field-value-color: #111827;
+
+  /* field-list */
+  --field-list-primary-text-color: #1f1f1f;
+  --field-list-secondary-text-color: #808080;
+
+  /* transfer-summary-card */
+  --transfer-summary-card-bg-gradient-start: #7f13fb;
+  --transfer-summary-card-bg-gradient-end: #a824f5;
 }
 
 @media (prefers-color-scheme: dark) {
