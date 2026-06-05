@@ -1,4 +1,4 @@
-import { html, LitElement } from "lit";
+import { html, LitElement,nothing } from "lit";
 import { styles } from "./info-card.css.js";
 import "../../components/type-icon/type-icon.js";
 import "../../components/type-text/type-text.js";
@@ -11,9 +11,17 @@ import { INFO_CARD_CONFIG } from "../../constants/info-card/constants.js";
 export class InfoCard extends LitElement {
   static properties = {
     /** */
+    message: {
+      type: String,
+    },
+    hasIcon: {
+      type: Boolean,
+    },
   };
   constructor() {
     super();
+    this.message = "";
+    this.hasIcon = false;
   }
 
   static get styles() {
@@ -22,13 +30,15 @@ export class InfoCard extends LitElement {
   render() {
     return html`
       <div class="info-card">
-        <div class="content">
-          <div class="title">
-            <slot name="title"></slot>
-          </div>
-          <div class="value">
-            <slot name="value"></slot>
-          </div>
+        ${this.hasIcon
+          ? html`
+              <div class="icon-container">
+                <type-icon icon-name="info"></type-icon>
+              </div>
+            `
+          : nothing}
+        <div class="message-container">
+          <type-text .text=${this.message}></type-text>
         </div>
       </div>
     `;

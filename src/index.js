@@ -5,6 +5,7 @@ import "./compositions/info-card/info-card";
 import "./compositions/type-input/type-input";
 import "./compositions/type-header/type-header";
 import "./page/successful-transfer-page/successful-transfer.js";
+import { SuccessfulTransferMock } from "../src/mocks/successful-transfer.mock.js";
 
 /**
  * An example element.
@@ -22,20 +23,13 @@ export class MyElement extends LitElement {
   }
   constructor() {
     super();
-    this.data = {
-      amount: "$1,234.00",
-      transaction: "TRF177932287994",
-      date: "20 de mayo de 2026",
-      time: "07:38 p.m.",
-      account: "Cuenta de Ahorros ****5678",
-      beneficiary: "Juan Pérez",
-      concept: "Pago servicios",
-    };
+    this.data = SuccessfulTransferMock();
   }
   render() {
     return html`
       <p>banking-transfer-pe</p>
       <successful-transfer .data=${this.data}></successful-transfer>
+      
     `;
   }
 }
