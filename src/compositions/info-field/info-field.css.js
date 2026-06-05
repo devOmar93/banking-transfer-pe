@@ -18,5 +18,4 @@ export const styles = css`
   .value {
     color: var(--info-field-value-color);
   }
-
 `;
