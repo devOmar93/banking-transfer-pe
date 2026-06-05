@@ -3,15 +3,15 @@ import { css } from "lit";
 export default css`
     .form-container {
         display: grid;
-        gap: 0.5rem;
+        gap: 1rem;
     }
     .field-container {
         display: grid;
         gap: 1rem;
         grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-        padding: 0.75rem 0.625rem;
+        padding: 1rem;
         background-color: #fff;
-        border-radius: 0.5rem;
+        border-radius: 0.75rem;
     }
     
     .error {

@@ -105,10 +105,15 @@ export class MyElement extends LitElement {
     ></accounts-page>`;
   }
 
+  _updateStep(event) {
+    this.step = event.detail;
+  }
+
   _renderNewTransferPage() {
     return html`<new-transfer-page
       .accountCustomer=${this.accountCustomer}
       @form-submit=${this.executeTransfer}
+      @return-page=${this._updateStep}
     ></new-transfer-page>`;
   }
 
