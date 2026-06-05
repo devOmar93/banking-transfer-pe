@@ -25,16 +25,16 @@ export class AccountList extends LitElement{
       <div class="container-list">
         ${
           repeat(
-            this.accounts,
+            Object.values(this.accounts),
             (account) => account.id,
             (account) => html`
               <account-card
-                accountName=${account.accountName}
-                accountNumber=${account.accountNumber}
-                accountType=${account.accountType}
-                status=${account.status}
-                availableBalance= ${account.availableBalance}
-                currency=${account.currency}
+                .accountName=${account.accountName}
+                .accountNumber=${account.accountNumber}
+                .accountType=${account.accountType}
+                .status=${account.status}
+                .availableBalance=${account.availableBalance}
+                .currency=${account.currency}
                 @account-selected=${this._onSelect}
               ></account-card>
             `

@@ -80,28 +80,7 @@ export class MyElement extends LitElement {
 
   render() {
     return html`
-      <successful-transfer-page
-        .locale=${this.locale}
-        .current=${this.current}
-        .amount=${this.amount}
-        .transactionNumber=${this.transactionNumber}
-        .time=${this.time}
-        .date=${this.date}
-        .originAccount=${this.originAccount}
-        .originAccountNumber=${this.originAccountNumber}
-        .beneficiaryName=${this.beneficiaryName}
-        .beneficiaryLastName=${this.beneficiaryLastName}
-        .concept=${this.concept}
-        .status=${this.status}
-        .isDataReady=${this.isDataReady}
-        .isOpen=${this.isDataReady}
-      ></successful-transfer-page>
-      <entelgy-global-transfers-api-dm
-        id="successfulTransferDm"
-        @transfer-api-dm-create="${this._handleDataSuccess}"
-        @transfer-api-fetch-error="${this._handleError}"
-      >
-      </entelgy-global-transfers-api-dm>
+      <p>banking-transfer-pe</p>
     `;
   }
 }
