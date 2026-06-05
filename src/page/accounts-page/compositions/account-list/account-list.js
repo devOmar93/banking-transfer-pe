@@ -13,15 +13,6 @@ export class AccountList extends LitElement{
   }
 
   static styles = styles;
-
-  _formatCurrency(currency) {
-    const symbols = {
-      PEN: 'S/',
-      USD: '$/'
-    }
-    const symbol = symbols[currency] || ''
-    return `${symbol}`;
-  }
   
   _onSelect(e){
     this.dispatchEvent(new CustomEvent('select-account',{
@@ -29,6 +20,7 @@ export class AccountList extends LitElement{
       bubbles: true,
       composed: true
     }))
+    console.log(e.detail)
   }
 
   render(){
@@ -40,12 +32,12 @@ export class AccountList extends LitElement{
             (account) => account.id,
             (account) => html`
               <account-card
-                title=${account.accountName}
-                number=${account.accountNumber}
-                type=${account.accountType}
+                accountName=${account.accountName}
+                accountNumber=${account.accountNumber}
+                accountType=${account.accountType}
                 status=${account.status}
-                amount= ${account.availableBalance}
-                currency=${this._formatCurrency(account.currency)}
+                availableBalance= ${account.availableBalance}
+                currency=${account.currency}
                 @account-selected=${this._onSelect}
               ></account-card>
             `
