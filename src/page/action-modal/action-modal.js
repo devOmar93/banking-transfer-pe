@@ -200,6 +200,7 @@ export class ActionModal extends LitElement {
             ? html`
                 <type-button
                   type="button"
+                  icon-position="right"
                   .text=${action.primaryButtonText ||
                   modalType.primaryButtonText}
                   variant="default"
@@ -212,6 +213,7 @@ export class ActionModal extends LitElement {
             ? html`
                 <type-button
                   type="button"
+                  icon-position="right"
                   .text=${action.secondaryButtonText ||
                   modalType.secondaryButtonText}
                   variant="ghost"
