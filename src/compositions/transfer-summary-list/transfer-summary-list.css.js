@@ -2,8 +2,8 @@ import { css } from "lit";
 
 export const styles = css`
   .container {
-    padding: 1rem;
     width: 100%;
+    box-sizing: border-box
   }
 
   .primary-text {
@@ -15,6 +15,7 @@ export const styles = css`
   }
 
   ul {
+    padding: 0;
     margin: 0;
   }
 
