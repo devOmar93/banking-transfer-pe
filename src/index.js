@@ -3,7 +3,6 @@ import { validateAllowedProp } from "./utils/utils.js";
 import locales from "@locales/locales.json";
 import "@DM/entelgy-global-transfers-api-dm/entelgy-global-transfers-api-dm.js";
 import "@pages/successful-transfer-page/successful-transfer-page.js";
-import "@pages/accounts-page/AccountsPage.js";
 
 const ALLOWED_LANGUAGES = ["es_LA"];
 
@@ -82,7 +81,6 @@ export class MyElement extends LitElement {
   render() {
     return html`
       <p>banking-transfer-pe</p>
-      <accounts-page></accounts-page>
     `;
   }
 }
