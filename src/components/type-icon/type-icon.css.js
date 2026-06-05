@@ -2,7 +2,6 @@ import { css } from "lit";
 
 export default css`
   :host {
-
     display: inline-flex;
     width: min-content;
     height: min-content;
@@ -12,9 +11,15 @@ export default css`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: min-content;
-    height: min-content;
     color: var(--icon-color);
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .container-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
   :host([variant="default"]) .container-icon {
@@ -25,21 +30,28 @@ export default css`
 
   :host([variant="secondary"]) .container-icon {
     background-color: transparent;
+    padding: 0;
   }
 
-  :host([size="s"]) svg {
+  :host([variant="ghost"]) .container-icon {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    padding: 0.25rem;
+  }
+
+  :host([size="s"]) .container-icon {
     width: 0.6rem;
     height: 0.6rem;
   }
-  :host([size="m"]) svg {
+  :host([size="m"]) .container-icon {
     width: 1.4rem;
     height: 1.4rem;
   }
-  :host([size="l"]) svg {
+  :host([size="l"]) .container-icon {
     width: 2.2rem;
     height: 2.2rem;
   }
-  :host([size="xl"]) svg {
+  :host([size="xl"]) .container-icon {
     width: 3rem;
     height: 3rem;
   }
