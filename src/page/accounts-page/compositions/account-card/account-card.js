@@ -23,11 +23,21 @@ export class AccountCard extends LitElement {
     this.accountName = "";
     this.accountNumber = "";
     this.accountType = "";
-    this.availableBalance = "";
+    this.currency = "";
+    this.availableBalance = 0;
     this.status = "";
   }
 
   static styles = styles;
+
+  
+  _formatCurrency(currency = this.currency) {
+    const symbols = {
+      PEN: 'S/',
+      USD: '$'
+    };
+    return symbols[currency] || '';
+  }
 
   /**
    * Renders the account card content
@@ -51,7 +61,7 @@ export class AccountCard extends LitElement {
               tag="p"
               size="m"
               weight="semibold"
-              text="${this.accountName}"
+              .text=${this.accountName}
             ></type-text>
 
             <type-text
@@ -59,7 +69,7 @@ export class AccountCard extends LitElement {
               size="s"
               weight="medium"
               class="p-subtitle"
-              text="${this.accountNumber}"
+              .text=${this.accountNumber}
             ></type-text>
 
             <type-text
@@ -67,7 +77,7 @@ export class AccountCard extends LitElement {
               size="xs"
               class="p-subtitle"
               weight="regular"
-              text="${this.accountType}"
+              .text=${this.accountType}
             ></type-text>
           </div>
         </div>
@@ -79,14 +89,7 @@ export class AccountCard extends LitElement {
             tag="p"
             size="ml"
             weight="bold"
-            text="${this.currency}"
-          ></type-text>
-
-          <type-text
-            tag="p"
-            size="ml"
-            weight="bold"
-            text="${this.availableBalance}"
+            .text=${`${this._formatCurrency()} ${this.availableBalance}`}
           ></type-text>
 
           <type-icon
@@ -99,6 +102,8 @@ export class AccountCard extends LitElement {
     `;
   }
 
+ 
+
   /**
    * Handles click event
    * Dispatches a custom event with account data
@@ -108,7 +113,7 @@ export class AccountCard extends LitElement {
     this.dispatchEvent(
       new CustomEvent("account-selected", {
         detail: {
-          accountName: this.title,
+          accountName: this.accountName,
           accountNumber: this.accountNumber,
           accountType: this.accountType,
           availableBalance: this.availableBalance,
@@ -120,6 +125,7 @@ export class AccountCard extends LitElement {
       }),
     );
   }
+
 
   /**
    * Handles keyboard interaction (Enter / Space)

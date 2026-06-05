@@ -105,7 +105,7 @@ export class AccountsPage extends LitElement {
   }
 
   _getBalanceError(account) {
-    return account.amount === 0
+    return account.availableBalance === 0
       ? STATES.ERROR_TYPES.NO_BALANCE
       : null;
   }

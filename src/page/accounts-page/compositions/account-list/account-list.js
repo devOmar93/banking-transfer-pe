@@ -14,14 +14,6 @@ export class AccountList extends LitElement{
 
   static styles = styles;
 
-  _formatCurrency(currency) {
-    const symbols = {
-      PEN: 'S/',
-      USD: '$/'
-    }
-    const symbol = symbols[currency] || ''
-    return `${symbol}`;
-  }
   
   _onSelect(e){
     this.dispatchEvent(new CustomEvent('select-account',{
@@ -36,16 +28,16 @@ export class AccountList extends LitElement{
       <div class="container-list">
         ${
           repeat(
-            this.accounts,
+            Object.values(this.accounts),
             (account) => account.id,
             (account) => html`
               <account-card
-                accountName=${account.accountName}
-                accountNumber=${account.accountNumber}
-                accountType=${account.accountType}
-                status=${account.status}
-                availableBalance=${account.availableBalance}
-                currency=${this._formatCurrency(account.currency)}
+                .accountName=${account.accountName}
+                .accountNumber=${account.accountNumber}
+                .accountType=${account.accountType}
+                .status=${account.status}
+                .availableBalance=${account.availableBalance}
+                .currency=${account.currency}
                 @account-selected=${this._onSelect}
               ></account-card>
             `
