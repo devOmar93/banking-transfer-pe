@@ -115,14 +115,22 @@ export class TransferForm extends LitElement {
           )}
         </div>
         <type-button
-          text="Continuar"
-          icon-name="arrow-right"
-          ?disabled="${!this.stateForm}"
-          @click="${this._onSubmit}"
-        ></type-button>
+              .text=${"Continuar"}
+              .variant=${"default"}
+              .type=${"button"}
+              icon-name="arrow-right"
+              @click="${this._onSubmit}"
+              .iconPosition=${"right"}
+            ></type-button>
       </form>
     `;
   }
 }
 
+/*<type-button
+          text="Continuar"
+          icon-name="arrow-right"
+          ?disabled="${!this.stateForm}"
+          @click="${this._onSubmit}"
+        ></type-button>*/
 customElements.define("transfer-form", TransferForm);

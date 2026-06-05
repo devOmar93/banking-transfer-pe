@@ -5,6 +5,7 @@ import "./compositions/from-account-card/from-account-card.js";
 import "./compositions/transfer-form/transfer-form.js";
 import { TRANSFER_FORM_FIELDS } from "../../utils/transfer-form/configTransferForm.js";
 import { resolveDestinationAccount } from "../../services/bankingTransferService.js";
+import "../../components/loading-overlay/loading-overlay.js";
 
 //import styles from "./new-transfer-page.css.js";
 export class NewTransferPage extends LitElement {
@@ -65,6 +66,7 @@ export class NewTransferPage extends LitElement {
 
   render() {
     return html`
+      ${this._loading ? html`<loading-overlay></loading-overlay>` : nothing}
       <type-modal
         ?open=${true}
         variant="page"

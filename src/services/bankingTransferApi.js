@@ -23,6 +23,6 @@ export const getAccountApi = (accountNumber) => {
         },
       });
       return;
-    }, 2000);
+    }, 2500);
   });
 };
