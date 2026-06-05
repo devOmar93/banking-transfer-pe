@@ -12,10 +12,12 @@ export const styles = css`
     background-color: white;
     color: black;
     display: flex;
+    align-items: center;
     width: 100%;
-    flex-direction: column;
     padding: 1rem;
     box-sizing: border-box;
-    box-shadow: var(--shadow-md)
+    gap: 0.8rem;
+    box-shadow: var(--shadow-md);
+    border-radius: 1rem;
   }
 `;

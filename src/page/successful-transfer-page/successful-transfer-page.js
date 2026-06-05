@@ -110,28 +110,28 @@ export class SuccessfulTransferPage extends LitElement {
   render() {
     return html`
       <type-modal .open=${this.isOpen} .hasFooter=${true}>
-        <div slot="header" class="header">
-          <type-icon
-            name="success"
-            size="xl"
-            .iconName=${"check-circle"}
-            .variant=${"default"}
-          ></type-icon>
-          <type-text
-            .text=${this.locale["successful-transfer-page-title"]}
-            .tag=${"h1"}
-            .weight=${"bold"}
-            .size=${"l"}
-            .align=${"center"}
-          ></type-text>
-          <type-text
-            .text=${this.locale["successful-transfer-page-subtitle"]}
-            .tag=${"p"}
-            .size=${"m"}
-            .align=${"center"}
-          ></type-text>
-        </div>
         <div slot="body">
+          <div class="header">
+            <type-icon
+              name="success"
+              size="xl"
+              .iconName=${"check-circle"}
+              .variant=${"default"}
+            ></type-icon>
+            <type-text
+              .text=${this.locale["successful-transfer-page-title"]}
+              .tag=${"h1"}
+              .weight=${"bold"}
+              .size=${"l"}
+              .align=${"center"}
+            ></type-text>
+            <type-text
+              .text=${this.locale["successful-transfer-page-subtitle"]}
+              .tag=${"p"}
+              .size=${"m"}
+              .align=${"center"}
+            ></type-text>
+          </div>
           <transfer-summary-card
             .locale=${this.locale}
             .current=${this.current}
@@ -146,13 +146,6 @@ export class SuccessfulTransferPage extends LitElement {
             .concept=${this.concept}
             .status=${this.status}
           ></transfer-summary-card>
-          <info-card
-            .message=${this.locale["successful-transfer-page-message"]}
-            ?hasIcon=${false}
-          >
-          </info-card>
-        </div>
-        <div slot="footer">
           <div class="actions">
             <type-button
               icon-name="download"
@@ -179,6 +172,11 @@ export class SuccessfulTransferPage extends LitElement {
             .type=${"button"}
             @click=${this._handleNewTransfer}
           ></type-button>
+          <info-card
+            .message=${this.locale["successful-transfer-page-message"]}
+            ?hasIcon=${false}
+          >
+          </info-card>
         </div>
       </type-modal>
       <type-modal ?open=${this._showShareModal} variant=${"dialog"}>

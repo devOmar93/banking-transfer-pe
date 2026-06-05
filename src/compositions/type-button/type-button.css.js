@@ -11,6 +11,7 @@ export default css`
     justify-content: center;
     gap: 0.3rem;
     cursor: pointer;
+    --text-color: white;
   }
 
   .btn:disabled {
@@ -19,37 +20,37 @@ export default css`
 
   :host([variant="default"]) .btn {
     background-color: var(--btn-bg-color);
-    color: var(--btn-text-color);
+    --text-color: var(--btn-text-color);
     --icon-color: var(--btn-text-color);
   }
 
   :host([variant="default"]) .btn:disabled {
     background-color: var(--btn-disabled-bg-color);
-    color: var(--btn-disabled-text-color);
+    --text-color: var(--btn-disabled-text-color);
     --icon-color: var(--btn-disabled-text-color);
   }
 
   :host([variant="secondary"]) .btn {
     background-color: var(--btn-secondary-bg-color);
-    color: var(--btn-secondary-text-color);
+    --text-color: var(--btn-secondary-text-color);
     --icon-color: var(--btn-secondary-text-color);
   }
 
   :host([variant="secondary"]) .btn:disabled {
     background-color: var(--btn-secondary-disabled-bg-color);
-    color: var(--btn-secondary-disabled-text-color);
+    --text-color: var(--btn-secondary-disabled-text-color);
     --icon-color: var(--btn-secondary-disabled-text-color);
   }
 
   :host([variant="ghost"]) .btn {
     background-color: var(--btn-ghost-bg-color);
-    color: var(--btn-ghost-text-color);
+    --text-color: var(--btn-ghost-text-color);
     --icon-color: var(--btn-ghost-text-color);
   }
 
   :host([variant="ghost"]) .btn:disabled {
     background-color: var(--btn-ghost-disabled-bg-color);
-    color: var(--btn-ghost-disabled-text-color);
+    --text-color: var(--btn-ghost-disabled-text-color);
     --icon-color: var(--btn-ghost-disabled-text-color);
   }
 
