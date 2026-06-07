@@ -8,6 +8,7 @@ import "./page/new-transfer-page/new-transfer-page.js";
 import "./page/accounts-page/AccountsPage.js";
 import "@DM/entelgy-global-transfers-api-dm/entelgy-global-transfers-api-dm.js";
 import "@pages/successful-transfer-page/successful-transfer-page.js";
+import "@pages/confirm-transfer-page/confirm-transfer-page.js";
 import locales from "@locales/locales.json";
 
 const ALLOWED_LANGUAGES = ["es_LA"];
@@ -22,6 +23,7 @@ export class MyElement extends LitElement {
       type: Object,
     },
 
+    _transferData: { type: Object},
     lang: { type: String },
     current: { type: String },
     amount: { type: String },
@@ -41,6 +43,7 @@ export class MyElement extends LitElement {
     super();
     this.step = 0;
     this.accountCustomer = {};
+    this._transferData = null;
     this.lang = "";
     this.current = "";
     this.amount = "";
@@ -62,14 +65,26 @@ export class MyElement extends LitElement {
     console.log("accountCustomer", this.accountCustomer);
   }
 
-  async executeTransfer(event) {
+  getAccountCustomer(event) {
+    this.accountCustomer = event.detail;
+    this.step = 1;
+    console.log("accountCustomer", this.accountCustomer);
+  }
+
+  _handleConfirmRequested(event) {
+    this._transferData = event.detail;
+    this.step = 2;
+  }
+
+  async _handleConfirmAccept(event){
     const transferDm = this.shadowRoot.getElementById("transfers");
-    const transferData = event.detail || {};
     if (transferDm) {
-      console.log(transferDm);
       await transferDm.executeTransfer(transferData);
-      console.log("XDDATA");
-    }
+    } 
+  }
+
+  _handleConfirmCancel() {
+    this.step = 1;
   }
 
   _handleDataSuccess(event) {
@@ -87,12 +102,16 @@ export class MyElement extends LitElement {
     this.status = data.status;
     this.step = 2;
     this.isDataReady = true;
-    console.log("XDDATA");
+    this.step = 3;
   }
 
   _handleError(event) {
     console.error("Error cargando los datos de la transferencia", event);
     this.isDataReady = true;
+  }
+
+  _updateStep(event) {
+    this.step = event.detail;
   }
 
   get locale() {
@@ -105,16 +124,21 @@ export class MyElement extends LitElement {
     ></accounts-page>`;
   }
 
-  _updateStep(event) {
-    this.step = event.detail;
-  }
-
   _renderNewTransferPage() {
     return html`<new-transfer-page
       .accountCustomer=${this.accountCustomer}
-      @form-submit=${this.executeTransfer}
+      @confirm-requested=${this._handleConfirmRequested}
       @return-page=${this._updateStep}
     ></new-transfer-page>`;
+  }
+
+  _renderConfirmTransferPage(){
+    return html`<confirm-transfer-page
+    ?open=${true}
+    .transferData=${this._transferData}
+    @confirm-accept=${this._handleConfirmAccept}
+    @confirm-cancel=${this._handleConfirmCancel}
+    ></confirm-transfer-page>`;
   }
 
   _renderSuccessfulTransferPage() {
@@ -140,7 +164,8 @@ export class MyElement extends LitElement {
     const steps = {
       0: this._renderAcountsPage(),
       1: this._renderNewTransferPage(),
-      2: this._renderSuccessfulTransferPage(),
+      2: this._renderConfirmTransferPage(),
+      3: this._renderSuccessfulTransferPage(),
     };
     return steps[page] ?? nothing;
   }

@@ -1,4 +1,5 @@
 import { LitElement, html, nothing } from "lit";
+import { classMap } from "lit/directives/class-map.js";
 import styles from "./type-modal.css.js";
 
 export class TypeModal extends LitElement {
@@ -9,6 +10,7 @@ export class TypeModal extends LitElement {
     scrollable: { type: Boolean, reflect: true },
     fullHeight: { type: Boolean, reflect: true, attribute: "full-height" },
     hasFooter: { type: Boolean, reflect: true, attribute: "has-footer" },
+    _closing: { state: true },
   };
 
   constructor() {
@@ -18,8 +20,9 @@ export class TypeModal extends LitElement {
     this.scrollable = false;
     this.fullHeight = false;
     this.hasFooter = false;
+    this._closing = false;
     this._previousActiveElement = null;
-    this._handleKeyDown = this._handleKeyDown.bind(this);
+    this._abortClose = null;
     this._bodyScrollLocked = false;
   }
 
@@ -39,25 +42,66 @@ export class TypeModal extends LitElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
+
+    if (this._abortClose) {
+      this._abortClose();
+      this._abortClose = null;
+    }
     if (this._bodyScrollLocked) {
       TypeModal._unlockBodyScroll();
       this._bodyScrollLocked = false;
     }
-    this.removeEventListener("keydown", this._handleKeyDown);
+    this._closing = false;
   }
 
   _onOpen() {
+    if (this._abortClose) {
+      this._abortClose();
+      this._abortClose = null;
+      this._closing = false;
+      this.updateComplete.then(() => this._focusFirst());
+      return;
+    }
+
     TypeModal._lockBodyScroll();
     this._bodyScrollLocked = true;
-
     this._previousActiveElement = document.activeElement;
-
     this.updateComplete.then(() => this._focusFirst());
-
-    this.addEventListener("keydown", this._handleKeyDown);
   }
 
   _onClose() {
+    this._closing = true;
+
+    let aborted = false;
+    this._abortClose = () => { aborted = true; };
+
+    this.updateComplete.then(() => {
+      if (aborted) return;
+
+      const content = this.renderRoot.querySelector(".type-modal-content");
+      if (!content) {
+        if (!aborted) this._cleanupAfterClose();
+        return;
+      }
+
+      const fallback = setTimeout(() => {
+        if (!aborted) this._cleanupAfterClose();
+      }, 300);
+
+      const handleAnimationEnd = () => {
+        clearTimeout(fallback);
+        content.removeEventListener("animationend", handleAnimationEnd);
+        if (!aborted) this._cleanupAfterClose();
+      };
+
+      content.addEventListener("animationend", handleAnimationEnd);
+    });
+  }
+
+  _cleanupAfterClose() {
+    this._abortClose = null;
+    this._closing = false;
+
     if (this._bodyScrollLocked) {
       TypeModal._unlockBodyScroll();
       this._bodyScrollLocked = false;
@@ -67,8 +111,6 @@ export class TypeModal extends LitElement {
       this._previousActiveElement.focus();
     }
     this._previousActiveElement = null;
-
-    this.removeEventListener("keydown", this._handleKeyDown);
   }
 
   static _openCount = 0;
@@ -127,36 +169,23 @@ export class TypeModal extends LitElement {
     }
   }
 
-  _handleKeyDown(e) {
-    if (e.key !== "Tab") return;
-    const focusables = this._getFocusableElements();
-    if (focusables.length === 0) {
-      e.preventDefault();
-      return;
-    }
-    const first = focusables[0];
-    const last = focusables[focusables.length - 1];
-
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
-    }
-  }
-
   _handleContentClick(e) {
     e.stopPropagation();
   }
 
   render() {
-    if (!this.open) return nothing;
+    if (!this.open && !this.closing) return nothing;
 
     return html`
-            <div class="type-modal-backdrop">
+            <div class=${classMap({
+      "type-modal-backdrop": true,
+      "type-modal-backdrop--closing": this._closing,
+    })}>
                 <div
-                    class="type-modal-content"
+                    class=${classMap({
+      "type-modal-backdrop": true,
+      "type-modal-backdrop--closing": this._closing,
+    })}
                     role="dialog"
                     aria-modal="true"
                     @click=${this._handleContentClick}
