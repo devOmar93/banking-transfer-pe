@@ -104,6 +104,11 @@ export class SuccessfulTransferPage extends LitElement {
   }
 
   _handleNewTransfer() {
+    this.dispatchEvent(new CustomEvent('return-home', {
+      detail: 0,
+      bubbles: true,
+      composed:true
+    }));
     this.isOpen = false;
   }
 
