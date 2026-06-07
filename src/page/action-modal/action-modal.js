@@ -187,18 +187,12 @@ export class ActionModal extends LitElement {
             >
             </type-text>
           </div>
-          <div class="extra-content">
-            <slot name="extra-content">
-              <p class="extra-content-placeholder">
-                Espacio reservado para contenido adicional(CARD)
-              </p>
-            </slot>
-          </div>
         </div>
         <div class="actions">
           ${action.showPrimaryButton
             ? html`
                 <type-button
+                  class="primary-btn"
                   type="button"
                   icon-position="right"
                   .text=${action.primaryButtonText ||
@@ -212,6 +206,7 @@ export class ActionModal extends LitElement {
           ${action.showSecondaryButton
             ? html`
                 <type-button
+                  class="secondary-btn"
                   type="button"
                   icon-position="right"
                   .text=${action.secondaryButtonText ||
