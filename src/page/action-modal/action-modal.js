@@ -154,71 +154,82 @@ export class ActionModal extends LitElement {
       action.secondaryButtonText || modalType.secondaryButtonText,
     );
   }
+  handleBackdropClick() {
+    this.emitModalAction("backdrop", "exit", "Salir");
+  }
   render() {
     const action = this.actionData;
     const modalType = this.modalType;
     return html`
-      <section class="action-modal">
-        <div class="content">
-          <type-icon
-            icon-name=${action.iconName || modalType.iconName}
-            size="xl"
-            variant=${action.iconVariant || modalType.iconVariant}
-            aria-label=${action.title}
-          >
-          </type-icon>
-          <div class="title">
-            <type-text
-              tag="h1"
-              .text=${action.title}
-              size="l"
-              weight="bold"
-              align="center"
+      <div class="overlay" @click=${() => this.handleBackdropClick()}>
+        <section
+          class="action-modal"
+          @click=${(event) => event.stopPropagation()}
+        >
+          <div class="content">
+            <type-icon
+              icon-name=${action.iconName || modalType.iconName}
+              size="xl"
+              variant=${action.iconVariant || modalType.iconVariant}
+              aria-label=${action.title}
             >
-            </type-text>
+            </type-icon>
+            <div class="title">
+              <type-text
+                tag="h1"
+                .text=${action.title}
+                size="l"
+                weight="bold"
+                align="center"
+              >
+              </type-text>
+            </div>
+            <div class="message">
+              <type-text
+                tag="p"
+                .text=${action.message}
+                size="s"
+                weight="regular"
+                align="center"
+              >
+              </type-text>
+            </div>
+            <div class="extra-content">
+              <slot name="extra-content"></slot>
+            </div>
           </div>
-          <div class="message">
-            <type-text
-              tag="p"
-              .text=${action.message}
-              size="s"
-              weight="regular"
-              align="center"
-            >
-            </type-text>
+          <div class="actions">
+            ${action.showPrimaryButton
+              ? html`
+                  <type-button
+                    class="primary-btn"
+                    type="button"
+                    icon-position="right"
+                    .text=${action.primaryButtonText ||
+                    modalType.primaryButtonText}
+                    variant="default"
+                    @click=${() => this.handlePrimaryAction()}
+                  >
+                  </type-button>
+                `
+              : ""}
+            ${action.showSecondaryButton
+              ? html`
+                  <type-button
+                    class="secondary-btn"
+                    type="button"
+                    icon-position="right"
+                    .text=${action.secondaryButtonText ||
+                    modalType.secondaryButtonText}
+                    variant="ghost"
+                    @click=${() => this.handleSecondaryAction()}
+                  >
+                  </type-button>
+                `
+              : ""}
           </div>
-        </div>
-        <div class="actions">
-          ${action.showPrimaryButton
-            ? html`
-                <type-button
-                  class="primary-btn"
-                  type="button"
-                  icon-position="right"
-                  .text=${action.primaryButtonText ||
-                  modalType.primaryButtonText}
-                  variant="default"
-                  @click=${() => this.handlePrimaryAction()}
-                >
-                </type-button>
-              `
-            : ""}
-          ${action.showSecondaryButton
-            ? html`
-                <type-button
-                  class="secondary-btn"
-                  type="button"
-                  icon-position="right"
-                  .text=${action.secondaryButtonText ||
-                  modalType.secondaryButtonText}
-                  variant="ghost"
-                  @click=${() => this.handleSecondaryAction()}
-                >
-                </type-button>
-              `
-            : ""}
-        </div>
-      </section>
+        </section>
+      </div>
     `;
   }
 }
