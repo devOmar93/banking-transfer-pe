@@ -51,7 +51,27 @@ export class NewTransferPage extends LitElement {
   }
 
   _goNextStep(formField) {
-    console.log("formField", formField);
+    //console.log("formField", formField);
+    const transferData = {
+      amount: formField.amount,
+      currency: formField.currency,
+      sourceAccount: {
+        accountName: formField.accountName,
+        accountNumber: formField.accountNumber,
+        accountType: formField.accountType,
+        availableBalance: formField.availableBalance,
+      },
+      beneficiary: {
+        fullName: formField.destinationAccountName,
+        accountNumber: formField.destinationAccount,
+      },
+    };
+
+    this.dispatchEvent(new CustomEvent("confirm-requested", {
+      detail: transferData,
+      bubbles: true,
+      composed: true,
+    }));
   }
 
   async _getDestinationAccountDetails(accountCustomer) {

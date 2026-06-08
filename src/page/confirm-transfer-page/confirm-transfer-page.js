@@ -1,11 +1,11 @@
 import { html, LitElement } from "lit";
 import { styles } from "./confirm-transfer-page.css.js";
 import "@compositions/type-modal/type-modal.js";
+import "@compositions/type-header/type-header.js";
 import "@compositions/type-button/type-button.js";
 import "@compositions/transfer-summary/transfer-summary.js";
  
 export class ConfirmTransferPage extends LitElement {
-    
   static properties = {
     transferData: { type: Object },
     open: { type: Boolean, reflect: true },
@@ -41,10 +41,28 @@ export class ConfirmTransferPage extends LitElement {
   render() {
     return html`
       <type-modal
-        variant="dialog"
+        variant="page"
         ?open=${this.open}
-        has-footer
+        ?scrollable=${true}
+        ?full-height=${true}
+        ?has-footer=${true}
       >
+        <div slot="header" class="confirm-transfer-page__header">
+          <type-button
+            class="confirm-transfer-page__back-btn"
+            type="button"
+            text="Volver"
+            variant="secondary"
+            icon-name="arrow-left"
+            icon-position="left"
+            ?disabled=${this.loading}
+            @click=${this._handleCancel}
+          ></type-button>
+          <type-header
+            .title=${"Confirmar transferencia"}
+          ></type-header>
+        </div>
+ 
         <div slot="body">
           <transfer-summary
             .transferData=${this.transferData}
@@ -54,16 +72,12 @@ export class ConfirmTransferPage extends LitElement {
  
         <div slot="footer" class="confirm-transfer-page__footer">
           <type-button
-            text="Aceptar"
+            type="button"
+            text="Transferir"
+            icon-position="right"
             variant="default"
             ?disabled=${this.loading}
             @click=${this._handleAccept}
-          ></type-button>
-          <type-button
-            text="Volver"
-            variant="secondary"
-            ?disabled=${this.loading}
-            @click=${this._handleCancel}
           ></type-button>
         </div>
       </type-modal>
