@@ -1,6 +1,12 @@
 import { css } from "lit";
 export const actionModalStyles = css`
   :host {
+    display: block;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  .overlay {
     position: fixed;
     inset: 0;
     z-index: 1000;
@@ -60,7 +66,7 @@ export const actionModalStyles = css`
     min-width: 60px;
   }
   @media (max-width: 480px) {
-    :host {
+    .overlay {
       padding: 16px;
     }
     .action-modal {
