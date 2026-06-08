@@ -1,8 +1,8 @@
 // src/compositions/account-card/account-card.js
 import { html, LitElement } from "lit";
 import { styles } from "./account-card.css.js";
-import "../../../../components/type-icon/type-icon.js";
-import "../../../../components/type-text/type-text.js";
+import "@components/type-icon/type-icon.js";
+import "@components/type-text/type-text.js";
 
 export class AccountCard extends LitElement {
   /**
@@ -30,13 +30,12 @@ export class AccountCard extends LitElement {
 
   static styles = styles;
 
-  
   _formatCurrency(currency = this.currency) {
     const symbols = {
-      PEN: 'S/',
-      USD: '$'
+      PEN: "S/",
+      USD: "$",
     };
-    return symbols[currency] || '';
+    return symbols[currency] || "";
   }
 
   /**
@@ -52,9 +51,13 @@ export class AccountCard extends LitElement {
         @click=${this._onClick}
         @keydown=${this._onKeyDown}
       >
-        <!-- Left section: icon + account info -->
+
         <div class="account-left">
-          <type-icon variant ="secondary" icon-name="wallet" size="m"></type-icon>
+          <type-icon
+            variant="secondary"
+            icon-name="wallet"
+            size="m"
+          ></type-icon>
 
           <div class="account-info">
             <type-text
@@ -82,7 +85,7 @@ export class AccountCard extends LitElement {
           </div>
         </div>
 
-        <!-- Right section: amount + arrow -->
+
 
         <div class="account-right">
           <type-text
@@ -101,8 +104,6 @@ export class AccountCard extends LitElement {
       </div>
     `;
   }
-
- 
 
   /**
    * Handles click event
@@ -125,7 +126,6 @@ export class AccountCard extends LitElement {
       }),
     );
   }
-
 
   /**
    * Handles keyboard interaction (Enter / Space)
