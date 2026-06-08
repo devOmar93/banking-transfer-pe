@@ -45,6 +45,10 @@ export class TypeInput extends LitElement {
     errorMessage: {
       type: String,
     },
+
+    valor: {
+      type: String,
+    },
   };
 
   constructor() {
@@ -57,16 +61,19 @@ export class TypeInput extends LitElement {
     this.requiredInput = true;
     this.errorMessage = "";
     this.formatCurrency = "";
+    this.valor = "";
   }
-
   _onInput(event) {
     const input = event.target;
     let value = input.value;
-    this._nativeValid = input.checkValidity();
+    value = this._validateInput(value);
+    this.value = value;
+    input.value = value;
 
-    if (this.typeInput === "number") {
+    if (this.nameField === "amount") {
       value = value === "" ? null : parseFloat(value);
     }
+    this._nativeValid = input.checkValidity();
 
     this.dispatchEvent(
       new CustomEvent("text-change", {
@@ -79,6 +86,61 @@ export class TypeInput extends LitElement {
         composed: true,
       }),
     );
+  }
+
+  _validateInput(event) {
+    const validateForNameInput = {
+      destinationAccount: this._formatAccountDestinatari(event),
+      amount: this._formatAmount(event),
+    };
+    return validateForNameInput[this.nameField] ?? event.target.value;
+  }
+
+  _formatAmount(value) {
+    let valorActual = value;
+    valorActual = valorActual.replace(/[^0-9.]/g, '');
+    const indicePunto = valorActual.indexOf('.');
+
+    if (indicePunto !== -1) {
+      let intPart = valorActual.slice(0, indicePunto);
+      let decimalPart = valorActual.slice(indicePunto + 1);
+      intPart = intPart.replace(/^0+/, '');
+
+      if (intPart === '') {
+        intPart = '0';
+      }
+
+      decimalPart = decimalPart.replace(/\./g, '0').substring(0, 2);
+      valorActual = intPart + '.' + decimalPart;
+      return valorActual;  
+    }
+
+    return valorActual = valorActual.replace(/^0+/, '');
+  }
+  _/*formatAmount3(value) {
+    let valorActual = value;
+    valorActual = valorActual.replace(/[^0-9.]/g, '');
+    const indicePunto = valorActual.indexOf('.');
+    const [intPartRaw, decimalRaw = ''] = valorActual.split('.');
+    
+    console.log('intPartRaw', intPartRaw);
+    console.log('decimalRaw', decimalRaw);
+    let intPart = intPartRaw.replace(/^0+/, '') || '0';
+    console.log('intPart', intPart);
+
+    let decimalPart = decimalRaw.replace(/\./g, '').substring(0, 2);
+    valorActual = intPart;
+    if (decimalPart) {
+      valorActual = intPart + '.' + decimalPart;
+    }
+
+    return valorActual;
+  }*/
+
+  _formatAccountDestinatari(value) {
+    let valorActual = value;
+    valorActual = valorActual.replace(/[^0-9]/g, "");
+    return valorActual;
   }
 
   get _isValid() {
@@ -113,8 +175,8 @@ export class TypeInput extends LitElement {
             .type=${this.typeInput}
             placeholder=${this.placeholderInput}
             ?required=${this.requiredInput}
+            .value="${this.valor}"
             @input=${this._onInput}
-            step="${this.formatCurrency}"
           />
         </div>
         ${invalid && this.errorMessage

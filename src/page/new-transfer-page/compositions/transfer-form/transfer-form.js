@@ -22,7 +22,7 @@ export class TransferForm extends LitElement {
     },
 
     configFormFields: {
-      type: Array,
+      type: Object,
     },
 
     availableBalance: {
@@ -39,13 +39,22 @@ export class TransferForm extends LitElement {
     this.formFieldStates = {};
     this.configFormFields = {};
     this.availableBalance = 100;
+    this.stateForm = false;
     this.currency = "";
   }
-
+  /*
   firstUpdated() {
     this.formFieldStates = createInitialFormStates(this.configFormFields);
     console.log("currency", this.currency);
+  }*/
+
+  
+  willUpdate(changedProps) {
+    if (changedProps.has("configFormFields")) {
+      this.formFieldStates = createInitialFormStates(this.configFormFields);
+    }
   }
+
 
   _sendForm() {
     const formValues = getFormValues(this.formFieldStates);
@@ -59,9 +68,13 @@ export class TransferForm extends LitElement {
   }
 
   _validateForm() {
-    this.stateForm = Object.values(this.formFieldStates).every(
+    const isValid = Object.values(this.formFieldStates).every(
       ({ isValid }) => isValid === true,
     );
+
+    if (this.stateForm !== isValid) {
+      this.stateForm = isValid;
+    }
   }
 
   _onFieldChange(event) {
@@ -114,7 +127,7 @@ export class TransferForm extends LitElement {
         .errorMessage=${errorMessageField}
         .valid=${this.formFieldStates[name]?.isValid}
       >
-        ${hasIcon
+        ${hasIcon && this.currency
           ? html`<type-icon
               slot="prefix"
               icon-name="${this.currency}"
