@@ -104,7 +104,7 @@ export class AccountsPage extends LitElement {
   }
   
   _goToExitStep() {
-    fireEvent(this, "exit", { page: 4 });
+    fireEvent(this, "exit", { step: 4 });
   }
 
   _validateSingleAccount(account) {

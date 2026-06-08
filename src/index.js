@@ -10,6 +10,7 @@ import "@DM/entelgy-global-transfers-api-dm/entelgy-global-transfers-api-dm.js";
 import "@pages/successful-transfer-page/successful-transfer-page.js";
 import "@pages/confirm-transfer-page/confirm-transfer-page.js";
 import locales from "@locales/locales.json";
+import "./page/exit-page/exit-page.js";
  
 const ALLOWED_LANGUAGES = ["es_LA"];
  
@@ -106,6 +107,10 @@ export class MyElement extends LitElement {
   _updateStep(event) {
     this.step = event.detail;
   }
+
+  _updateExitStep(event) {
+    this.step = event.detail.step;
+  }
  
   get locale() {
     return locales[this.lang];
@@ -114,6 +119,7 @@ export class MyElement extends LitElement {
   _renderAcountsPage() {
     return html`<accounts-page
       @account=${this.getAccountCustomer}
+      @exit=${this._updateExitStep}
     ></accounts-page>`;
   }
 
@@ -153,6 +159,16 @@ export class MyElement extends LitElement {
       @return-home=${this._updateStep}
     ></successful-transfer-page>`;
   }
+  
+  _goToAccounts() {
+    this.step = 0;
+  }
+
+  _renderExitPage(e) {
+    return html`<transfer-exit-page
+      @start-transfer=${this._goToAccounts}
+    ></transfer-exit-page>`;
+  }
  
   _renderStep(page) {
     const steps = {
@@ -160,6 +176,7 @@ export class MyElement extends LitElement {
       1: this._renderNewTransferPage(),
       2: this._renderConfirmTransferPage(),
       3: this._renderSuccessfulTransferPage(),
+      4: this._renderExitPage(),
     };
     return steps[page] ?? nothing;
   }
