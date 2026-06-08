@@ -6,7 +6,7 @@ import "./compositions/account-list/account-list.js";
 import "@components/loading-overlay/loading-overlay.js";
 import "@compositions/info-card/info-card.js";
 import "../action-modal/action-modal.js";
-import { ACCOUNTS_BASE_CASE } from "@mocks/accounts.mock.js";
+import { ACCOUNTS_CASE_1 } from "@mocks/accounts.mock.js";
 import { getAccounts } from "@services/accounts.service.js";
 import {
   ACCOUNTS_PAGE_ES as ES,
@@ -31,6 +31,8 @@ export class AccountsPage extends LitElement {
     _actionModalOpen: { type: Boolean },
     _actionType: { type: String },
     _retryCount: { type: Number },
+
+    _isInitialError: { type: Boolean },
   };
 
   constructor() {
@@ -42,6 +44,7 @@ export class AccountsPage extends LitElement {
     this._actionModalOpen = false;
     this._actionType = "";
     this._retryCount = 0;
+    this._isInitialError = false;
   }
 
   static styles = styles;
@@ -60,7 +63,7 @@ export class AccountsPage extends LitElement {
     this._actionType = "";
 
     try {
-      const { accounts } = await getAccounts(ACCOUNTS_BASE_CASE);
+      const { accounts } = await getAccounts(ACCOUNTS_CASE_1);
       const filteredAccounts = filterTopAccounts(
         accounts,
         CONFIG.accounts.limit,
@@ -70,6 +73,7 @@ export class AccountsPage extends LitElement {
 
       if (result.errorState) {
         this._errorState = result.errorState;
+        this._isInitialError = true;
         this._showActionModal(
           this._mapErrorStateToActionType(result.errorState),
         );
@@ -97,6 +101,10 @@ export class AccountsPage extends LitElement {
 
   _goToNextStep(account) {
     fireEvent(this, "account", account);
+  }
+  
+  _goToExitStep() {
+    fireEvent(this, "exit", { page: 4 });
   }
 
   _validateSingleAccount(account) {
@@ -145,6 +153,10 @@ export class AccountsPage extends LitElement {
   }
 
   _closeActionModal() {
+    if(this._isInitialError) {
+      this._goToExitStep();
+      return;
+    }
     this._actionModalOpen = false;
     this._actionType = "";
   }
