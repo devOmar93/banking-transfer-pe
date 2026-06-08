@@ -23,7 +23,7 @@ export const TRANSFER_FORM_FIELDS = {
 
   amount: {
     name: "amount",
-    type: "number",
+    type: "text",
     label: "Monto a transferir",
     placeholder: "0.00",
     formatCurrency: "0.01",

@@ -128,19 +128,10 @@ export class AccountsPage extends LitElement {
     this._validateSingleAccount(account);
   }
 
-  _mapErrorStateToActionType(errorState) {
-    switch (errorState) {
-      case STATES.ERROR_TYPES.NO_ACCOUNTS:
-        return "noAccountsAvailable";
-      case STATES.ERROR_TYPES.ALL_NO_BALANCE:
-      case STATES.ERROR_TYPES.NO_BALANCE:
-        return "insufficientBalance";
-      case STATES.ERROR_TYPES.BLOCKED:
-      case STATES.ERROR_TYPES.INACTIVE:
-        return "blockedAccount";
-      default:
-        return "loadAccountsError";
-    }
+   _mapErrorStateToActionType(errorState) {
+    return (
+      STATES.ERROR_MODAL_TYPES[errorState] || "loadAccountsError"
+    );
   }
 
   _showActionModal(actionType) {

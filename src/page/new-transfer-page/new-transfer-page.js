@@ -67,11 +67,13 @@ export class NewTransferPage extends LitElement {
       },
     };
 
-    this.dispatchEvent(new CustomEvent("confirm-requested", {
-      detail: transferData,
-      bubbles: true,
-      composed: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent("confirm-requested", {
+        detail: transferData,
+        bubbles: true,
+        composed: true,
+      }),
+    );
   }
 
   async _getDestinationAccountDetails(accountCustomer) {
@@ -81,12 +83,11 @@ export class NewTransferPage extends LitElement {
   }
 
   _getCurrency(currency) {
-    if (currency === "USD") {
-      return "dollar-sign";
-    }
-    if (currency === "PEN") {
-      return "dollar-sign";
-    }
+    const listCurrency = {
+      USD: "dollar-sign",
+      PEN: "dollar-sign",
+    };
+    return listCurrency[currency] ?? "dollar-sign";
   }
 
   _returnPage() {
@@ -97,6 +98,15 @@ export class NewTransferPage extends LitElement {
         composed: true,
       }),
     );
+  }
+
+  _renderActionModal() {
+    return html`
+      <action-modal
+        action-type=${this._actionType}
+        @action-modal-action=${this._handleActionModalAction}
+      ></action-modal>
+    `;
   }
 
   static get styles() {
