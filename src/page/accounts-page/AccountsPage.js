@@ -6,7 +6,7 @@ import "./compositions/account-list/account-list.js";
 import "@components/loading-overlay/loading-overlay.js";
 import "@compositions/info-card/info-card.js";
 import "../action-modal/action-modal.js";
-import { ACCOUNTS_CASE_1 } from "@mocks/accounts.mock.js";
+import { ACCOUNTS_BASE_CASE } from "@mocks/accounts.mock.js";
 import { getAccounts } from "@services/accounts.service.js";
 import {
   ACCOUNTS_PAGE_ES as ES,
@@ -63,7 +63,7 @@ export class AccountsPage extends LitElement {
     this._actionType = "";
 
     try {
-      const { accounts } = await getAccounts(ACCOUNTS_CASE_1);
+      const { accounts } = await getAccounts(ACCOUNTS_BASE_CASE);
       const filteredAccounts = filterTopAccounts(
         accounts,
         CONFIG.accounts.limit,
