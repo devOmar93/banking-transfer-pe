@@ -1,9 +1,12 @@
+import ES from "@locales/locales.json";
+const lang = ES["es_LA"];
+
 export const TRANSFER_FORM_FIELDS = {
   destinationAccount: {
     name: "destinationAccount",
     type: "text",
-    label: "Cuenta del destinatario",
-    placeholder: "00000000000000",
+    label: lang["new-transfer-page-field-destination-label"],
+    placeholder: lang["new-transfer-page-field-destination-placeholder"],
 
     nativeValidation: {
       required: true,
@@ -12,10 +15,10 @@ export const TRANSFER_FORM_FIELDS = {
     },
 
     errorMessages: {
-      default: "La cuenta es obligatoria.",
-      minLength: "Debe tener al menos 14 dígitos.",
-      maxLength: "No puede superar los 20 dígitos.",
-      nonNumericaAccount: "La cuenta tiene que ser númerica.",
+      default: lang["new-transfer-page-field-destination-error-default"],
+      minLength: lang["new-transfer-page-field-destination-error-min-Length"],
+      maxLength: lang["new-transfer-page-field-destination-error-max-Length"],
+      nonNumericaAccount: lang["new-transfer-page-field-destination-error-not-numerical"],
     },
 
     businessValidation: true,
@@ -24,8 +27,8 @@ export const TRANSFER_FORM_FIELDS = {
   amount: {
     name: "amount",
     type: "text",
-    label: "Monto a transferir",
-    placeholder: "0.00",
+    label: lang["new-transfer-page-field-amount-label"],
+    placeholder: lang["new-transfer-page-field-amount-placeholder"],
     formatCurrency: "0.01",
     hasIcon: true,
 
@@ -34,9 +37,9 @@ export const TRANSFER_FORM_FIELDS = {
     },
 
     errorMessages: {
-      default: "El monto es obligatorio.",
-      insufficientBalance: "Tu saldo es insuficiente para pagar.",
-      amountNotAllowed: "El monto debe ser mayor que 0.",
+      default: lang["new-transfer-page-field-amount-error-default"],
+      insufficientBalance: lang["new-transfer-page-field-amount-error-insufficient-balance"],
+      amountNotAllowed: lang["new-transfer-page-field-amount-error-amount-not-allowed"],
     },
 
     businessValidation: true,

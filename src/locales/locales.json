@@ -47,6 +47,21 @@
     "action-modal-button-understood": "Entendido",
     "action-modal-button-continue": "Continuar",
     "action-modal-button-confirm": "Confirmar",
-    "action-modal-button-cancel": "Cancelar"
+    "action-modal-button-cancel": "Cancelar",
+    "new-transfer-page-title": "Nueva Transferencia",
+    "new-transfer-page-subtitle": "Complete los datos de la transferencia",
+    "new-transfer-page-go-back-button": "Voler",
+    "new-transfer-page-continue-button": "continuar",
+    "new-transfer-page-field-destination-label": "Cuenta del destinatario",
+    "new-transfer-page-field-amount-label": "Monto a transferir",
+    "new-transfer-page-field-destination-placeholder": "00000000000000",
+    "new-transfer-page-field-amount-placeholder": "0.00",
+    "new-transfer-page-field-destination-error-default": "La cuenta es obligatoria.",
+    "new-transfer-page-field-destination-error-min-Length": "Debe tener al menos 14 dígitos.",
+    "new-transfer-page-field-destination-error-max-Length": "No puede superar los 20 dígitos.",
+    "new-transfer-page-field-destination-error-not-numerical": "La cuenta tiene que ser númerica.",
+    "new-transfer-page-field-amount-error-default": "El monto es obligatorio.",
+    "new-transfer-page-field-amount-error-insufficient-balance": "Tu saldo es insuficiente para pagar.",
+    "new-transfer-page-field-amount-error-amount-not-allowed": "El monto debe ser mayor que 0."
   }
 }
