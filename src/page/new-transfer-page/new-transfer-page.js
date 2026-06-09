@@ -7,6 +7,10 @@ import { TRANSFER_FORM_FIELDS } from "../../utils/transfer-form/configTransferFo
 import { resolveDestinationAccount } from "../../services/bankingTransferService.js";
 import "../../components/loading-overlay/loading-overlay.js";
 import "../../compositions/type-button/type-button.js";
+import {
+  NEW_TRANSFER_PAGE_LITERALS as LITERALS,
+  NEW_TRANSFER_PAGE_CONFIG as CONFIG,
+} from "@utils/new-transfer-page/newTransferPageConfig.js";
 import styles from "./new-transfer-page.css.js";
 export class NewTransferPage extends LitElement {
   static properties = {
@@ -118,25 +122,24 @@ export class NewTransferPage extends LitElement {
       ${this._loading ? html`<loading-overlay></loading-overlay>` : nothing}
       <type-modal
         ?open=${true}
-        variant="page"
-        ?scrollable=${true}
-        ?full-height=${true}
-        ?has-footer=${true}
-        class="modal-accounts"
+        .variant=${CONFIG.modal.variant}
+        ?scrollable=${CONFIG.modal.scrollable}
+        ?full-height=${CONFIG.modal.fullHeight}
+        ?has-footer=${CONFIG.modal.hasFooter}
       >
         <div slot="header">
           <type-button
             class="container-button"
-            icon-name="arrow-left"
-            icon-position="left"
-            text="Volver"
-            variant="secondary"
-            .type=${"button"}
+            icon-name=${CONFIG.backButton.iconName}
+            icon-position=${CONFIG.backButton.iconPosition}
+            .text=${LITERALS.backButton.text}
+            .variant=${CONFIG.backButton.variant}
+            .type=${CONFIG.backButton.type}
             @click=${this._returnPage}
           ></type-button>
           <type-header
-            .title=${"Nueva Transferencia"}
-            .subtitle=${"Complete los datos de la transferencia"}
+            .title=${LITERALS.header.title}
+            .subtitle=${LITERALS.header.subtitle}
           ></type-header>
         </div>
 

@@ -8,6 +8,10 @@ import {
 import "../../../../compositions/type-input/type-input.js";
 import "../../../../compositions/type-button/type-button.js";
 import "../../../../components/type-icon/type-icon.js";
+import {
+  NEW_TRANSFER_PAGE_LITERALS as LITERALS,
+  NEW_TRANSFER_PAGE_CONFIG as CONFIG,
+} from "@utils/new-transfer-page/newTransferPageConfig.js";
 
 import styles from "./transfer-form.css.js";
 
@@ -148,12 +152,12 @@ export class TransferForm extends LitElement {
           )}
         </div>
         <type-button
-          .text=${"Continuar"}
-          .variant=${"default"}
-          .type=${"button"}
-          icon-name="arrow-right"
+          .text=${LITERALS.continueButton.text}
+          .variant=${CONFIG.continueButton.variant}
+          .type=${CONFIG.continueButton.type}
+          icon-name=${CONFIG.continueButton.iconName}
           @click="${this._onSubmit}"
-          .iconPosition=${"right"}
+          .iconPosition=${CONFIG.continueButton.iconPosition}
           ?disabled="${!this.stateForm}"
         ></type-button>
       </form>
