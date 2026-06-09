@@ -31,6 +31,22 @@
     "account-page-errors-inactive-title": "Cuenta no disponible",
     "account-page-errors-inactive-message": "La cuenta está inactiva",
     "account-page-errors-error-technical-title": "Error al cargar las cuentas",
-    "account-page-errors-error-technical-message": "Ocurrió un problema al obtener sus cuentas. Intente nuevamente"
+    "account-page-errors-error-technical-message": "Ocurrió un problema al obtener sus cuentas. Intente nuevamente",
+    "action-modal-load-accounts-error-title": "Error al cargar cuentas",
+    "action-modal-load-accounts-error-message": "Ocurrió un problema al obtener sus cuentas. Intente nuevamente.",
+    "action-modal-final-error-title": "No se pudo completar la operación",
+    "action-modal-final-error-message": "Ha ocurrido un error. Intente nuevamente más tarde.",
+    "action-modal-accounts-limit-title": "Información",
+    "action-modal-accounts-limit-message": "Solo se mostrarán las cuentas disponibles para realizar la operación.",
+    "action-modal-single-valid-account-title": "Cuenta disponible",
+    "action-modal-single-valid-account-message": "Se encontró una cuenta disponible para continuar.",
+    "action-modal-transfer-confirmation-title": "Confirmar operación",
+    "action-modal-transfer-confirmation-message": "¿Deseas continuar con la operación?",
+    "action-modal-button-retry": "Reintentar",
+    "action-modal-button-exit": "Salir",
+    "action-modal-button-understood": "Entendido",
+    "action-modal-button-continue": "Continuar",
+    "action-modal-button-confirm": "Confirmar",
+    "action-modal-button-cancel": "Cancelar"
   }
 }
