@@ -80,6 +80,12 @@ const ACTION_MODALS = {
     localePrefix: "action-modal-inactive-account",
     buttons: ["exit"],
   },
+  transferError: {
+    modalType: "error",
+    iconName: "triangle-alert",
+    localePrefix: "action-modal-transfer-error",
+    buttons: ["retry", "exit"],
+  }
 };
 export class ActionModal extends LitElement {
   static styles = actionModalStyles;

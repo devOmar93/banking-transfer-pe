@@ -3,6 +3,16 @@ import { SUCCESSFUL_TRANSFER_RESPONSE_MOCK } from "@mocks/transfer.mock.js";
 import { fireEvent } from "@utils/utils";
 
 class EntelgyGlobalTransfersApiDm extends LitElement {
+
+  static properties = {
+    simulateError: { type: Boolean, attribute: "simulate-error" },
+  };
+
+  constructor() {
+    super();
+    this.simulateError = false;
+  }
+
   async executeTransfer(transferData) {
     try {
       const responseData = await this._sendPost(transferData);
@@ -13,8 +23,12 @@ class EntelgyGlobalTransfersApiDm extends LitElement {
   }
 
   _sendPost(transferData) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       setTimeout(() => {
+        if (this.simulateError) {
+          reject(new Error("Error simulado de transferencia"));
+          return;
+        }
         resolve(SUCCESSFUL_TRANSFER_RESPONSE_MOCK);
       }, 800);
     });

@@ -25,6 +25,7 @@ export class MyElement extends LitElement {
     },
 
     _transferData: { type: Object },
+    _transferStatus: { type: String },
     lang: { type: String },
     current: { type: String },
     amount: { type: String },
@@ -47,6 +48,7 @@ export class MyElement extends LitElement {
     this.step = 0;
     this.accountCustomer = {};
     this._transferData = null;
+    this._transferStatus = "";
     this.lang = "";
     this.current = "";
     this.amount = "";
@@ -106,6 +108,7 @@ export class MyElement extends LitElement {
  
   _handleConfirmRequested(event) {
     this._transferData = event.detail;
+    this._transferStatus = "";
     this.step = 2;
   }
 
@@ -118,7 +121,16 @@ export class MyElement extends LitElement {
   }
  
   _handleConfirmCancel() {
+    this._transferStatus = "";
     this.step = 1;
+  }
+
+  _handleTransferRetry() {
+    this._transferStatus = "";
+    const transferDm = this.shadowRoot.getElementById("transfers");
+    if (transferDm) {
+      transferDm.executeTransfer(this._transferData);
+    }
   }
  
   _handleDataSuccess(event) {
@@ -135,12 +147,13 @@ export class MyElement extends LitElement {
     this.concept = data.concept;
     this.status = data.status;
     this.isDataReady = true;
+    this._transferStatus = "";
     this.step = 3;
   }
  
   _handleError(event) {
-    console.error("Error cargando los datos de la transferencia", event);
-    this.isDataReady = true;
+    console.error("Error en la transferencia", event);
+    this._transferStatus = "error";
   }
  
   _updateStep(event) {
@@ -177,8 +190,10 @@ export class MyElement extends LitElement {
     return html`<confirm-transfer-page
       ?open=${true}
       .transferData=${this._transferData}
+      .transferStatus=${this._transferStatus}
       @confirm-accept=${this._handleConfirmAccept}
       @confirm-cancel=${this._handleConfirmCancel}
+      @transfer-retry=${this._handleTransferRetry}
     ></confirm-transfer-page>`;
   }
  
