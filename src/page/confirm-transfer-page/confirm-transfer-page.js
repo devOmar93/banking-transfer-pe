@@ -1,44 +1,104 @@
-import { html, LitElement } from "lit";
+import { html, LitElement, nothing } from "lit";
 import { styles } from "./confirm-transfer-page.css.js";
 import "@compositions/type-modal/type-modal.js";
 import "@compositions/type-header/type-header.js";
 import "@compositions/type-button/type-button.js";
 import "@compositions/transfer-summary/transfer-summary.js";
- 
+import "@pages/action-modal/action-modal.js";
+
 export class ConfirmTransferPage extends LitElement {
   static properties = {
     transferData: { type: Object },
     open: { type: Boolean, reflect: true },
-    loading: { type: Boolean, reflect: true },
+    transferStatus: { type: String },
+    _retryCount: { state: true },
+    _actionModalOpen: { state: true },
+    _actionType: { state: true },
   };
- 
+
   constructor() {
     super();
     this.transferData = null;
     this.open = false;
-    this.loading = false;
+    this.transferStatus = "";
+    this._retryCount = 0;
+    this._actionModalOpen = false;
+    this._actionType = "";
   }
- 
+
   static styles = styles;
- 
+
+  willUpdate(changedProperties) {
+    if (!changedProperties.has("transferStatus")) return;
+    if (this.transferStatus === "error") {
+      this._handleTransferError();
+    }
+  }
+
+  _handleTransferError() {
+    this._retryCount += 1;
+    if (this._retryCount >= 3) {
+      this._retryCount = 0;
+      this._dispatchCancel();
+      return;
+    }
+    this._showActionModal("transferError");
+  }
+
+  _showActionModal(actionType) {
+    this._actionType = actionType;
+    this._actionModalOpen = true;
+  }
+
+  _closeActionModal() {
+    this._actionModalOpen = false;
+    this._actionType = "";
+  }
+
+  _handleActionModalAction(e) {
+    const { buttonAction } = e.detail;
+    this._closeActionModal();
+    if (buttonAction === "retry") {
+      this._requestRetry();
+    }
+  }
+
+  _requestRetry() {
+    this.dispatchEvent(new CustomEvent("transfer-retry", {
+      bubbles: true,
+      composed: true,
+    }));
+  }
+
   _handleAccept() {
-    if (this.loading) return;
     this.dispatchEvent(new CustomEvent("confirm-accept", {
       detail: { transferData: this.transferData },
       bubbles: true,
       composed: true,
     }));
   }
- 
+
   _handleCancel() {
-    if (this.loading) return;
+    this._dispatchCancel();
+  }
+
+  _dispatchCancel() {
     this.dispatchEvent(new CustomEvent("confirm-cancel", {
       bubbles: true,
       composed: true,
     }));
   }
- 
-  render() {
+
+  _renderActionModal() {
+    return html`
+      <action-modal
+        action-type=${this._actionType}
+        @action-modal-action=${this._handleActionModalAction}
+      ></action-modal>
+    `;
+  }
+
+  _renderContent() {
     return html`
       <type-modal
         variant="page"
@@ -55,7 +115,6 @@ export class ConfirmTransferPage extends LitElement {
             variant="secondary"
             icon-name="arrow-left"
             icon-position="left"
-            ?disabled=${this.loading}
             @click=${this._handleCancel}
           ></type-button>
           <type-header
@@ -76,13 +135,18 @@ export class ConfirmTransferPage extends LitElement {
             text="Transferir"
             icon-position="right"
             variant="default"
-            ?disabled=${this.loading}
             @click=${this._handleAccept}
           ></type-button>
         </div>
       </type-modal>
+ 
+      ${this._actionModalOpen ? this._renderActionModal() : nothing}
     `;
   }
+
+  render() {
+    return html`${this._renderContent()}`;
+  }
 }
- 
+
 customElements.define("confirm-transfer-page", ConfirmTransferPage);
