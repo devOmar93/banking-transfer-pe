@@ -62,7 +62,7 @@ export const STATES = {
   },
   ERROR_MODAL_TYPES: {
     BLOCKED: 'blockedAccount',
-    INACTIVE: 'blockedAccount',
+    INACTIVE: 'inactiveAccount',
     NO_BALANCE: 'insufficientBalance',
     NO_ACCOUNTS: 'noAccountsAvailable',
     ALL_NO_BALANCE: 'insufficientBalance'
