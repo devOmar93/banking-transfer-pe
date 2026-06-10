@@ -1,10 +1,10 @@
 import { LitElement, html, nothing } from "lit";
-import styles from "./successful-transfer-page.css.js";
-import "@compositions/type-modal/type-modal.js";
-import "@compositions/info-card/info-card.js";
+import "@compositions/transfer-summary-card/transfer-summary-card.js";
 import "@compositions/type-button/type-button.js";
 import "@compositions/type-modal/type-modal.js";
-import "@organisms/transfer-summary-card/transfer-summary-card.js";
+import "@compositions/info-card/info-card.js";
+import { fireEvent } from "@utils/utils.js";
+import styles from "./successful-transfer-page.css.js";
 import { generateTransferSummaryPdf } from "./services/generate-transfer-summary-pdf.js";
 
 export class SuccessfulTransferPage extends LitElement {
@@ -12,17 +12,39 @@ export class SuccessfulTransferPage extends LitElement {
     locale: {
       type: Object,
     },
-    current: { type: String },
-    amount: { type: String },
-    transactionNumber: { type: String },
-    time: { type: String },
-    date: { type: String },
-    originAccount: { type: String },
-    originAccountNumber: { type: String },
-    beneficiaryName: { type: String },
-    beneficiaryLastName: { type: String },
-    concept: { type: String },
-    isDataReady: { type: Object },
+    current: {
+      type: String,
+    },
+    amount: {
+      type: String,
+    },
+    transactionNumber: {
+      type: String,
+    },
+    time: {
+      type: String,
+    },
+    date: {
+      type: String,
+    },
+    originAccount: {
+      type: String,
+    },
+    originAccountNumber: {
+      type: String,
+    },
+    beneficiaryName: {
+      type: String,
+    },
+    beneficiaryLastName: {
+      type: String,
+    },
+    concept: {
+      type: String,
+    },
+    isDataReady: {
+      type: Object,
+    },
     isOpen: {
       type: Boolean,
     },
@@ -53,7 +75,7 @@ export class SuccessfulTransferPage extends LitElement {
   static styles = styles;
 
   _handleDownload() {
-    generateTransferSummaryPdf(this.amount, [
+    const dataPdf = [
       {
         label: this.locale["successful-transfer-page-transaction-number"],
         value: this.transactionNumber,
@@ -82,7 +104,15 @@ export class SuccessfulTransferPage extends LitElement {
         label: this.locale["successful-transfer-page-status"],
         value: this.status,
       },
-    ]);
+    ];
+    try {
+      generateTransferSummaryPdf(this.amount, dataPdf);
+    } catch(error) {
+      fireEvent(this, "error-retry", {
+        title : "Error al descargar el PDF",
+        message : error.message
+      });
+    }
   }
 
   _handleShare() {
@@ -104,11 +134,13 @@ export class SuccessfulTransferPage extends LitElement {
   }
 
   _handleNewTransfer() {
-    this.dispatchEvent(new CustomEvent('return-home', {
-      detail: 0,
-      bubbles: true,
-      composed:true
-    }));
+    this.dispatchEvent(
+      new CustomEvent("return-home", {
+        detail: 0,
+        bubbles: true,
+        composed: true,
+      }),
+    );
     this.isOpen = false;
   }
 
