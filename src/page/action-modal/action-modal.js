@@ -72,7 +72,7 @@ const ACTION_MODALS = {
     modalType: "error",
     iconName: "triangle-alert",
     localePrefix: "action-modal-technical-error",
-    buttons: ["exit"],
+    buttons: ["retry", "exit"],
   },
    inactiveAccount: {
     modalType: "error",
