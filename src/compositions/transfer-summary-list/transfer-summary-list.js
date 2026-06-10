@@ -3,7 +3,6 @@ import { styles } from "./transfer-summary-list.css.js";
 import "@components/type-text/type-text.js";
 import "@components/type-tag/type-tag.js";
 import "@compositions/info-field/info-field.js";
-import { fireError } from "@utils/utils.js";
 
 export class TransferSummaryList extends LitElement {
   static properties = {

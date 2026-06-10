@@ -140,6 +140,7 @@ export class NewTransferPage extends LitElement {
   _renderActionModal() {
     return html`
       <action-modal
+        ?open=${true}
         action-type=${this._actionType}
         @action-modal-action=${this._handleActionModalAction}
       ></action-modal>

@@ -1,10 +1,9 @@
-import { ICONS, ICONS_RUTE } from "./utils/icons.js";
-import { html, LitElement, nothing } from "lit";
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
-import styles from "./type-icon.css";
+import { html, LitElement, nothing } from "lit";
 import { validateAllowedProp } from "@utils/utils.js";
 import { validateRequiredProp } from "@utils/utils";
-import { fireError } from "../../utils/utils";
+import { ICONS, ICONS_RUTE } from "./utils/icons.js";
+import styles from "./type-icon.css";
 
 const ALLOWED_VARIANTS = ["default", "secondary"];
 const ALLOWED_SIZES = ["xs", "s", "m", "l", "xl"];
@@ -60,7 +59,7 @@ export class TypeIcon extends LitElement {
 
     if (changedProperties.has("iconName") && this.iconName) {
       if (!this.svg) {
-        fireError(`No se encontró el ícono: ${this.iconName}`);
+        throw new Error(`No se encontró el ícono: ${this.iconName}`);
       }
     }
   }

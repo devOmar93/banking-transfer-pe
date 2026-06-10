@@ -7,7 +7,6 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
       "@components": path.resolve(__dirname, "./src/components"),
       "@compositions": path.resolve(__dirname, "./src/compositions"),
-      "@organisms": path.resolve(__dirname, "./src/organisms"),
       "@constants": path.resolve(__dirname, "./src/constants"),
       "@locales": path.resolve(__dirname, "./src/locales"),
       "@mocks": path.resolve(__dirname, "./src/mocks"),
@@ -16,7 +15,6 @@ export default defineConfig({
       "@services": path.resolve(__dirname, "./src/services"),
       "@utils": path.resolve(__dirname, "./src/utils"),
       "@DM": path.resolve(__dirname, "./src/providers/data-managers"),
-      "@mocks": path.resolve(__dirname, "./src/mocks"),
     },
   },
 });
