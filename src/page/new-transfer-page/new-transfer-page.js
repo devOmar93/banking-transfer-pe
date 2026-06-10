@@ -20,10 +20,14 @@ export class NewTransferPage extends LitElement {
       type: Object,
     },
 
+    _lastFormPayload: {
+      type: Object,
+    },
+
     _loading: {
       type: Boolean,
     },
-    
+
     _actionType: {
       type: String,
     },
@@ -36,31 +40,44 @@ export class NewTransferPage extends LitElement {
   constructor() {
     super();
     this.accountCustomer = {};
+    this._lastFormPayload = {};
     this._loading = false;
     this._actionType = "";
     this._actionModalOpen = false;
+    this._retryCount = 0;
   }
 
-  async _sendForm(event) {
-    const accountNumberDestination = event.detail.destinationAccount;
-    const accountCustomer = this.accountCustomer.accountNumber;
+  async _sendForm(lastFormPayload) {
     this._loading = true;
-    const responseDestinationAccount =
-      await resolveDestinationAccount(accountCustomer, accountNumberDestination);
+    const responseDestinationAccount = await resolveDestinationAccount(
+      this._lastFormPayload.accountNumber,
+      this._lastFormPayload.destinationAccount,
+    );
     this._loading = false;
     if (responseDestinationAccount.status === "OK") {
-      const formField = {
-        ...event.detail,
-        ...this.accountCustomer,
+      const finalFormPayload = {
+        ...lastFormPayload,
         destinationAccountName:
           responseDestinationAccount.data.accountHolderName,
         destinationAccountCurrency: responseDestinationAccount.data.currency,
       };
 
-      return this._goNextStep(formField);
+      return this._goNextStep(lastFormPayload);
     }
 
-    return this._openModalError(responseDestinationAccount.errorCode);
+    if (this._retryCount < 3) {
+      return this._openModalError(responseDestinationAccount.errorCode);
+    }
+    this._returnPage();
+  }
+
+  _handleFormSubmit(event) {
+    const lastFormPayload = {
+      ...event.detail,
+      ...this.accountCustomer,
+    };
+    this._lastFormPayload = lastFormPayload;
+    this._sendForm(lastFormPayload);
   }
 
   _openModalError(configModal) {
@@ -94,11 +111,6 @@ export class NewTransferPage extends LitElement {
     );
   }
 
-  async _getDestinationAccountDetails(accountCustomer) {
-    const responseDestinationAccount =
-      await resolveDestinationAccount(accountCustomer);
-  }
-
   _getCurrency(currency) {
     const listCurrency = {
       USD: "dollar-sign",
@@ -119,6 +131,11 @@ export class NewTransferPage extends LitElement {
   _handleActionModalAction(event) {
     this._actionType = "";
     this._actionModalOpen = false;
+    if (event.detail.buttonAction === "retry") {
+      this._retryCount += 1;
+      return this._sendForm(this._lastFormPayload);
+    }
+    this._retryCount = 0;
   }
 
   _renderActionModal() {
@@ -168,7 +185,7 @@ export class NewTransferPage extends LitElement {
             .configFormFields=${TRANSFER_FORM_FIELDS}
             .availableBalance=${this.accountCustomer.availableBalance}
             .currency=${this._getCurrency(this.accountCustomer.currency)}
-            @form-submit="${this._sendForm}"
+            @form-submit="${this._handleFormSubmit}"
           ></transfer-form>
         </div>
       </type-modal>
