@@ -62,6 +62,18 @@ const ACTION_MODALS = {
     localePrefix: "action-modal-transfer-confirmation",
     buttons: ["confirm", "cancel"],
   },
+  sameAccount: {
+    modalType: "error",
+    iconName: "triangle-alert",
+    localePrefix: "action-modal-same-account",
+    buttons: ["exit"],
+  },
+  technicalError: {
+    modalType: "error",
+    iconName: "triangle-alert",
+    localePrefix: "action-modal-technical-error",
+    buttons: ["exit"],
+  },
 };
 export class ActionModal extends LitElement {
   static styles = actionModalStyles;
