@@ -141,6 +141,7 @@ export class NewTransferPage extends LitElement {
   _renderActionModal() {
     return html`
       <action-modal
+        ?open=${true}
         action-type=${this._actionType}
         @action-modal-action=${this._handleActionModalAction}
       ></action-modal>
@@ -196,4 +197,3 @@ export class NewTransferPage extends LitElement {
 }
 
 customElements.define("new-transfer-page", NewTransferPage);
-/*<from-account-card></from-account-card>*/

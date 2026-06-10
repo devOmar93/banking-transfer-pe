@@ -3,7 +3,9 @@ import { actionModalStyles } from "./action-modal.css.js";
 import "../../compositions/type-modal/type-modal.js";
 import "../../compositions/type-button/type-button.js";
 import "../../components/type-icon/type-icon.js";
+import { fireEvent } from "@utils/utils.js";
 import locales from "@locales/locales.json";
+
 const DEFAULT_LANGUAGE = "es_LA";
 const BUTTON_TYPES = {
   retry: "primary",
@@ -90,13 +92,15 @@ const ACTION_MODALS = {
 export class ActionModal extends LitElement {
   static styles = actionModalStyles;
   static properties = {
-    actionType: { type: String, attribute: "action-type" },
     locale: { type: Object },
+    actionType: { type: String, attribute: "action-type" },
+    open: { type: Boolean },
   };
   constructor() {
     super();
     this.actionType = "loadAccountsError";
     this.locale = null;
+    this.open = false;
   }
   get actionData() {
     return ACTION_MODALS[this.actionType] || ACTION_MODALS.loadAccountsError;
@@ -139,20 +143,8 @@ export class ActionModal extends LitElement {
       buttonAction: action,
       buttonText: this._getButtonText(action),
     };
-    this.dispatchEvent(
-      new CustomEvent("action-modal-action", {
-        detail,
-        bubbles: true,
-        composed: true,
-      }),
-    );
-    this.dispatchEvent(
-      new CustomEvent(`action-modal-${action}`, {
-        detail,
-        bubbles: true,
-        composed: true,
-      }),
-    );
+    fireEvent(this, "action-modal-action", detail)
+    fireEvent(this, `action-modal-${action}`, detail)
   }
   _handleButtonClick(action, event) {
     event.stopPropagation();
@@ -187,7 +179,7 @@ export class ActionModal extends LitElement {
   render() {
     return html`
       <type-modal
-        .open=${true}
+        .open=${this.open}
         variant="dialog"
         .hasFooter=${true}
         @click=${this._handleBackdropClick}
