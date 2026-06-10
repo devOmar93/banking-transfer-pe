@@ -6,8 +6,6 @@ import "./compositions/account-list/account-list.js";
 import "@components/loading-overlay/loading-overlay.js";
 import "@compositions/info-card/info-card.js";
 import "../action-modal/action-modal.js";
-import { ACCOUNTS_BASE_CASE } from "@mocks/accounts.mock.js";
-import { getAccounts } from "@services/accounts.service.js";
 import {
   ACCOUNTS_PAGE_ES as ES,
   ACCOUNTS_PAGE_CONFIG as CONFIG,
@@ -23,83 +21,139 @@ import { fireEvent } from "@utils/utils.js";
 
 export class AccountsPage extends LitElement {
   static properties = {
-    accounts: { type: Array },
-    _loading: { type: Boolean },
-    _error: { type: Boolean },
+    /**
+     * Represents the current state of the accounts flow (idle, loading, success, empty, error)
+     * @type {string}
+     */
+    status: { type: String },
+
+    /**
+     * Holds the raw accounts data received from the parent component
+     * @type {Array}
+     */
+    data: { type: Array },
+
+    /**
+     * Stores the business error code generated during account processing
+     * @type {string}
+     * @private
+     */
     _errorState: { type: String },
 
+    /**
+     * Controls whether the action modal is visible in the UI
+     * @type {boolean}
+     * @private
+     */
     _actionModalOpen: { type: Boolean },
+
+    /**
+     * Defines which type of action modal should be displayed
+     * @type {string}
+     * @private
+     */
     _actionType: { type: String },
+
+    /**
+     * Counts how many retry attempts have been made after failures
+     * @type {number}
+     * @private
+     */
     _retryCount: { type: Number },
+
+    /**
+     * Indicates if the error occurred during the initial load of accounts
+     * @type {boolean}
+     * @private
+     */
+    _isInitialError: { type: Boolean },
+
+    /**
+     * Contains the processed accounts ready to be rendered in the UI
+     * @type {Array<any>}
+     * @private
+     */
+    _accountsProcessed: { type: Array },
   };
 
   constructor() {
     super();
-    this.accounts = [];
-    this._loading = false;
-    this._error = false;
+    this.status = "";
     this._errorState = "";
     this._actionModalOpen = false;
     this._actionType = "";
     this._retryCount = 0;
+    this._isInitialError = false;
+    this._accountsProcessed = [];
   }
 
   static styles = styles;
 
-  connectedCallback() {
-    super.connectedCallback();
-    this._loading = true;
+  willUpdate(changedProperties) {
+    if (!changedProperties.has("status")) return;
+    this._processIfNeeded();
   }
 
-  async firstUpdated() {
-    this._loadAccounts();
+  _processIfNeeded() {
+    const action = {
+      success: () => this._loadAccounts(),
+      empty: () => this._loadAccounts(),
+      error: () => this._handleError(),
+    }[this.status];
+
+    action?.();
   }
-  async _loadAccounts() {
-    this._loading = true;
-    this._actionModalOpen = false;
-    this._actionType = "";
 
-    try {
-      const { accounts } = await getAccounts(ACCOUNTS_BASE_CASE);
-      const filteredAccounts = filterTopAccounts(
-        accounts,
-        CONFIG.accounts.limit,
-        STATES.SUCCESS.ACTIVE,
-      );
-      const result = processAccounts(filteredAccounts, PROCESS_ACCOUNT_RULES);
+  _handleError() {
+    this._retryCount += 1;
+    const actionType =
+      this._retryCount >= 3 ? "finalError" : "loadAccountsError";
+    this._showActionModal(actionType);
+  }
 
-      if (result.errorState) {
-        this._errorState = result.errorState;
-        this._showActionModal(
+  _loadAccounts() {
+    const result = this._processAccounts();
+    this._handleProcessResult(result);
+  } 
+  
+  _processAccounts() {
+    const filteredAccounts = filterTopAccounts(
+      this.data,
+      CONFIG.accounts.limit,
+      STATES.SUCCESS.ACTIVE,
+    );
+
+    return processAccounts(filteredAccounts, PROCESS_ACCOUNT_RULES);
+  }
+
+  
+  _handleProcessResult(result) {
+    if (result.errorState) {
+      this._errorState = result.errorState;
+      this._isInitialError = true;
+      this._accountsProcessed = result.accounts;
+      return this._showActionModal(
           this._mapErrorStateToActionType(result.errorState),
         );
-        return;
-      }
-
-      if (result.singleAccount) {
-        this._validateSingleAccount(result.singleAccount);
-        return;
-      }
-
-      this.accounts = result.accounts;
-      this._retryCount = 0;
-    } catch {
-      this._retryCount += 1;
-      if (this._retryCount >= 3) {
-        this._showActionModal("finalError");
-      } else {
-        this._showActionModal("loadAccountsError");
-      }
-    } finally {
-      this._loading = false;
     }
+
+    if (result.singleAccount) {
+      this._accountsProcessed = [result.singleAccount];
+      return this._validateSingleAccount(result.singleAccount, true);
+    }
+    this._accountsProcessed = result.accounts;
+    this._retryCount = 0;
   }
 
   _goToNextStep(account) {
     fireEvent(this, "account", account);
   }
+  
+  _goToExitStep() {
+    fireEvent(this, "exit", { step: 4 });
+  }
 
-  _validateSingleAccount(account) {
+  _validateSingleAccount(account, isInitial = false) {
     const error = validateAccount(
       account,
       STATES.SUCCESS.ACTIVE,
@@ -108,27 +162,12 @@ export class AccountsPage extends LitElement {
 
     if (error) {
       this._errorState = error;
+      this._isInitialError = isInitial;
       this._showActionModal(this._mapErrorStateToActionType(error));
       return;
     }
 
     this._goToNextStep(account);
-  }
-
-  _validateAccount(account) {
-    return this._getStatusError(account) ?? this._getBalanceError(account);
-  }
-
-  _getStatusError(account) {
-    return account.status !== STATES.SUCCESS.ACTIVE
-      ? STATES.ERROR_TYPES[account.status]
-      : null;
-  }
-
-  _getBalanceError(account) {
-    return account.availableBalance === 0
-      ? STATES.ERROR_TYPES.NO_BALANCE
-      : null;
   }
 
   _selectedAccount(e) {
@@ -152,21 +191,28 @@ export class AccountsPage extends LitElement {
   }
 
   _closeActionModal() {
+    if(this._isInitialError || this._retryCount === 3) {
+      this._goToExitStep();
+      return;
+    }
+
     this._actionModalOpen = false;
     this._actionType = "";
   }
 
-  // Escucha la acción del modal y decide qué hacer según el botón pulsado.
   _handleActionModalAction(e) {
     const { buttonAction } = e.detail;
     if (buttonAction === "retry") {
-      this._closeActionModal();
-      this._loadAccounts();
+      this._actionModalOpen = false;
+      this._actionType = "";
+      this._requestRetry();
       return;
     }
-
-    // Para 'exit', 'cancel', 'understood' o cualquier otra acción, cerramos el modal.
     this._closeActionModal();
+  }
+
+  _requestRetry(){
+    fireEvent(this, "retry-accounts");
   }
 
   _renderActionModal() {
@@ -181,7 +227,7 @@ export class AccountsPage extends LitElement {
   _renderAccountsList() {
     return html`
       <account-list
-        .accounts=${this.accounts}
+        .accounts=${this._accountsProcessed ?? []}
         @select-account=${this._selectedAccount}
       ></account-list>
     `;
@@ -189,7 +235,7 @@ export class AccountsPage extends LitElement {
 
   render() {
     return html`
-      ${this._loading
+      ${this.status === "loading"
         ? html`<loading-overlay></loading-overlay>`
         : html`
             <type-modal

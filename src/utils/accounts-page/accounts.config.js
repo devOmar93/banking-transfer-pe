@@ -75,11 +75,18 @@ export const STATES = {
 export const PROCESS_ACCOUNT_RULES = [
   {
     condition: accounts => accounts.length === 0,
-    result: { errorState: STATES.ERROR_TYPES.NO_ACCOUNTS },
+    result: () => ({
+      errorState: STATES.ERROR_TYPES.NO_ACCOUNTS,
+      accounts: [],
+    }),
+
   },
   {
     condition: accounts => accounts.every(account => account.availableBalance === 0),
-    result: { errorState: STATES.ERROR_TYPES.ALL_NO_BALANCE },
+    result: accounts => ({
+      errorState: STATES.ERROR_TYPES.ALL_NO_BALANCE,
+      accounts,
+    }),
   },
   {
     condition: accounts => accounts.length === 1,

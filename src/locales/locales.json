@@ -66,6 +66,8 @@
     "new-transfer-page-field-destination-error-not-numerical": "La cuenta tiene que ser númerica.",
     "new-transfer-page-field-amount-error-default": "El monto es obligatorio.",
     "new-transfer-page-field-amount-error-insufficient-balance": "Tu saldo es insuficiente para pagar.",
-    "new-transfer-page-field-amount-error-amount-not-allowed": "El monto debe ser mayor que 0."
+    "new-transfer-page-field-amount-error-amount-not-allowed": "El monto debe ser mayor que 0.",
+    "exit-page-title": "¡Hasta luego!",
+    "exit-page-subtitle": "Has salido de la aplicación de transferencias"
   }
 }
