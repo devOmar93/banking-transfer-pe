@@ -62,7 +62,7 @@ export class NewTransferPage extends LitElement {
         destinationAccountCurrency: responseDestinationAccount.data.currency,
       };
 
-      return this._goNextStep(lastFormPayload);
+      return this._goNextStep(finalFormPayload);
     }
 
     if (this._retryCount < 3) {
@@ -86,7 +86,6 @@ export class NewTransferPage extends LitElement {
   }
 
   _goNextStep(formField) {
-    //console.log("formField", formField);
     const transferData = {
       amount: formField.amount,
       currency: formField.currency,
@@ -196,4 +195,3 @@ export class NewTransferPage extends LitElement {
 }
 
 customElements.define("new-transfer-page", NewTransferPage);
-/*<from-account-card></from-account-card>*/

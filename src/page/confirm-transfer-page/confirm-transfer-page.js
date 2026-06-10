@@ -99,6 +99,7 @@ export class ConfirmTransferPage extends LitElement {
   }
 
   _renderContent() {
+    console.log('transferData', this.transferData);
     return html`
       <type-modal
         variant="page"
