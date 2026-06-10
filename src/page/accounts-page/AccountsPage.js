@@ -6,7 +6,6 @@ import "./compositions/account-list/account-list.js";
 import "@components/loading-overlay/loading-overlay.js";
 import "@compositions/info-card/info-card.js";
 import "../action-modal/action-modal.js";
-import { ACCOUNTS_CASE_1 } from "@mocks/accounts.mock.js";
 import {
   ACCOUNTS_PAGE_ES as ES,
   ACCOUNTS_PAGE_CONFIG as CONFIG,
@@ -22,24 +21,64 @@ import { fireEvent } from "@utils/utils.js";
 
 export class AccountsPage extends LitElement {
   static properties = {
-    accounts: { type: Array },
-    loading: { type: Boolean },
-    error: { type: Boolean },
+    /**
+     * Represents the current state of the accounts flow (idle, loading, success, empty, error)
+     * @type {string}
+     */
+    status: { type: String },
+
+    /**
+     * Holds the raw accounts data received from the parent component
+     * @type {Array}
+     */
+    data: { type: Array },
+
+    /**
+     * Stores the business error code generated during account processing
+     * @type {string}
+     * @private
+     */
     _errorState: { type: String },
 
+    /**
+     * Controls whether the action modal is visible in the UI
+     * @type {boolean}
+     * @private
+     */
     _actionModalOpen: { type: Boolean },
+
+    /**
+     * Defines which type of action modal should be displayed
+     * @type {string}
+     * @private
+     */
     _actionType: { type: String },
+
+    /**
+     * Counts how many retry attempts have been made after failures
+     * @type {number}
+     * @private
+     */
     _retryCount: { type: Number },
 
+    /**
+     * Indicates if the error occurred during the initial load of accounts
+     * @type {boolean}
+     * @private
+     */
     _isInitialError: { type: Boolean },
+
+    /**
+     * Contains the processed accounts ready to be rendered in the UI
+     * @type {Array<any>}
+     * @private
+     */
     _accountsProcessed: { type: Array },
   };
 
   constructor() {
     super();
-    this._accounts = [];
-    this.loading = false;
-    this.error = false;
+    this.status = "";
     this._errorState = "";
     this._actionModalOpen = false;
     this._actionType = "";
@@ -50,64 +89,60 @@ export class AccountsPage extends LitElement {
 
   static styles = styles;
 
-set accounts(value) {
-  const old = this._accounts;
-  this._accounts = value;
-  this.requestUpdate("accounts", old);
-
- 
-   
-console.log("Cuentas actualizadas:", this._accounts);
-console.log("Loading:", this.loading);
-if (!this.loading) {
-    this._loadAccounts();
+  willUpdate(changedProperties) {
+    if (!changedProperties.has("status")) return;
+    this._processIfNeeded();
   }
 
+  _processIfNeeded() {
+    const action = {
+      success: () => this._loadAccounts(),
+      empty: () => this._loadAccounts(),
+      error: () => this._handleError(),
+    }[this.status];
 
-}
+    action?.();
+  }
 
-get accounts() {
-  return this._accounts;
-}
-
-
+  _handleError() {
+    this._retryCount += 1;
+    const actionType =
+      this._retryCount >= 3 ? "finalError" : "loadAccountsError";
+    this._showActionModal(actionType);
+  }
 
   _loadAccounts() {
-    this._actionModalOpen = false;
-    this._actionType = "";
+    const result = this._processAccounts();
+    this._handleProcessResult(result);
+  } 
+  
+  _processAccounts() {
+    const filteredAccounts = filterTopAccounts(
+      this.data,
+      CONFIG.accounts.limit,
+      STATES.SUCCESS.ACTIVE,
+    );
 
-    try {
-      const filteredAccounts = filterTopAccounts(
-        this.accounts,
-        CONFIG.accounts.limit,
-        STATES.SUCCESS.ACTIVE,
-      );
-      const result = processAccounts(filteredAccounts, PROCESS_ACCOUNT_RULES);
+    return processAccounts(filteredAccounts, PROCESS_ACCOUNT_RULES);
+  }
 
-      if (result.errorState) {
-        this._errorState = result.errorState;
-        this._isInitialError = true;
-        this._showActionModal(
+  
+  _handleProcessResult(result) {
+    if (result.errorState) {
+      this._errorState = result.errorState;
+      this._isInitialError = true;
+      this._accountsProcessed = result.accounts;
+      return this._showActionModal(
           this._mapErrorStateToActionType(result.errorState),
         );
-        return;
-      }
-
-      if (result.singleAccount) {
-        this._validateSingleAccount(result.singleAccount);
-        return;
-      }
-
-      this._accountsProcessed = result.accounts;
-      this._retryCount = 0;
-    } catch {
-      this._retryCount += 1;
-      if (this._retryCount >= 3) {
-        this._showActionModal("finalError");
-      } else {
-        this._showActionModal("loadAccountsError");
-      }
     }
+
+    if (result.singleAccount) {
+      this._accountsProcessed = [result.singleAccount];
+      return this._validateSingleAccount(result.singleAccount, true);
+    }
+    this._accountsProcessed = result.accounts;
+    this._retryCount = 0;
   }
 
   _goToNextStep(account) {
@@ -118,7 +153,7 @@ get accounts() {
     fireEvent(this, "exit", { step: 4 });
   }
 
-  _validateSingleAccount(account) {
+  _validateSingleAccount(account, isInitial = false) {
     const error = validateAccount(
       account,
       STATES.SUCCESS.ACTIVE,
@@ -127,6 +162,7 @@ get accounts() {
 
     if (error) {
       this._errorState = error;
+      this._isInitialError = isInitial;
       this._showActionModal(this._mapErrorStateToActionType(error));
       return;
     }
@@ -155,25 +191,28 @@ get accounts() {
   }
 
   _closeActionModal() {
-    if(this._isInitialError) {
+    if(this._isInitialError || this._retryCount === 3) {
       this._goToExitStep();
       return;
     }
+
     this._actionModalOpen = false;
     this._actionType = "";
   }
 
-  // Escucha la acción del modal y decide qué hacer según el botón pulsado.
   _handleActionModalAction(e) {
     const { buttonAction } = e.detail;
     if (buttonAction === "retry") {
-      this._closeActionModal();
-      this._loadAccounts();
+      this._actionModalOpen = false;
+      this._actionType = "";
+      this._requestRetry();
       return;
     }
-
-    // Para 'exit', 'cancel', 'understood' o cualquier otra acción, cerramos el modal.
     this._closeActionModal();
+  }
+
+  _requestRetry(){
+    fireEvent(this, "retry-accounts");
   }
 
   _renderActionModal() {
@@ -196,7 +235,7 @@ get accounts() {
 
   render() {
     return html`
-      ${this.loading
+      ${this.status === "loading"
         ? html`<loading-overlay></loading-overlay>`
         : html`
             <type-modal
