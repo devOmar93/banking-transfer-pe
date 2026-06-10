@@ -74,6 +74,12 @@ const ACTION_MODALS = {
     localePrefix: "action-modal-technical-error",
     buttons: ["exit"],
   },
+   inactiveAccount: {
+    modalType: "error",
+    iconName: "triangle-alert",
+    localePrefix: "action-modal-inactive-account",
+    buttons: ["exit"],
+  },
 };
 export class ActionModal extends LitElement {
   static styles = actionModalStyles;

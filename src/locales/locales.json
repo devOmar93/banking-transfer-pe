@@ -46,6 +46,8 @@
     "action-modal-same-account-message": "No puedes realizar una transferencia a la misma cuenta.",
     "action-modal-technical-error-title": "Error técnico",
     "action-modal-technical-error-message": "Ha ocurrido un error interno. Intente nuevamente más tarde.",    
+    "action-modal-inactive-account-title": "Cuenta inactiva",
+    "action-modal-inactive-account-message": "Lo sentimos, La cuenta seleccionada está inactiva.",
     "action-modal-button-retry": "Reintentar",
     "action-modal-button-exit": "Salir",
     "action-modal-button-understood": "Entendido",
