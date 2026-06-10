@@ -46,12 +46,6 @@ export class TransferForm extends LitElement {
     this.stateForm = false;
     this.currency = "";
   }
-  /*
-  firstUpdated() {
-    this.formFieldStates = createInitialFormStates(this.configFormFields);
-    console.log("currency", this.currency);
-  }*/
-
   
   willUpdate(changedProps) {
     if (changedProps.has("configFormFields")) {
@@ -165,10 +159,4 @@ export class TransferForm extends LitElement {
   }
 }
 
-/*<type-button
-          text="Continuar"
-          icon-name="arrow-right"
-          ?disabled="${!this.stateForm}"
-          @click="${this._onSubmit}"
-        ></type-button>*/
 customElements.define("transfer-form", TransferForm);
