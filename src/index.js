@@ -7,6 +7,7 @@ import "./compositions/type-header/type-header.js";
 import "./page/new-transfer-page/new-transfer-page.js";
 import "./page/accounts-page/AccountsPage.js";
 import "@DM/entelgy-global-transfers-api-dm/entelgy-global-transfers-api-dm.js";
+import "@DM/entelgy-global-accounts-api-dm/entelgy-global-accounts-api-dm.js";
 import "@pages/successful-transfer-page/successful-transfer-page.js";
 import "@pages/confirm-transfer-page/confirm-transfer-page.js";
 import locales from "@locales/locales.json";
@@ -37,6 +38,8 @@ export class MyElement extends LitElement {
     concept: { type: String },
     status: { type: String },
     isDataReady: { type: Boolean },
+    accountsStatus: { type: String },
+    accountsData: { type: Array },
   };
  
   constructor() {
@@ -57,12 +60,48 @@ export class MyElement extends LitElement {
     this.concept = "";
     this.status = "";
     this.isDataReady = false;
+    this.accountsStatus = "";
+    this.accountsData = [];
   }
 
-  getAccountCustomer(event) {
+  firstUpdated() {
+    setTimeout(() => {
+      const accountsDm = this.shadowRoot.getElementById("accounts");
+      if(accountsDm) {
+        accountsDm.getAccounts();
+      }
+    });
+  }
+
+  _handleLoadingAccounts(e) {
+    const isLoading = e.detail.isLoading;
+    if (isLoading) {
+      this.accountsStatus = "loading";
+      this.accountsData = [];
+    }
+  }
+
+  _handleSuccessAccounts(e) {
+    const data = e.detail;
+    this.accountsData = data.accounts ?? [];
+    this.accountsStatus = data.accounts?.length ? "success" : "empty";
+  }
+
+  _handleErrorAccounts() {
+    this.accountsData = [];
+    this.accountsStatus = "error";
+  }
+
+  _handleRetryAccounts(){ 
+    const accountsDm = this.shadowRoot.getElementById("accounts");
+    if(accountsDm) {
+      accountsDm.getAccounts();
+    }
+  }
+
+  _getAccountCustomer(event) {
     this.accountCustomer = event.detail;
     this.step = 1;
-    console.log("accountCustomer", this.accountCustomer);
   }
  
   _handleConfirmRequested(event) {
@@ -118,8 +157,11 @@ export class MyElement extends LitElement {
 
   _renderAcountsPage() {
     return html`<accounts-page
-      @account=${this.getAccountCustomer}
+      @account=${this._getAccountCustomer}
       @exit=${this._updateExitStep}
+      @retry-accounts=${this._handleRetryAccounts}
+      .status=${this.accountsStatus}
+      .data=${this.accountsData ?? []}
     ></accounts-page>`;
   }
 
@@ -159,15 +201,11 @@ export class MyElement extends LitElement {
       @return-home=${this._updateStep}
     ></successful-transfer-page>`;
   }
-  
-  _goToAccounts() {
-    this.step = 0;
-  }
 
   _renderExitPage(e) {
     return html`<transfer-exit-page
-      @start-transfer=${this._goToAccounts}
-    ></transfer-exit-page>`;
+      .locale=${this.locale}
+      ></transfer-exit-page>`;
   }
  
   _renderStep(page) {
@@ -190,6 +228,13 @@ export class MyElement extends LitElement {
         @transfer-api-dm-fetch-error=${this._handleError}
       >
       </entelgy-global-transfers-api-dm>
+      <entelgy-global-accounts-api-dm
+        id="accounts"
+        @accounts-api-dm-loading=${this._handleLoadingAccounts}
+        @accounts-api-dm-success=${this._handleSuccessAccounts}
+        @accounts-api-dm-error=${this._handleErrorAccounts}
+        >
+      </entelgy-global-accounts-api-dm>
     `;
   }
 }

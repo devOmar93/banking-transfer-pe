@@ -6,8 +6,7 @@ import "./compositions/account-list/account-list.js";
 import "@components/loading-overlay/loading-overlay.js";
 import "@compositions/info-card/info-card.js";
 import "../action-modal/action-modal.js";
-import { ACCOUNTS_BASE_CASE } from "@mocks/accounts.mock.js";
-import { getAccounts } from "@services/accounts.service.js";
+import { ACCOUNTS_CASE_1 } from "@mocks/accounts.mock.js";
 import {
   ACCOUNTS_PAGE_ES as ES,
   ACCOUNTS_PAGE_CONFIG as CONFIG,
@@ -24,8 +23,8 @@ import { fireEvent } from "@utils/utils.js";
 export class AccountsPage extends LitElement {
   static properties = {
     accounts: { type: Array },
-    _loading: { type: Boolean },
-    _error: { type: Boolean },
+    loading: { type: Boolean },
+    error: { type: Boolean },
     _errorState: { type: String },
 
     _actionModalOpen: { type: Boolean },
@@ -33,39 +32,53 @@ export class AccountsPage extends LitElement {
     _retryCount: { type: Number },
 
     _isInitialError: { type: Boolean },
+    _accountsProcessed: { type: Array },
   };
 
   constructor() {
     super();
-    this.accounts = [];
-    this._loading = false;
-    this._error = false;
+    this._accounts = [];
+    this.loading = false;
+    this.error = false;
     this._errorState = "";
     this._actionModalOpen = false;
     this._actionType = "";
     this._retryCount = 0;
     this._isInitialError = false;
+    this._accountsProcessed = [];
   }
 
   static styles = styles;
 
-  connectedCallback() {
-    super.connectedCallback();
-    this._loading = true;
-  }
+set accounts(value) {
+  const old = this._accounts;
+  this._accounts = value;
+  this.requestUpdate("accounts", old);
 
-  async firstUpdated() {
+ 
+   
+console.log("Cuentas actualizadas:", this._accounts);
+console.log("Loading:", this.loading);
+if (!this.loading) {
     this._loadAccounts();
   }
-  async _loadAccounts() {
-    this._loading = true;
+
+
+}
+
+get accounts() {
+  return this._accounts;
+}
+
+
+
+  _loadAccounts() {
     this._actionModalOpen = false;
     this._actionType = "";
 
     try {
-      const { accounts } = await getAccounts(ACCOUNTS_BASE_CASE);
       const filteredAccounts = filterTopAccounts(
-        accounts,
+        this.accounts,
         CONFIG.accounts.limit,
         STATES.SUCCESS.ACTIVE,
       );
@@ -85,7 +98,7 @@ export class AccountsPage extends LitElement {
         return;
       }
 
-      this.accounts = result.accounts;
+      this._accountsProcessed = result.accounts;
       this._retryCount = 0;
     } catch {
       this._retryCount += 1;
@@ -94,8 +107,6 @@ export class AccountsPage extends LitElement {
       } else {
         this._showActionModal("loadAccountsError");
       }
-    } finally {
-      this._loading = false;
     }
   }
 
@@ -177,7 +188,7 @@ export class AccountsPage extends LitElement {
   _renderAccountsList() {
     return html`
       <account-list
-        .accounts=${this.accounts}
+        .accounts=${this._accountsProcessed ?? []}
         @select-account=${this._selectedAccount}
       ></account-list>
     `;
@@ -185,7 +196,7 @@ export class AccountsPage extends LitElement {
 
   render() {
     return html`
-      ${this._loading
+      ${this.loading
         ? html`<loading-overlay></loading-overlay>`
         : html`
             <type-modal

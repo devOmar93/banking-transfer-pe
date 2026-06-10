@@ -47,6 +47,8 @@
     "action-modal-button-understood": "Entendido",
     "action-modal-button-continue": "Continuar",
     "action-modal-button-confirm": "Confirmar",
-    "action-modal-button-cancel": "Cancelar"
+    "action-modal-button-cancel": "Cancelar",
+    "exit-page-title": "¡Hasta luego!",
+    "exit-page-subtitle": "Has salido de la aplicación de transferencias"
   }
 }
