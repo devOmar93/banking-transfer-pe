@@ -1,27 +1,25 @@
-export const getAccountApi = (accountNumber) => {
+import { NEW_TRANSFER_PAGE_RESPONSE_MOCK as RESPONSE } from "../mocks/newTransferPage.mock.js";
+
+export const getAccountApi = (accountNumberOrigin, accountNumberDestination ) => {
   return new Promise((resolve, reject) => {
     const operationSuccessful = true;
     setTimeout(() => {
-      if (operationSuccessful) {
-        resolve({
-          success: true,
-          data: {
-            accountNumber: "1234567890",
-            accountHolderName: "JUAN PEREZ LOPEZ",
-            currency: "PEN",
-            isActive: true,
-          },
-        });
+      
+      if (accountNumberDestination === "00000000000000") {
+        reject(RESPONSE.ERRORS.technicalError);
         return;
       }
-      reject({
-        success: false,
-        error: {
-          code: "ACCOUNT_NOT_FOUND",
-          message: "El número de cuenta no existe",
-          description: "Lo sentimos. El número de cuenta a transferir no existe, por favor ingrese una cuenta existente."
-        },
-      });
+
+      if (accountNumberOrigin === accountNumberDestination) {
+        resolve(RESPONSE.ERRORS.sameAccount);
+        return;
+      }
+
+      if (accountNumberDestination === "99999999999999") {
+        resolve(RESPONSE.ERRORS.blockedAccount);
+        return;
+      }
+      resolve(RESPONSE.SUCCESS);
       return;
     }, 2500);
   });

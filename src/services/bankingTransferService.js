@@ -1,8 +1,8 @@
 
 import { getAccountApi } from "./bankingTransferApi.js";
 
-export const resolveDestinationAccount = (accountNumber) => {
-  return getAccountApi(accountNumber)
+export const resolveDestinationAccount = (accountNumber, accountNumberDestination) => {
+  return getAccountApi(accountNumber, accountNumberDestination)
     .then((response) => {
       return response;
     })
