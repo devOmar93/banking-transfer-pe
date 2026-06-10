@@ -11,6 +11,8 @@ import {
   NEW_TRANSFER_PAGE_LITERALS as LITERALS,
   NEW_TRANSFER_PAGE_CONFIG as CONFIG,
 } from "@utils/new-transfer-page/newTransferPageConfig.js";
+
+import "../action-modal/action-modal.js";
 import styles from "./new-transfer-page.css.js";
 export class NewTransferPage extends LitElement {
   static properties = {
@@ -21,21 +23,32 @@ export class NewTransferPage extends LitElement {
     _loading: {
       type: Boolean,
     },
+    
+    _actionType: {
+      type: String,
+    },
+
+    _actionModalOpen: {
+      type: Boolean,
+    },
   };
 
   constructor() {
     super();
     this.accountCustomer = {};
     this._loading = false;
+    this._actionType = "";
+    this._actionModalOpen = false;
   }
 
   async _sendForm(event) {
+    const accountNumberDestination = event.detail.destinationAccount;
     const accountCustomer = this.accountCustomer.accountNumber;
     this._loading = true;
     const responseDestinationAccount =
-      await resolveDestinationAccount(accountCustomer);
+      await resolveDestinationAccount(accountCustomer, accountNumberDestination);
     this._loading = false;
-    if (responseDestinationAccount.success) {
+    if (responseDestinationAccount.status === "OK") {
       const formField = {
         ...event.detail,
         ...this.accountCustomer,
@@ -47,11 +60,12 @@ export class NewTransferPage extends LitElement {
       return this._goNextStep(formField);
     }
 
-    return this._openModalError(responseDestinationAccount.error);
+    return this._openModalError(responseDestinationAccount.errorCode);
   }
 
   _openModalError(configModal) {
-    console.log("configModal", configModal);
+    this._actionType = configModal;
+    this._actionModalOpen = true;
   }
 
   _goNextStep(formField) {
@@ -83,7 +97,6 @@ export class NewTransferPage extends LitElement {
   async _getDestinationAccountDetails(accountCustomer) {
     const responseDestinationAccount =
       await resolveDestinationAccount(accountCustomer);
-    console.log("responseDestinationAccount", responseDestinationAccount);
   }
 
   _getCurrency(currency) {
@@ -102,6 +115,10 @@ export class NewTransferPage extends LitElement {
         composed: true,
       }),
     );
+  }
+  _handleActionModalAction(event) {
+    this._actionType = "";
+    this._actionModalOpen = false;
   }
 
   _renderActionModal() {
@@ -155,6 +172,7 @@ export class NewTransferPage extends LitElement {
           ></transfer-form>
         </div>
       </type-modal>
+      ${this._actionModalOpen ? this._renderActionModal() : nothing}
     `;
   }
 }
