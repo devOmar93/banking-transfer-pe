@@ -2,11 +2,15 @@ import { css } from "lit";
 
 export default css`
   :host {
-    --type-modal-bg-color: #dcf5ff;
     color: black;
     font-size: 1rem;
     max-width: 22.5 rem;
     margin: 0 auto;
+  }
+
+  .modal-page-primary {
+    --type-modal-bg-color: var(--surface-page-primary-bg);
+    --type-modal-backdrop-color: var(--surface-page-primary-backdrop);
   }
 
   .header {
