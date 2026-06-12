@@ -1,18 +1,29 @@
-import { LitElement, html, css } from 'lit';
-import { property } from 'lit/decorators.js';
-import { styles } from './loading-overlay.css';
+import { LitElement, html, nothing } from "lit";
+import { styles } from "./loading-overlay.css";
 
 export class LoadingOverlay extends LitElement {
+  static properties = {
+    active: {
+      type: Boolean,
+    },
+  };
+
+  constructor() {
+    super();
+    this.active = false;
+  }
 
   static styles = styles;
 
   render() {
-    return html`
-      <div class="overlay" role="alert" aria-busy="true">
-        <div class="spinner"></div>
-      </div>
-    `;
+    return this.active
+      ? html`
+          <div class="overlay" role="alert" aria-busy="true">
+            <div class="spinner"></div>
+          </div>
+        `
+      : nothing;
   }
 }
 
-customElements.define('loading-overlay', LoadingOverlay);
+customElements.define("loading-overlay", LoadingOverlay);
