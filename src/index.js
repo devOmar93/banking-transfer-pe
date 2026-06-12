@@ -1,75 +1,61 @@
-import { LitElement, css, html, nothing } from "lit";
-import "./components/type-icon/type-icon.js";
-import "./components/type-text/type-text";
-import "./compositions/info-card/info-card";
-import "./compositions/type-input/type-input";
-import "./compositions/type-header/type-header.js";
-import "./page/new-transfer-page/new-transfer-page.js";
-import "./page/accounts-page/AccountsPage.js";
-import "@DM/entelgy-global-transfers-api-dm/entelgy-global-transfers-api-dm.js";
-import "@DM/entelgy-global-accounts-api-dm/entelgy-global-accounts-api-dm.js";
-import "@pages/successful-transfer-page/successful-transfer-page.js";
-import "@pages/confirm-transfer-page/confirm-transfer-page.js";
+import { LitElement, html, nothing } from "lit";
+import "@/providers/data-managers/entelgy-global-transfers-api-dm/entelgy-global-transfers-api-dm.js";
+import "@/providers/data-managers/entelgy-global-accounts-api-dm/entelgy-global-accounts-api-dm.js";
+import "@/page/new-transfer-page/new-transfer-page.js";
+import "@/page/accounts-page/AccountsPage.js";
+import "@/page/successful-transfer-page/successful-transfer-page.js";
+import "@/page/confirm-transfer-page/confirm-transfer-page.js";
+import "@/page/exit-page/exit-page.js";
 import locales from "@locales/locales.json";
-import "./page/exit-page/exit-page.js";
- 
-const ALLOWED_LANGUAGES = ["es_LA"];
- 
+
 export class MyElement extends LitElement {
   static properties = {
-    step: {
+    lang: {
+      type: String
+    },
+    _step: {
       type: Number,
     },
-    accountCustomer: {
+    _accountsData: {
+      type: Array,
+    },
+    _accountCustomer: {
       type: Object,
     },
-
-    _transferData: { type: Object },
-    _transferStatus: { type: String },
-    lang: { type: String },
-    current: { type: String },
-    amount: { type: String },
-    transactionNumber: { type: String },
-    time: { type: String },
-    date: { type: String },
-    originAccount: { type: String },
-    originAccountNumber: { type: String },
-    beneficiaryName: { type: String },
-    beneficiaryLastName: { type: String },
-    concept: { type: String },
-    status: { type: String },
-    isDataReady: { type: Boolean },
-    accountsStatus: { type: String },
-    accountsData: { type: Array },
+    _transferSummary: {
+      type: Object,
+    },
+    _transferData: {
+      type: Object,
+    },
+    _transferStatus: {
+      type: String,
+    },
+    _isDataReady: {
+      type: Boolean,
+    },
+    _accountsStatus: {
+      type: String,
+    },
   };
- 
+
   constructor() {
     super();
-    this.step = 0;
-    this.accountCustomer = {};
+    this.lang = "";
+    this._step = 0;
+    this._accountCustomer = {};
+    this._transferSummary = {};
     this._transferData = null;
     this._transferStatus = "";
-    this.lang = "";
-    this.current = "";
-    this.amount = "";
-    this.transactionNumber = "";
-    this.time = "";
-    this.date = "";
-    this.originAccount = "";
-    this.originAccountNumber = "";
-    this.beneficiaryName = "";
-    this.beneficiaryLastName = "";
-    this.concept = "";
-    this.status = "";
-    this.isDataReady = false;
-    this.accountsStatus = "";
-    this.accountsData = [];
+    this._isDataReady = false;
+    this._accountsStatus = "";
+    this._accountsData = [];
   }
 
   firstUpdated() {
     setTimeout(() => {
       const accountsDm = this.shadowRoot.getElementById("accounts");
-      if(accountsDm) {
+      if (accountsDm) {
         accountsDm.getAccounts();
       }
     });
@@ -78,38 +64,38 @@ export class MyElement extends LitElement {
   _handleLoadingAccounts(e) {
     const isLoading = e.detail.isLoading;
     if (isLoading) {
-      this.accountsStatus = "loading";
-      this.accountsData = [];
+      this._accountsStatus = "loading";
+      this._accountsData = [];
     }
   }
 
   _handleSuccessAccounts(e) {
     const data = e.detail;
-    this.accountsData = data.accounts ?? [];
-    this.accountsStatus = data.accounts?.length ? "success" : "empty";
+    this._accountsData = data.accounts ?? [];
+    this._accountsStatus = data.accounts?.length ? "success" : "empty";
   }
 
   _handleErrorAccounts() {
-    this.accountsData = [];
-    this.accountsStatus = "error";
+    this._accountsData = [];
+    this._accountsStatus = "error";
   }
 
-  _handleRetryAccounts(){ 
+  _handleRetryAccounts() {
     const accountsDm = this.shadowRoot.getElementById("accounts");
-    if(accountsDm) {
+    if (accountsDm) {
       accountsDm.getAccounts();
     }
   }
 
-  _getAccountCustomer(event) {
-    this.accountCustomer = event.detail;
-    this.step = 1;
+  _handleAccountValidated(event) {
+    this._accountCustomer = event.detail.account;
+    this._step = 1;
   }
- 
+
   _handleConfirmRequested(event) {
     this._transferData = event.detail;
     this._transferStatus = "";
-    this.step = 2;
+    this._step = 2;
   }
 
   async _handleConfirmAccept(event) {
@@ -119,10 +105,10 @@ export class MyElement extends LitElement {
       await transferDm.executeTransfer(transferData);
     }
   }
- 
+
   _handleConfirmCancel() {
     this._transferStatus = "";
-    this.step = 1;
+    this._step = 1;
   }
 
   _handleTransferRetry() {
@@ -132,60 +118,47 @@ export class MyElement extends LitElement {
       transferDm.executeTransfer(this._transferData);
     }
   }
- 
+
   _handleDataSuccess(event) {
-    const data = event.detail;
-    this.current = data.current;
-    this.amount = data.amount;
-    this.transactionNumber = data.transactionNumber;
-    this.date = data.date;
-    this.time = data.time;
-    this.originAccount = data.originAccount;
-    this.originAccountNumber = data.originAccountNumber;
-    this.beneficiaryName = data.beneficiaryName;
-    this.beneficiaryLastName = data.beneficiaryLastName;
-    this.concept = data.concept;
-    this.status = data.status;
-    this.isDataReady = true;
+    const response = event.detail.response;
+    const accounts = event.detail.accounts;
+    this._transferSummary = { ...response };
+    this._isDataReady = true;
     this._transferStatus = "";
-    this.step = 3;
-  }
- 
-  _handleError(event) {
-    console.error("Error en la transferencia", event);
-    this._transferStatus = "error";
-  }
- 
-  _updateStep(event) {
-    this.step = event.detail;
+    this._accountsData = [...accounts];
+    this._step = 3;
   }
 
-  _updateExitStep(event) {
-    this.step = event.detail.step;
+  _handleError() {
+    this._transferStatus = "error";
   }
- 
+
+  _updateStep(event) {
+    this._step = event.detail.step;
+  }
+
   get locale() {
     return locales[this.lang];
   }
 
   _renderAcountsPage() {
     return html`<accounts-page
-      @account=${this._getAccountCustomer}
-      @exit=${this._updateExitStep}
+      @account-validated=${this._handleAccountValidated}
+      @exit=${this._updateStep}
       @retry-accounts=${this._handleRetryAccounts}
-      .status=${this.accountsStatus}
-      .data=${this.accountsData ?? []}
+      .status=${this._accountsStatus}
+      .data=${this._accountsData ?? []}
     ></accounts-page>`;
   }
 
   _renderNewTransferPage() {
     return html`<new-transfer-page
-      .accountCustomer=${this.accountCustomer}
+      .accountCustomer=${this._accountCustomer}
       @confirm-requested=${this._handleConfirmRequested}
       @return-page=${this._updateStep}
     ></new-transfer-page>`;
   }
- 
+
   _renderConfirmTransferPage() {
     return html`<confirm-transfer-page
       ?open=${true}
@@ -196,33 +169,32 @@ export class MyElement extends LitElement {
       @transfer-retry=${this._handleTransferRetry}
     ></confirm-transfer-page>`;
   }
- 
+
   _renderSuccessfulTransferPage() {
     return html` <successful-transfer-page
       .locale=${this.locale}
-      .current=${this.current}
-      .amount=${this.amount}
-      .transactionNumber=${this.transactionNumber}
-      .time=${this.time}
-      .date=${this.date}
-      .originAccount=${this.originAccount}
-      .originAccountNumber=${this.originAccountNumber}
-      .beneficiaryName=${this.beneficiaryName}
-      .beneficiaryLastName=${this.beneficiaryLastName}
-      .concept=${this.concept}
-      .status=${this.status}
-      .isDataReady=${this.isDataReady}
-      .isOpen=${this.isDataReady}
+      ?isOpen=${this._isDataReady}
       @return-home=${this._updateStep}
+      .amount=${this._transferSummary.amount}
+      .current=${this._transferSummary.current}
+      .transactionNumber=${this._transferSummary.transactionNumber}
+      .time=${this._transferSummary.time}
+      .date=${this._transferSummary.date}
+      .originAccount=${this._transferSummary.originAccount}
+      .originAccountNumber=${this._transferSummary.originAccountNumber}
+      .beneficiaryName=${this._transferSummary.beneficiaryName}
+      .beneficiaryLastName=${this._transferSummary.beneficiaryLastName}
+      .concept=${this._transferSummary.concept}
+      .status=${this._transferSummary.status}
     ></successful-transfer-page>`;
   }
 
-  _renderExitPage(e) {
+  _renderExitPage() {
     return html`<transfer-exit-page
       .locale=${this.locale}
-      ></transfer-exit-page>`;
+    ></transfer-exit-page>`;
   }
- 
+
   _renderStep(page) {
     const steps = {
       0: this._renderAcountsPage(),
@@ -233,12 +205,13 @@ export class MyElement extends LitElement {
     };
     return steps[page] ?? nothing;
   }
- 
+
   render() {
     return html`
-      ${this._renderStep(this.step)}
+      ${this._renderStep(this._step)}
       <entelgy-global-transfers-api-dm
         id="transfers"
+        .accounts=${this._accountsData}
         @transfer-api-dm-create=${this._handleDataSuccess}
         @transfer-api-dm-fetch-error=${this._handleError}
       >
@@ -248,7 +221,7 @@ export class MyElement extends LitElement {
         @accounts-api-dm-loading=${this._handleLoadingAccounts}
         @accounts-api-dm-success=${this._handleSuccessAccounts}
         @accounts-api-dm-error=${this._handleErrorAccounts}
-        >
+      >
       </entelgy-global-accounts-api-dm>
     `;
   }
