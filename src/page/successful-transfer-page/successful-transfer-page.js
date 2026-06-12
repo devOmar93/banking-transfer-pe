@@ -146,7 +146,7 @@ export class SuccessfulTransferPage extends LitElement {
 
   render() {
     return html`
-      <type-modal .open=${this.isOpen} .hasFooter=${true}>
+      <type-modal class="modal-page-primary" .open=${this.isOpen} .hasFooter=${true}>
         <div slot="body">
           <div class="header">
             <type-icon

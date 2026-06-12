@@ -39,8 +39,10 @@
   --btn-ghost-disabled-text-color: #6e6e6e;
 
   /* type-modal */
+  --surface-page-primary-bg: #dcf5ff;
+  --surface-page-primary-backdrop: #dcf5ff;
   --type-modal-bg-color: #ffffff;
-  --type-modal-backdrop-color: rgba(0, 0, 0.5, 0.5);
+  --type-modal-backdrop-color: rgba(0, 0, 0, 0.5);
   --type-modal-width: 100%;
   --type-modal-max-width: 100%;
   --type-modal-min-width: auto;
