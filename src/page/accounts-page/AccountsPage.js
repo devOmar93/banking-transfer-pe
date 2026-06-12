@@ -241,7 +241,7 @@ export class AccountsPage extends LitElement {
         : html`
             <type-modal
               ?open=${true}
-              ?scrollable=${true}
+              ?scrollable=${false}
               ?full-height=${true}
               ?has-footer=${true}
               class="modal-page-primary"
