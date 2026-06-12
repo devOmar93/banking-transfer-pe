@@ -1,23 +1,23 @@
 import { html, LitElement, nothing } from "lit";
+import "@/page/action-modal/action-modal.js";
+import "@/page/accounts-page/compositions/account-list/account-list.js";
+import "@/compositions/type-modal/type-modal.js";
+import "@/compositions/type-header/type-header.js";
+import "@/compositions/info-card/info-card.js";
+import "@/components/loading-overlay/loading-overlay.js";
 import { styles } from "./accounts-page.css.js";
-import "@compositions/type-modal/type-modal.js";
-import "@compositions/type-header/type-header.js";
-import "./compositions/account-list/account-list.js";
-import "@components/loading-overlay/loading-overlay.js";
-import "@compositions/info-card/info-card.js";
-import "../action-modal/action-modal.js";
 import {
   ACCOUNTS_PAGE_ES as ES,
   ACCOUNTS_PAGE_CONFIG as CONFIG,
   STATES,
   PROCESS_ACCOUNT_RULES,
-} from "@utils/accounts-page/accounts.config.js";
+} from "@/utils/accounts-page/accounts.config.js";
 import {
   processAccounts,
   filterTopAccounts,
   validateAccount,
-} from "@utils/accounts-page/accounts.utils.js";
-import { fireEvent } from "@utils/utils.js";
+} from "@/utils/accounts-page/accounts.utils.js";
+import { fireEvent } from "@/utils/utils.js";
 
 export class AccountsPage extends LitElement {
   static properties = {
@@ -79,6 +79,7 @@ export class AccountsPage extends LitElement {
   constructor() {
     super();
     this.status = "";
+    this.data = [];
     this._errorState = "";
     this._actionModalOpen = false;
     this._actionType = "";
@@ -114,8 +115,8 @@ export class AccountsPage extends LitElement {
   _loadAccounts() {
     const result = this._processAccounts();
     this._handleProcessResult(result);
-  } 
-  
+  }
+
   _processAccounts() {
     const filteredAccounts = filterTopAccounts(
       this.data,
@@ -126,15 +127,14 @@ export class AccountsPage extends LitElement {
     return processAccounts(filteredAccounts, PROCESS_ACCOUNT_RULES);
   }
 
-  
   _handleProcessResult(result) {
     if (result.errorState) {
       this._errorState = result.errorState;
       this._isInitialError = true;
       this._accountsProcessed = result.accounts;
       return this._showActionModal(
-          this._mapErrorStateToActionType(result.errorState),
-        );
+        this._mapErrorStateToActionType(result.errorState),
+      );
     }
 
     if (result.singleAccount) {
@@ -146,9 +146,9 @@ export class AccountsPage extends LitElement {
   }
 
   _goToNextStep(account) {
-    fireEvent(this, "account", account);
+    fireEvent(this, "account-validated", { account });
   }
-  
+
   _goToExitStep() {
     fireEvent(this, "exit", { step: 4 });
   }
@@ -170,15 +170,13 @@ export class AccountsPage extends LitElement {
     this._goToNextStep(account);
   }
 
-  _selectedAccount(e) {
-    const account = e.detail;
+  _handleAccountSelected(e) {
+    const account = e.detail.account;
     this._validateSingleAccount(account);
   }
 
-   _mapErrorStateToActionType(errorState) {
-    return (
-      STATES.ERROR_MODAL_TYPES[errorState] || "loadAccountsError"
-    );
+  _mapErrorStateToActionType(errorState) {
+    return STATES.ERROR_MODAL_TYPES[errorState] || "loadAccountsError";
   }
 
   _showActionModal(actionType) {
@@ -191,7 +189,7 @@ export class AccountsPage extends LitElement {
   }
 
   _closeActionModal() {
-    if(this._isInitialError || this._retryCount === 3) {
+    if (this._isInitialError || this._retryCount === 3) {
       this._goToExitStep();
       return;
     }
@@ -211,7 +209,7 @@ export class AccountsPage extends LitElement {
     this._closeActionModal();
   }
 
-  _requestRetry(){
+  _requestRetry() {
     fireEvent(this, "retry-accounts");
   }
 
@@ -229,7 +227,7 @@ export class AccountsPage extends LitElement {
     return html`
       <account-list
         .accounts=${this._accountsProcessed ?? []}
-        @select-account=${this._selectedAccount}
+        @account-selected=${this._handleAccountSelected}
       ></account-list>
     `;
   }
