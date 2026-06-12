@@ -5,7 +5,7 @@ export const styles = css`
   }
 
   * {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Roboto', sans-serif;
     display: block;
   }
 
