@@ -1,4 +1,5 @@
 import { LitElement, html, nothing } from "lit";
+import { createRef, ref } from "lit/directives/ref.js";
 import "@/providers/data-managers/entelgy-global-transfers-api-dm/entelgy-global-transfers-api-dm.js";
 import "@/providers/data-managers/entelgy-global-accounts-api-dm/entelgy-global-accounts-api-dm.js";
 import "@/page/new-transfer-page/new-transfer-page.js";
@@ -9,9 +10,12 @@ import "@/page/exit-page/exit-page.js";
 import locales from "@locales/locales.json";
 
 export class MyElement extends LitElement {
+  transfersApiDm = createRef();
+  accountsApiDm = createRef();
+
   static properties = {
     lang: {
-      type: String
+      type: String,
     },
     _step: {
       type: Number,
@@ -80,30 +84,24 @@ export class MyElement extends LitElement {
     this._accountsStatus = "error";
   }
 
-  _handleRetryAccounts() {
-    const accountsDm = this.shadowRoot.getElementById("accounts");
-    if (accountsDm) {
-      accountsDm.getAccounts();
-    }
+  async _handleRetryAccounts() {
+    await this.accountsApiDm.value.getAccounts();
   }
 
-  _handleAccountValidated(event) {
-    this._accountCustomer = event.detail.account;
+  _handleAccountValidated({ detail }) {
+    this._accountCustomer = detail.account;
     this._step = 1;
   }
 
-  _handleConfirmRequested(event) {
-    this._transferData = event.detail;
+  _handleConfirmRequested({ detail }) {
+    this._transferData = detail;
     this._transferStatus = "";
     this._step = 2;
   }
 
-  async _handleConfirmAccept(event) {
-    const transferDm = this.shadowRoot.getElementById("transfers");
-    const transferData = event.detail?.transferData ?? {};
-    if (transferDm) {
-      await transferDm.executeTransfer(transferData);
-    }
+  async _handleConfirmAccept({ detail }) {
+    const transferData = detail?.transferData ?? {};
+    await this.transfersApiDm.value.executeTransfer(transferData);
   }
 
   _handleConfirmCancel() {
@@ -206,23 +204,33 @@ export class MyElement extends LitElement {
     return steps[page] ?? nothing;
   }
 
-  render() {
+  get renderTransfersApiDm() {
     return html`
-      ${this._renderStep(this._step)}
       <entelgy-global-transfers-api-dm
-        id="transfers"
+        ${ref(this.transfersApiDm)}
         .accounts=${this._accountsData}
         @transfer-api-dm-create=${this._handleDataSuccess}
         @transfer-api-dm-fetch-error=${this._handleError}
-      >
-      </entelgy-global-transfers-api-dm>
+      ></entelgy-global-transfers-api-dm>
+    `;
+  }
+
+  get renderAccountsApiDm() {
+    return html`
       <entelgy-global-accounts-api-dm
-        id="accounts"
+        ${ref(this.accountsApiDm)}
         @accounts-api-dm-loading=${this._handleLoadingAccounts}
         @accounts-api-dm-success=${this._handleSuccessAccounts}
         @accounts-api-dm-error=${this._handleErrorAccounts}
       >
       </entelgy-global-accounts-api-dm>
+    `;
+  }
+
+  render() {
+    return html`
+      ${this._renderStep(this._step)} ${this.renderTransfersApiDm()}
+      ${this.renderAccountsApiDm()}
     `;
   }
 }
