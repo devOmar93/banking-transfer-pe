@@ -3,11 +3,7 @@ import { css } from "lit";
 
 export const styles = css`
   :host {
-    font-family:
-      "Inter",
-      system-ui,
-      -apple-system,
-      sans-serif;
+    font-family: inherit;
   }
   .account-card {
     display: flex;
