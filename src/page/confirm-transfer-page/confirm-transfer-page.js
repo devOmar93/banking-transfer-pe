@@ -1,10 +1,10 @@
 import { html, LitElement, nothing } from "lit";
+import "@/compositions/type-modal/type-modal.js";
+import "@/compositions/type-header/type-header.js";
+import "@/compositions/type-button/type-button.js";
+import "@/compositions/transfer-summary/transfer-summary.js";
 import { styles } from "./confirm-transfer-page.css.js";
-import "@compositions/type-modal/type-modal.js";
-import "@compositions/type-header/type-header.js";
-import "@compositions/type-button/type-button.js";
-import "@compositions/transfer-summary/transfer-summary.js";
-import "@pages/action-modal/action-modal.js";
+import { fireEvent } from "@/utils/utils.js";
 
 export class ConfirmTransferPage extends LitElement {
   static properties = {
@@ -64,18 +64,11 @@ export class ConfirmTransferPage extends LitElement {
   }
 
   _requestRetry() {
-    this.dispatchEvent(new CustomEvent("transfer-retry", {
-      bubbles: true,
-      composed: true,
-    }));
+    fireEvent(this, "transfer-retry")
   }
 
   _handleAccept() {
-    this.dispatchEvent(new CustomEvent("confirm-accept", {
-      detail: { transferData: this.transferData },
-      bubbles: true,
-      composed: true,
-    }));
+    fireEvent(this, "confirm-accept", { transferData: this.transferData })
   }
 
   _handleCancel() {
@@ -83,10 +76,7 @@ export class ConfirmTransferPage extends LitElement {
   }
 
   _dispatchCancel() {
-    this.dispatchEvent(new CustomEvent("confirm-cancel", {
-      bubbles: true,
-      composed: true,
-    }));
+    fireEvent(this, "confirm-cancel")
   }
 
   _renderActionModal() {
@@ -100,7 +90,6 @@ export class ConfirmTransferPage extends LitElement {
   }
 
   _renderContent() {
-    console.log('transferData', this.transferData);
     return html`
       <type-modal
         variant="page"
@@ -119,18 +108,16 @@ export class ConfirmTransferPage extends LitElement {
             icon-position="left"
             @click=${this._handleCancel}
           ></type-button>
-          <type-header
-            .title=${"Confirmar transferencia"}
-          ></type-header>
+          <type-header .title=${"Confirmar transferencia"}></type-header>
         </div>
- 
+
         <div slot="body">
           <transfer-summary
             .transferData=${this.transferData}
             amount-label="Monto a transferir"
           ></transfer-summary>
         </div>
- 
+
         <div slot="footer" class="confirm-transfer-page__footer">
           <type-button
             type="button"
@@ -141,7 +128,7 @@ export class ConfirmTransferPage extends LitElement {
           ></type-button>
         </div>
       </type-modal>
- 
+
       ${this._actionModalOpen ? this._renderActionModal() : nothing}
     `;
   }
