@@ -15,7 +15,7 @@ export const styles = css`
   .from-account-card {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     gap: 1rem;
     padding: var(--from-account-card-padding);
     background-color: var(--from-account-card-bg);
