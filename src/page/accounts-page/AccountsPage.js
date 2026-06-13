@@ -11,12 +11,12 @@ import {
   ACCOUNTS_PAGE_CONFIG as CONFIG,
   STATES,
   PROCESS_ACCOUNT_RULES,
-} from "@/utils/accounts-page/accounts.config.js";
+} from "@/page/accounts-page/utils/accounts.config.js";
 import {
   processAccounts,
   filterTopAccounts,
   validateAccount,
-} from "@/utils/accounts-page/accounts.utils.js";
+} from "@/page/accounts-page/utils/accounts.utils.js";
 import { fireEvent } from "@/utils/utils.js";
 
 export class AccountsPage extends LitElement {

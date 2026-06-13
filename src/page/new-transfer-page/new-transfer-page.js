@@ -1,19 +1,19 @@
 import { html, LitElement, nothing } from "lit";
-import "../../compositions/type-modal/type-modal.js";
-import "../../compositions/type-header/type-header.js";
-import "./compositions/from-account-card/from-account-card.js";
-import "./compositions/transfer-form/transfer-form.js";
-import { TRANSFER_FORM_FIELDS } from "../../utils/transfer-form/configTransferForm.js";
-import { resolveDestinationAccount } from "../../services/bankingTransferService.js";
-import "../../components/loading-overlay/loading-overlay.js";
-import "../../compositions/type-button/type-button.js";
+import "@/compositions/type-modal/type-modal.js";
+import "@/compositions/type-header/type-header.js";
+import "@/page/action-modal/action-modal.js";
+import "@/page/new-transfer-page/compositions/from-account-card/from-account-card.js";
+import "@/page/new-transfer-page/compositions/transfer-form/transfer-form.js";
+import "@/components/loading-overlay/loading-overlay.js";
+import "@/compositions/type-button/type-button.js";
+import { resolveDestinationAccount } from "@/services/bankingTransferService.js";
+import { TRANSFER_FORM_FIELDS } from "@/page/new-transfer-page/compositions/transfer-form/utils/configTransferForm.js";
 import {
   NEW_TRANSFER_PAGE_LITERALS as LITERALS,
   NEW_TRANSFER_PAGE_CONFIG as CONFIG,
-} from "@utils/new-transfer-page/newTransferPageConfig.js";
-
-import "../action-modal/action-modal.js";
+} from "@/page/new-transfer-page/utils/newTransferPageConfig.js";
 import styles from "./new-transfer-page.css.js";
+
 export class NewTransferPage extends LitElement {
   static properties = {
     accountCustomer: {
@@ -121,7 +121,7 @@ export class NewTransferPage extends LitElement {
   _returnPage() {
     this.dispatchEvent(
       new CustomEvent("return-page", {
-        detail: 0,
+        detail: { step: 0 },
         bubbles: true,
         composed: true,
       }),
