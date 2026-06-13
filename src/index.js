@@ -57,12 +57,9 @@ export class MyElement extends LitElement {
   }
 
   firstUpdated() {
-    setTimeout(() => {
-      const accountsDm = this.shadowRoot.getElementById("accounts");
-      if (accountsDm) {
-        accountsDm.getAccounts();
-      }
-    });
+    if (this.accountsApiDm.value) {
+      this.accountsApiDm.value.getAccounts();
+    }
   }
 
   _handleLoadingAccounts(e) {
@@ -111,9 +108,8 @@ export class MyElement extends LitElement {
 
   _handleTransferRetry() {
     this._transferStatus = "";
-    const transferDm = this.shadowRoot.getElementById("transfers");
-    if (transferDm) {
-      transferDm.executeTransfer(this._transferData);
+    if (this.transfersApiDm.value) {
+      this.transfersApiDm.value.executeTransfer(this._transferData);
     }
   }
 
@@ -188,9 +184,7 @@ export class MyElement extends LitElement {
   }
 
   _renderExitPage() {
-    return html`<transfer-exit-page
-      .locale=${this.locale}
-    ></transfer-exit-page>`;
+    return html`<exit-page .locale=${this.locale}></exit-page>`;
   }
 
   _renderStep(page) {
@@ -204,7 +198,7 @@ export class MyElement extends LitElement {
     return steps[page] ?? nothing;
   }
 
-  get renderTransfersApiDm() {
+  get _renderTransfersApiDm() {
     return html`
       <entelgy-global-transfers-api-dm
         ${ref(this.transfersApiDm)}
@@ -215,7 +209,7 @@ export class MyElement extends LitElement {
     `;
   }
 
-  get renderAccountsApiDm() {
+  get _renderAccountsApiDm() {
     return html`
       <entelgy-global-accounts-api-dm
         ${ref(this.accountsApiDm)}
@@ -229,8 +223,8 @@ export class MyElement extends LitElement {
 
   render() {
     return html`
-      ${this._renderStep(this._step)} ${this.renderTransfersApiDm()}
-      ${this.renderAccountsApiDm()}
+      ${this._renderStep(this._step)} ${this._renderTransfersApiDm}
+      ${this._renderAccountsApiDm}
     `;
   }
 }
