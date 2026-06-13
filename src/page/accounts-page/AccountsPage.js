@@ -143,7 +143,6 @@ export class AccountsPage extends LitElement {
   }
 
   _closeActionModal() {
-    console.log("cerrar")
     if(this._isInitialError) {
       this._isInitialError = false;
       this._goToExitStep();
