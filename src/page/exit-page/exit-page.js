@@ -1,9 +1,7 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
+import "@/compositions/type-modal/type-modal.js";
+import "@/compositions/type-header/type-header.js";
 import { styles } from "./exit-page.css.js";
-import { fireEvent } from "@utils/utils.js";
-import "@compositions/type-modal/type-modal.js";
-import "@compositions/type-header/type-header.js";
-import "@compositions/type-button/type-button.js";
 
 class TransferExitPage extends LitElement {
   static properties = {
