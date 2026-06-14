@@ -58,7 +58,32 @@ export class NewTransferPage extends LitElement {
     this.destinationAccount = {};
     this.dataForm = {};
   }
+  connectedCallback() {
+    super.connectedCallback();
+    this._handleKeyDown = this._handleKeyDown.bind(this);
+    window.addEventListener("keydown", this._handleKeyDown);
+  }
 
+  disconnectedCallback() {
+    window.removeEventListener("keydown", this._handleKeyDown);
+    super.disconnectedCallback();
+  }
+
+  _handleKeyDown(e) {
+    if (e.key === "Escape" && !this._loading) {
+      this._returnPage();
+    }
+  }
+  firstUpdated() {
+    const firstFocusable = this.renderRoot.querySelector("type-button");
+    firstFocusable?.focus();
+  }
+  updated(changed) {
+    if (changed.has("_actionModalOpen") && this._actionModalOpen) {
+      const modal = this.renderRoot.querySelector("action-modal");
+      modal?.focus?.();
+    }
+  }
   willUpdate(changedProperties) {
     if (
       changedProperties.has("destinationAccount") &&
@@ -80,7 +105,7 @@ export class NewTransferPage extends LitElement {
     fireEvent(this, "get-account-destinatari", data);
   }
 
-  _handleFormSubmit({detail}) {
+  _handleFormSubmit({ detail }) {
     this.dataForm = detail;
     const sourceAccount = {
       ...this.accountCustomer,
@@ -147,6 +172,9 @@ export class NewTransferPage extends LitElement {
   _renderActionModal() {
     return html`
       <action-modal
+        role="alertdialog"
+        aria-modal="true"
+        aria-live="assertive"
         ?open=${true}
         action-type=${this._actionType}
         @action-modal-action=${this._handleActionModalAction}
@@ -160,8 +188,20 @@ export class NewTransferPage extends LitElement {
 
   render() {
     return html`
-      ${this._loading ? html`<loading-overlay></loading-overlay>` : nothing}
+      ${this._loading
+        ? html`
+            <loading-overlay
+              role="status"
+              aria-live="polite"
+              aria-label="Cargando datos, por favor espere"
+            ></loading-overlay>
+          `
+        : nothing}
+
       <type-modal
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
         class="modal-page-primary"
         ?open=${true}
         .variant=${CONFIG.modal.variant}
@@ -177,9 +217,12 @@ export class NewTransferPage extends LitElement {
             .text=${LITERALS.backButton.text}
             .variant=${CONFIG.backButton.variant}
             .type=${CONFIG.backButton.type}
+            aria-label="Volver a la pantalla anterior"
             @click=${this._returnPage}
           ></type-button>
+
           <type-header
+            id="modal-title"
             .title=${LITERALS.header.title}
             .subtitle=${LITERALS.header.subtitle}
           ></type-header>
@@ -190,6 +233,7 @@ export class NewTransferPage extends LitElement {
             .account=${this.accountCustomer}
           ></from-account-card>
           <transfer-form
+            aria-label="Formulario de transferencia"
             .configFormFields=${TRANSFER_FORM_FIELDS}
             .availableBalance=${this.accountCustomer.availableBalance}
             .currency=${this._getCurrency(this.accountCustomer.currency)}
