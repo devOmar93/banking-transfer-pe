@@ -1,22 +1,12 @@
-import { defineConfig } from 'vitest/config';
-import path from 'path';
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
-    environment: 'jsdom',
-    globals: true,
-
     coverage: {
-      provider: 'v8',
-      reporter: ['text', 'html'],
-      reportsDirectory: './coverage',
-      exclude: ['node_modules/', 'test/'],
-    },
-  },
-
-  resolve: {
-    alias: {
-      '@utils': path.resolve(__dirname, 'src/utils'),
-    },
-  },
-});
+      enabled: true,
+      clean: false,
+      reporter: ['text', 'html'], // 👈 CLAVE
+      reportsDirectory: './coverage', // 👈 opcional pero recomendado
+    }
+  }
+})
