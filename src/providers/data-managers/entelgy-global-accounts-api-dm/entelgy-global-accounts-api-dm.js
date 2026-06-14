@@ -13,14 +13,11 @@ class EntelgyGlobalAccountsApiDm extends LitElement {
   }
 
   async getAccounts() {
-    this._dispatchLoading(true);
     try {
       const responseData = await this._sendGet();
       this._dispatchSuccess(responseData);
     } catch (error) {
       this._dispatchError(error);
-    } finally {
-      this._dispatchLoading(false);
     }
   }
 
@@ -43,11 +40,6 @@ class EntelgyGlobalAccountsApiDm extends LitElement {
   _dispatchError(error) {
     fireEvent(this, "accounts-api-dm-error", { message: error.message });
   }
-
-  _dispatchLoading(isLoading) {
-    fireEvent(this, "accounts-api-dm-loading", { isLoading });
-  }
-
 }
 
 customElements.define("entelgy-global-accounts-api-dm", EntelgyGlobalAccountsApiDm);

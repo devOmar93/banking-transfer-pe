@@ -1,18 +1,17 @@
 import { html, LitElement, nothing } from "lit";
 import { classMap } from "lit/directives/class-map.js";
+import "@/compositions/type-input/type-input.js";
+import "@/compositions/type-button/type-button.js";
+import "@/components/type-icon/type-icon.js";
+import {
+  NEW_TRANSFER_PAGE_LITERALS as LITERALS,
+  NEW_TRANSFER_PAGE_CONFIG as CONFIG,
+} from "@/page/new-transfer-page/utils/newTransferPageConfig.js";
 import {
   updateField,
   createInitialFormStates,
   getFormValues,
-} from "../../../../utils/transfer-form/transferFormUtil.js";
-import "../../../../compositions/type-input/type-input.js";
-import "../../../../compositions/type-button/type-button.js";
-import "../../../../components/type-icon/type-icon.js";
-import {
-  NEW_TRANSFER_PAGE_LITERALS as LITERALS,
-  NEW_TRANSFER_PAGE_CONFIG as CONFIG,
-} from "@utils/new-transfer-page/newTransferPageConfig.js";
-
+} from "./utils/transferFormUtil.js";
 import styles from "./transfer-form.css.js";
 
 export class TransferForm extends LitElement {
@@ -46,13 +45,12 @@ export class TransferForm extends LitElement {
     this.stateForm = false;
     this.currency = "";
   }
-  
+
   willUpdate(changedProps) {
     if (changedProps.has("configFormFields")) {
       this.formFieldStates = createInitialFormStates(this.configFormFields);
     }
   }
-
 
   _sendForm() {
     const formValues = getFormValues(this.formFieldStates);
@@ -67,7 +65,7 @@ export class TransferForm extends LitElement {
 
   _validateForm() {
     const isValid = Object.values(this.formFieldStates).every(
-      ({ isValid }) => isValid === true,
+      ({ isValid }) => isValid,
     );
 
     if (this.stateForm !== isValid) {

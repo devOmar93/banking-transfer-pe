@@ -10,7 +10,6 @@ export default defineConfig({
       "@constants": path.resolve(__dirname, "./src/constants"),
       "@locales": path.resolve(__dirname, "./src/locales"),
       "@mocks": path.resolve(__dirname, "./src/mocks"),
-      "@pages": path.resolve(__dirname, "./src/page"),
       "@providers": path.resolve(__dirname, "./src/providers"),
       "@services": path.resolve(__dirname, "./src/services"),
       "@utils": path.resolve(__dirname, "./src/utils"),

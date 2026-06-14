@@ -4,10 +4,15 @@ statuses (ACTIVE, BLOCKED, INACTIVE)
 and different balances, including a scenario 
 exceeding the display limit */
 export const ACCOUNTS_BASE_CASE = {
+  accountHolder: {
+    firstName: "John",
+    lastName: "Ramos Sanchez"
+  },
+
   accounts: [
     {
       id: 1,
-      accountNumber: "12341234",
+      accountNumber: "10101010101011",
       accountName: "Cuenta Corriente",
       accountType: "Corriente",
       availableBalance: 5250.00,
@@ -16,7 +21,7 @@ export const ACCOUNTS_BASE_CASE = {
     },
     {
       id: 2,
-      accountNumber: "56785678",
+      accountNumber: "10101010101012",
       accountName: "Cuenta de Ahorros",
       accountType: "Ahorros",
       availableBalance: 12800.50,
@@ -25,7 +30,7 @@ export const ACCOUNTS_BASE_CASE = {
     },
     {
       id: 3,
-      accountNumber: "90129012",
+      accountNumber: "10101010101013",
       accountName: "Cuenta Nómina",
       accountType: "Nómina",
       availableBalance: 3420.75,
@@ -34,16 +39,16 @@ export const ACCOUNTS_BASE_CASE = {
     },
     { 
       id: 4, 
-      accountNumber: "11112222", 
+      accountNumber: "10101010101014", 
       accountName: "Cuenta Corriente", 
       accountType: "Corriente", 
       availableBalance: 4000, 
-      currency: "USD", 
+      currency: "PEN", 
       status: "ACTIVE" 
     },
     { 
       id: 5, 
-      accountNumber: "33334444", 
+      accountNumber: "10101010101015", 
       accountName: "Cuenta de Ahorros", 
       accountType: "Ahorros", 
       availableBalance: 5000, 
@@ -52,7 +57,7 @@ export const ACCOUNTS_BASE_CASE = {
     },
     { 
       id: 6, 
-      accountNumber: "55556666", 
+      accountNumber: "10101010101016", 
       accountName: "Cuenta Corriente", 
       accountType: "Corriente", 
       availableBalance: 0, 
@@ -61,7 +66,7 @@ export const ACCOUNTS_BASE_CASE = {
     },
     { 
       id: 7, 
-      accountNumber: "55556666", 
+      accountNumber: "10101010101017", 
       accountName: "Cuenta Corriente", 
       accountType: "Corriente", 
       availableBalance: 6000, 
@@ -76,7 +81,7 @@ export const ACCOUNTS_CASE_1 = {
   accounts: [
     {
       id: 1,
-      accountNumber: "12341234",
+      accountNumber: "10101010101018",
       accountName: "Cuenta Corriente",
       accountType: "Corriente",
       availableBalance: 0,
@@ -91,7 +96,7 @@ export const ACCOUNTS_CASE_2 = {
   accounts: [
     {
       id: 1,
-      accountNumber: "12341234",
+      accountNumber: "10101010101019",
       accountName: "Cuenta Corriente",
       accountType: "Corriente",
       availableBalance: 5250.00,
@@ -106,7 +111,7 @@ export const ACCOUNTS_CASE_3 = {
   accounts: [
     {
       id: 1,
-      accountNumber: "12341234",
+      accountNumber: "10101010101020",
       accountName: "Cuenta Corriente",
       accountType: "Corriente",
       availableBalance: 5250.00,
@@ -127,7 +132,7 @@ export const ACCOUNTS_CASE_5 = {
   accounts: [
     {
       id: 1,
-      accountNumber: "12341234",
+      accountNumber: "10101010101021",
       accountName: "Cuenta Corriente",
       accountType: "Corriente",
       availableBalance: 0,

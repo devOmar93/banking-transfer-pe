@@ -1,26 +1,36 @@
 import { html, LitElement, nothing } from "lit";
-import "../../compositions/type-modal/type-modal.js";
-import "../../compositions/type-header/type-header.js";
-import "./compositions/from-account-card/from-account-card.js";
-import "./compositions/transfer-form/transfer-form.js";
-import { TRANSFER_FORM_FIELDS } from "../../utils/transfer-form/configTransferForm.js";
-import { resolveDestinationAccount } from "../../services/bankingTransferService.js";
-import "../../components/loading-overlay/loading-overlay.js";
-import "../../compositions/type-button/type-button.js";
+import "@/compositions/type-modal/type-modal.js";
+import "@/compositions/type-header/type-header.js";
+import "@/page/action-modal/action-modal.js";
+import "@/page/new-transfer-page/compositions/from-account-card/from-account-card.js";
+import "@/page/new-transfer-page/compositions/transfer-form/transfer-form.js";
+import "@/components/loading-overlay/loading-overlay.js";
+import "@/compositions/type-button/type-button.js";
+import { resolveDestinationAccount } from "@/services/bankingTransferService.js";
+import { TRANSFER_FORM_FIELDS } from "@/page/new-transfer-page/compositions/transfer-form/utils/configTransferForm.js";
 import {
   NEW_TRANSFER_PAGE_LITERALS as LITERALS,
   NEW_TRANSFER_PAGE_CONFIG as CONFIG,
-} from "@utils/new-transfer-page/newTransferPageConfig.js";
-
+} from "@/page/new-transfer-page/utils/newTransferPageConfig.js";
 import "../action-modal/action-modal.js";
+import { fireEvent } from "@utils/utils";
 import styles from "./new-transfer-page.css.js";
+
 export class NewTransferPage extends LitElement {
   static properties = {
     accountCustomer: {
       type: Object,
     },
 
-    _lastFormPayload: {
+    destinationAccount: {
+      type: Object,
+    },
+
+    dataForm: {
+      type: Object,
+    },
+
+    _sourceAccount: {
       type: Object,
     },
 
@@ -40,67 +50,64 @@ export class NewTransferPage extends LitElement {
   constructor() {
     super();
     this.accountCustomer = {};
-    this._lastFormPayload = {};
+    this._sourceAccount = {};
     this._loading = false;
     this._actionType = "";
     this._actionModalOpen = false;
     this._retryCount = 0;
+    this.destinationAccount = {};
+    this.dataForm = {};
   }
 
-  async _sendForm(lastFormPayload) {
-    this._loading = true;
-    const responseDestinationAccount = await resolveDestinationAccount(
-      this._lastFormPayload.accountNumber,
-      this._lastFormPayload.destinationAccount,
-    );
-    this._loading = false;
-    if (responseDestinationAccount.status === "OK") {
-      const finalFormPayload = {
-        ...lastFormPayload,
-        destinationAccountName:
-          responseDestinationAccount.data.accountHolderName,
-        destinationAccountCurrency: responseDestinationAccount.data.currency,
-      };
+  willUpdate(changedProperties) {
+    if (
+      changedProperties.has("destinationAccount") &&
+      Object.keys(this.destinationAccount).length > 0
+    ) {
+      if (this.destinationAccount.status === "ACTIVE") {
+        const finalPayload = {
+          sourceAccount: this._sourceAccount,
+          destinationAccount: this.destinationAccount,
+        };
 
-      return this._goNextStep(finalFormPayload);
+        return this._goNextStep(finalPayload);
+      }
+      this._openModalError(this.destinationAccount.status);
     }
-
-    if (this._retryCount < 3) {
-      return this._openModalError(responseDestinationAccount.errorCode);
-    }
-    this._returnPage();
   }
 
-  _handleFormSubmit(event) {
-    const lastFormPayload = {
-      ...event.detail,
+  _dispatchGetdestinationAccount(data) {
+    fireEvent(this, "get-account-destinatari", data);
+  }
+
+  _handleFormSubmit({detail}) {
+    this.dataForm = detail;
+    const sourceAccount = {
       ...this.accountCustomer,
+      amount: this.dataForm.amount,
     };
-    this._lastFormPayload = lastFormPayload;
-    this._sendForm(lastFormPayload);
+    this._sourceAccount = sourceAccount;
+    this._dispatchGetdestinationAccount(this.dataForm.destinationAccount);
   }
 
-  _openModalError(configModal) {
-    this._actionType = configModal;
+  _openModalError(idErrorModalType) {
+    this._actionType = this._getActionModalType(idErrorModalType);
     this._actionModalOpen = true;
   }
 
-  _goNextStep(formField) {
-    const transferData = {
-      amount: formField.amount,
-      currency: formField.currency,
-      sourceAccount: {
-        accountName: formField.accountName,
-        accountNumber: formField.accountNumber,
-        accountType: formField.accountType,
-        availableBalance: formField.availableBalance,
-      },
-      beneficiary: {
-        fullName: formField.destinationAccountName,
-        accountNumber: formField.destinationAccount,
-      },
-    };
+  _getActionModalType(idErrorModalType) {
+    const ERROR_MODAL_TYPES = {
+      BLOCKED: 'blockedAccount',
+      INACTIVE: 'inactiveAccount',
+      NO_BALANCE: 'insufficientBalance',
+      NO_ACCOUNTS: 'noAccountsAvailable',
+      ALL_NO_BALANCE: 'insufficientBalance'
+    }
 
+    return ERROR_MODAL_TYPES[idErrorModalType] ?? "";
+  }
+
+  _goNextStep(transferData) {
     this.dispatchEvent(
       new CustomEvent("confirm-requested", {
         detail: transferData,
@@ -121,7 +128,7 @@ export class NewTransferPage extends LitElement {
   _returnPage() {
     this.dispatchEvent(
       new CustomEvent("return-page", {
-        detail: 0,
+        detail: { step: 0 },
         bubbles: true,
         composed: true,
       }),
@@ -132,7 +139,7 @@ export class NewTransferPage extends LitElement {
     this._actionModalOpen = false;
     if (event.detail.buttonAction === "retry") {
       this._retryCount += 1;
-      return this._sendForm(this._lastFormPayload);
+      return this._dispatchGetdestinationAccount(this._sourceAccount);
     }
     this._retryCount = 0;
   }
