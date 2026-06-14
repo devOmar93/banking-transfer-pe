@@ -1,7 +1,7 @@
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 import { html, LitElement, nothing } from "lit";
 import { validateAllowedProp } from "@utils/utils.js";
-import { validateRequiredProp } from "@utils/utils";
+import { validateRequiredProp } from "@utils/utils.js";
 import { ICONS, ICONS_RUTE } from "./utils/icons.js";
 import styles from "./type-icon.css";
 
