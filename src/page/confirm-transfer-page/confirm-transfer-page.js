@@ -18,7 +18,7 @@ export class ConfirmTransferPage extends LitElement {
 
   constructor() {
     super();
-    this.transferData = null;
+    this.transferData = {};
     this.open = false;
     this.transferStatus = "";
     this._retryCount = 0;

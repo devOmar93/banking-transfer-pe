@@ -87,6 +87,12 @@ const ACTION_MODALS = {
     iconName: "triangle-alert",
     localePrefix: "action-modal-transfer-error",
     buttons: ["retry", "exit"],
+  },
+  downloadError : {
+    modalType: "error",
+    iconName: "triangle-alert",
+    localePrefix: "action-modal-technical-error",
+    buttons: ["retry", "exit"],
   }
 };
 export class ActionModal extends LitElement {

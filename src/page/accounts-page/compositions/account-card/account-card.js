@@ -49,8 +49,8 @@ export class AccountCard extends LitElement {
         class="account-card"
         role="button"
         tabindex="0"
-        @click=${this._onClick}
-        @keydown=${this._onKeyDown}
+        @click=${() => this._onClick()}
+       @keydown=${(e) => this._onKeyDown(e)}
       >
         <div class="account-left">
           <type-icon

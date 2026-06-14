@@ -23,7 +23,7 @@ class EntelgyGlobalTransfersApiDm extends LitElement {
     try {
       const sourceNo = transferData.sourceAccount.accountNumber;
       const destNo = transferData.destinationAccount.accountNumber;
-      const baseAmount = transferData.amount;
+      const baseAmount = transferData.sourceAccount.amount;
       const baseCurrency = transferData.sourceAccount.currency;
 
       const responseData = await this._sendPost(
@@ -79,11 +79,16 @@ class EntelgyGlobalTransfersApiDm extends LitElement {
     return { ...account, availableBalance: account.availableBalance + amount };
   }
   _removeFunds(account, baseAmount) {
-    return { ...account, availableBalance: account.availableBalance - baseAmount };
+    return {
+      ...account,
+      availableBalance: account.availableBalance - baseAmount,
+    };
   }
 
   _convertAmount(amount, fromCurrency, toCurrency) {
-    return (amount / EXCHANGE_RATE[fromCurrency]) * EXCHANGE_RATE[toCurrency];
+    const converted =
+      (amount / EXCHANGE_RATE[fromCurrency]) * EXCHANGE_RATE[toCurrency];
+    return Number(converted.toFixed(2));
   }
 
   _dispatchSuccess(data) {

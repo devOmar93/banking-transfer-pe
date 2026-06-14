@@ -1,10 +1,10 @@
 import { html, LitElement, nothing } from "lit";
 import "@/page/action-modal/action-modal.js";
-import "@/page/accounts-page/compositions/account-list/account-list.js";
 import "@/compositions/type-modal/type-modal.js";
 import "@/compositions/type-header/type-header.js";
 import "@/compositions/info-card/info-card.js";
 import "@/components/loading-overlay/loading-overlay.js";
+import "./compositions/account-list/account-list.js";
 import { styles } from "./accounts-page.css.js";
 import {
   ACCOUNTS_PAGE_ES as ES,
@@ -22,23 +22,10 @@ import { fireEvent } from "@/utils/utils.js";
 export class AccountsPage extends LitElement {
   static properties = {
     /**
-     * Represents the current state of the accounts flow (idle, loading, success, empty, error)
-     * @type {string}
-     */
-    status: { type: String },
-
-    /**
      * Holds the raw accounts data received from the parent component
      * @type {Array}
      */
     data: { type: Array },
-
-    /**
-     * Stores the business error code generated during account processing
-     * @type {string}
-     * @private
-     */
-    _errorState: { type: String },
 
     /**
      * Controls whether the action modal is visible in the UI
@@ -55,13 +42,6 @@ export class AccountsPage extends LitElement {
     _actionType: { type: String },
 
     /**
-     * Counts how many retry attempts have been made after failures
-     * @type {number}
-     * @private
-     */
-    _retryCount: { type: Number },
-
-    /**
      * Indicates if the error occurred during the initial load of accounts
      * @type {boolean}
      * @private
@@ -74,42 +54,26 @@ export class AccountsPage extends LitElement {
      * @private
      */
     _accountsProcessed: { type: Array },
+
+    open: { type: Boolean },
   };
 
   constructor() {
     super();
-    this.status = "";
     this.data = [];
-    this._errorState = "";
     this._actionModalOpen = false;
     this._actionType = "";
-    this._retryCount = 0;
     this._isInitialError = false;
     this._accountsProcessed = [];
+    this.open = false;
   }
 
   static styles = styles;
 
-  willUpdate(changedProperties) {
-    if (!changedProperties.has("status")) return;
-    this._processIfNeeded();
-  }
-
-  _processIfNeeded() {
-    const action = {
-      success: () => this._loadAccounts(),
-      empty: () => this._loadAccounts(),
-      error: () => this._handleError(),
-    }[this.status];
-
-    action?.();
-  }
-
-  _handleError() {
-    this._retryCount += 1;
-    const actionType =
-      this._retryCount >= 3 ? "finalError" : "loadAccountsError";
-    this._showActionModal(actionType);
+  willUpdate(changedProps) {
+    if (this.open && changedProps.has("data")) {
+      this._loadAccounts();
+    }
   }
 
   _loadAccounts() {
@@ -129,12 +93,11 @@ export class AccountsPage extends LitElement {
 
   _handleProcessResult(result) {
     if (result.errorState) {
-      this._errorState = result.errorState;
       this._isInitialError = true;
       this._accountsProcessed = result.accounts;
-      return this._showActionModal(
-        this._mapErrorStateToActionType(result.errorState),
-      );
+      const actionType = this._mapErrorStateToActionType(result.errorState);
+      fireEvent(this, "accounts-error", { actionType });
+      return;
     }
 
     if (result.singleAccount) {
@@ -142,7 +105,6 @@ export class AccountsPage extends LitElement {
       return this._validateSingleAccount(result.singleAccount, true);
     }
     this._accountsProcessed = result.accounts;
-    this._retryCount = 0;
   }
 
   _goToNextStep(account) {
@@ -159,19 +121,17 @@ export class AccountsPage extends LitElement {
       STATES.SUCCESS.ACTIVE,
       STATES.ERROR_TYPES,
     );
-
     if (error) {
-      this._errorState = error;
-      this._isInitialError = isInitial;
-      this._showActionModal(this._mapErrorStateToActionType(error));
+      const actionType = this._mapErrorStateToActionType(error);
+      fireEvent(this, "accounts-error", { actionType });
       return;
     }
 
     this._goToNextStep(account);
   }
 
-  _handleAccountSelected(e) {
-    const account = e.detail.account;
+  _handleAccountSelected({detail}) {
+    const account = detail.account;
     this._validateSingleAccount(account);
   }
 
@@ -184,12 +144,9 @@ export class AccountsPage extends LitElement {
     this._actionModalOpen = true;
   }
 
-  showActionModal(actionType) {
-    this._showActionModal(actionType);
-  }
-
   _closeActionModal() {
-    if (this._isInitialError || this._retryCount === 3) {
+    if (this._isInitialError) {
+      this._isInitialError = false;
       this._goToExitStep();
       return;
     }
@@ -198,30 +155,15 @@ export class AccountsPage extends LitElement {
     this._actionType = "";
   }
 
-  _handleActionModalAction(e) {
-    const { buttonAction } = e.detail;
-    if (buttonAction === "retry") {
-      this._actionModalOpen = false;
-      this._actionType = "";
-      this._requestRetry();
-      return;
-    }
-    this._closeActionModal();
-  }
-
-  _requestRetry() {
-    fireEvent(this, "retry-accounts");
-  }
-
-  _renderActionModal() {
-    return html`
-      <action-modal
-        ?open=${true}
-        action-type=${this._actionType}
-        @action-modal-action=${this._handleActionModalAction}
-      ></action-modal>
-    `;
-  }
+  // _renderActionModal() {
+  //   return html`
+  //     <action-modal
+  //       ?open=${this._actionModalOpen}
+  //       .actionType=${this._actionType}
+  //       @action-modal-action=${this._closeActionModal}
+  //     ></action-modal>
+  //   `;
+  // }
 
   _renderAccountsList() {
     return html`
@@ -234,31 +176,26 @@ export class AccountsPage extends LitElement {
 
   render() {
     return html`
-      ${this.status === "loading"
-        ? html`<loading-overlay></loading-overlay>`
-        : html`
-            <type-modal
-              ?open=${true}
-              ?scrollable=${true}
-              ?full-height=${true}
-              ?has-footer=${true}
-              class="modal-accounts"
-            >
-              <type-header
-                slot="header"
-                .title=${ES.header.title}
-                .subtitle=${ES.header.subtitle}
-              ></type-header>
+      <type-modal
+        ?open=${this.open}
+        ?scrollable=${true}
+        ?full-height=${true}
+        ?has-footer=${true}
+        class="modal-accounts"
+      >
+        <type-header
+          slot="header"
+          .title=${ES.header.title}
+          .subtitle=${ES.header.subtitle}
+        ></type-header>
 
-              <div slot="body">${this._renderAccountsList()}</div>
-              <info-card
-                slot="footer"
-                .message=${ES.messageSecurity}
-                ?hasIcon=${true}
-              ></info-card>
-            </type-modal>
-          `}
-      ${this._actionModalOpen ? this._renderActionModal() : nothing}
+        <div slot="body">${this._renderAccountsList()}</div>
+        <info-card
+          slot="footer"
+          .message=${ES.messageSecurity}
+          ?hasIcon=${true}
+        ></info-card>
+      </type-modal>
     `;
   }
 }

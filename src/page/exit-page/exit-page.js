@@ -3,7 +3,7 @@ import "@/compositions/type-modal/type-modal.js";
 import "@/compositions/type-header/type-header.js";
 import { styles } from "./exit-page.css.js";
 
-class TransferExitPage extends LitElement {
+class ExitPage extends LitElement {
   static properties = {
     locale: { type: String }
   }
@@ -29,4 +29,4 @@ class TransferExitPage extends LitElement {
   }
 }
 
-customElements.define('transfer-exit-page', TransferExitPage);
+customElements.define('exit-page', ExitPage);
