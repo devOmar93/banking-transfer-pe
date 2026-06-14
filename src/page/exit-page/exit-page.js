@@ -17,7 +17,7 @@ class ExitPage extends LitElement {
         ?scrollable=${true}
         ?full-height=${true}
         ?has-footer=${true}
-        class="modal-exit"
+        class="modal-page-primary"
       >
         <type-header
           slot="header"

@@ -39,6 +39,13 @@ export class AccountCard extends LitElement {
     return symbols[currency] || "";
   }
 
+  _formatAmount() {
+    return new Intl.NumberFormat("es-PE", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(this.availableBalance);
+  }
+
   /**
    * Renders the account card content
    */
@@ -49,8 +56,9 @@ export class AccountCard extends LitElement {
         class="account-card"
         role="button"
         tabindex="0"
+        aria-label=${`Cuenta ${this.accountName}, saldo ${this._formatCurrency()}${this._formatAmount()}`}
         @click=${() => this._onClick()}
-       @keydown=${(e) => this._onKeyDown(e)}
+        @keydown=${(e) => this._onKeyDown(e)}
       >
         <div class="account-left">
           <type-icon
@@ -86,16 +94,18 @@ export class AccountCard extends LitElement {
         </div>
 
         <div class="account-right">
-          <type-text
-            tag="p"
-            size="ml"
-            weight="bold"
-            .text=${`${this._formatCurrency()} ${this.availableBalance}`}
-          ></type-text>
+          <div class="balance">
+            <type-text
+              tag="p"
+              size="ml"
+              weight="bold"
+              .text=${`${this._formatCurrency()} ${this._formatAmount()}`}
+            ></type-text>
+          </div>
 
           <type-icon
             icon-name="arrow-right"
-            size="s"
+            size="m"
             variant="secondary"
           ></type-icon>
         </div>

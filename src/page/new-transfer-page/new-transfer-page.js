@@ -162,7 +162,7 @@ export class NewTransferPage extends LitElement {
     return html`
       ${this._loading ? html`<loading-overlay></loading-overlay>` : nothing}
       <type-modal
-        class="modal-accounts"
+        class="modal-page-primary"
         ?open=${true}
         .variant=${CONFIG.modal.variant}
         ?scrollable=${CONFIG.modal.scrollable}

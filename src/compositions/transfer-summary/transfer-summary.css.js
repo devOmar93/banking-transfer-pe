@@ -11,7 +11,9 @@ export const styles = css`
     --transfer-summary-card-radius: 0.5rem;
     --transfer-summary-card-bg: #ffffff;
     --transfer-summary-gap: 0.5rem;
-    --transfer-summary-muted-color: var(--text-muted, #9ca3af);
+    --transfer-summary-label-color: var(--field-list-secondary-text-color, #808080);
+    --transfer-summary-value-color: var(--field-list-primary-text-color, #1f1f1f);
+    --transfer-summary-muted-color: var(--field-list-secondary-text-color, #808080);
   }
  
   .transfer-summary {
@@ -56,6 +58,14 @@ export const styles = css`
     flex-direction: column;
     align-items: flex-end;
     gap: 0.125rem;
+  }
+
+  .transfer-summary__field-label {
+    --text-color: var(--transfer-summary-label-color);
+  }
+
+  .transfer-summary__field-value {
+    --text-color: var(--transfer-summary-value-color);
   }
  
   .transfer-summary__muted {

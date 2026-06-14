@@ -71,6 +71,7 @@ export class TransferSummary extends LitElement {
           tag="span"
           size="s"
           text="Cuenta origen"
+          class="transfer-summary__field-label"
         ></type-text>
         <div slot="value" class="transfer-summary__value-block">
           <type-text
@@ -79,6 +80,7 @@ export class TransferSummary extends LitElement {
             weight="semibold"
             align="right"
             text=${this._sourceAccountName}
+            class="transfer-summary__field-value"
           ></type-text>
           <type-text
             tag="span"
@@ -100,6 +102,7 @@ export class TransferSummary extends LitElement {
           tag="span"
           size="s"
           text="Beneficiario"
+          class="transfer-summary__field-label"
         ></type-text>
         <div slot="value" class="transfer-summary__value-block">
           <type-text
@@ -108,6 +111,7 @@ export class TransferSummary extends LitElement {
             weight="semibold"
             align="right"
             text=${this._beneficiaryName}
+            class="transfer-summary__field-value"
           ></type-text>
           <type-text
             tag="span"

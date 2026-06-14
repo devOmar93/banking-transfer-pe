@@ -1,6 +1,6 @@
 import { LitElement, html } from "lit";
 import { styles } from "./type-header.css.js";
-import "../../components/type-text/type-text.js";
+import "@/components/type-text/type-text.js";
 
 export class TypeHeader extends LitElement {
   static properties = {
