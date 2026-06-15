@@ -29,7 +29,7 @@ import {
 
 import { fireEvent } from "@utils/utils.js";
 
-describe("accounts-page (flujo completo)", () => {
+describe("accounts-page", () => {
   let el;
 
   beforeEach(() => {
