@@ -48,11 +48,11 @@ class EntelgyGlobalNewTransferApiDm extends LitElement {
   }
 
   _dispatchSuccess(responseAccountDestinatari) {
-    fireEvent(this, "new-tranfer-api-dm-success", responseAccountDestinatari);
+    fireEvent(this, "new-transfer-api-dm-success", responseAccountDestinatari);
   }
 
   _dispatchError(error) {
-    fireEvent(this, "new-tranfer-api-dm-error", { message: error.message });
+    fireEvent(this, "new-transfer-api-dm-error", { message: error.message });
   }
 }
 

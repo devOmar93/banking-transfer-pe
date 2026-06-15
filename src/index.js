@@ -1,134 +1,132 @@
-import { LitElement, css, html, nothing } from "lit";
-import "./components/type-icon/type-icon.js";
-import "./components/type-text/type-text";
-import "./compositions/info-card/info-card";
-import "./compositions/type-input/type-input";
-import "./compositions/type-header/type-header.js";
-import "./page/new-transfer-page/new-transfer-page.js";
-import "./page/accounts-page/AccountsPage.js";
-import "./components/loading-overlay/loading-overlay.js";
-import "./page/action-modal/action-modal.js";
-import "@DM/entelgy-global-transfers-api-dm/entelgy-global-transfers-api-dm.js";
-import "@DM/entelgy-global-accounts-api-dm/entelgy-global-accounts-api-dm.js";
-import "@DM/entelgy-global-new-transfer-api-dm/entelgy-global-new-transfer-api-dm.js";
-import "@pages/successful-transfer-page/successful-transfer-page.js";
-import "@pages/confirm-transfer-page/confirm-transfer-page.js";
+import { LitElement, html, nothing } from "lit";
+import { createRef, ref } from "lit/directives/ref.js";
+import "@/providers/data-managers/entelgy-global-transfers-api-dm/entelgy-global-transfers-api-dm.js";
+import "@/providers/data-managers/entelgy-global-accounts-api-dm/entelgy-global-accounts-api-dm.js";
+import "@/providers/data-managers/entelgy-global-new-transfer-api-dm/entelgy-global-new-transfer-api-dm.js";
+import "@/page/new-transfer-page/new-transfer-page.js";
+import "@/page/accounts-page/AccountsPage.js";
+import "@/page/successful-transfer-page/successful-transfer-page.js";
+import "@/page/confirm-transfer-page/confirm-transfer-page.js";
+import "@/page/exit-page/exit-page.js";
+import "@/page/action-modal/action-modal.js";
 import locales from "@locales/locales.json";
-import "./page/exit-page/exit-page.js";
-import "./page/action-modal/action-modal.js";
- import "./components/loading-overlay/loading-overlay.js";
- 
+
 export class MyElement extends LitElement {
+  transfersApiDm = createRef();
+  accountsApiDm = createRef();
+  newTransferApiDm = createRef();
+
   static properties = {
-    step: {
+    lang: {
+      type: String,
+    },
+    _step: {
       type: Number,
     },
-
-    customerAccount: {
+    _accountsData: {
+      type: Array,
+    },
+    _accountCustomer: {
       type: Object,
     },
-
-    destinationAccount: {
+    _destinationAccount: {
       type: Object,
     },
-
+    _transferSummary: {
+      type: Object,
+    },
+    _transferData: {
+      type: Object,
+    },
+    _transferStatus: {
+      type: String,
+    },
+    _isDataReady: {
+      type: Boolean,
+    },
+    _accountsStatus: {
+      type: String,
+    },
+    _loaded: {
+      type: Boolean,
+    },
+    _retryCount: {
+      type: Number,
+    },
     _actionModalOpen: {
       type: Boolean,
     },
-
-    _loading: {
-      type: Boolean,
-    },
-
-    _transferData: { type: Object },
-    _transferStatus: { type: String },
-    lang: { type: String },
-    current: { type: String },
-    amount: { type: String },
-    transactionNumber: { type: String },
-    time: { type: String },
-    date: { type: String },
-    originAccount: { type: String },
-    originAccountNumber: { type: String },
-    beneficiaryName: { type: String },
-    beneficiaryLastName: { type: String },
-    concept: { type: String },
-    status: { type: String },
-    isDataReady: { type: Boolean },
-    accountsData: { type: Array },
-    _actionModalOpen: { type: Boolean },
-    _actionType: { type: String },
-    _retryCount: { type: Number },
-    accountNumberDestinatari: { type: String }
   };
- 
+
   constructor() {
     super();
-    this.step = 0;
-    this.customerAccount = {};
+    this.lang = "";
+    this._step = 0;
+    this._accountCustomer = {};
+    this._destinationAccount = {};
+    this._transferSummary = {};
     this._transferData = null;
     this._transferStatus = "";
-    this.lang = "";
-    this.current = "";
-    this.amount = "";
-    this.transactionNumber = "";
-    this.time = "";
-    this.date = "";
-    this.originAccount = "";
-    this.originAccountNumber = "";
-    this.beneficiaryName = "";
-    this.beneficiaryLastName = "";
-    this.concept = "";
-    this.status = "";
-    this.isDataReady = false;
-    this.accountsData = [];
-    this.destinationAccount = {};
-    this._actionModalOpen = false;
-    this._loading = true;
+    this._isDataReady = false;
+    this._accountsStatus = "";
+    this._accountsData = [];
+    this._loaded = false;
     this._retryCount = 0;
     this._actionType = "";
-    this.accountNumberDestinatari = "";
+    this._recipientAccountNumber = "";
+    this._actionModalOpen = false;
   }
 
-  firstUpdated() {
-    this.shadowRoot.getElementById("accounts")?.getAccounts();
+  async firstUpdated() {
+    this._loaded = false;
+    if (this.accountsApiDm.value) {
+      await this.accountsApiDm.value.getAccounts();
+    }
+    this._loaded = true;
+  }
+
+  _handleLoadingAccounts(e) {
+    const isLoading = e.detail.isLoading;
+    if (isLoading) {
+      this._accountsStatus = "loading";
+      this._accountsData = [];
+    }
   }
 
   _handleSuccessAccounts(e) {
     const data = e.detail;
-    this.accountsData = data.accounts ?? [];
-    this._loading = false;
+    this._accountsData = data.accounts ?? [];
+    this._loaded = true;
     this._retryCount = 0;
     this._actionModalOpen = false;
     this._actionType = "";
   }
 
   _handleErrorAccounts() {
-    this._loading = false;
+    this._loaded = false;
 
     if (this._retryCount >= 3) {
       this._actionType = "finalError";
-      this.step = 4;
+      this._step = 4;
     } else {
       this._actionType = "loadAccountsError";
     }
 
-    this._actionModalOpen = true; 
-    
+    this._actionModalOpen = true;
   }
 
-  _handleActionModal(event) {
-    const { buttonAction } = event.detail;
-    const idDm = this._getDm(this.step);
-    const dm = this.shadowRoot.getElementById(idDm);
-
+  _handleActionModal({ detail }) {
+    const { buttonAction, actionType } = detail;
     this._actionModalOpen = false;
 
     if (buttonAction === "retry") {
       if (this._retryCount < 3) {
         this._retryCount++;
-        //this._loadingAccounts = true;
-        this._loading = true;
+        if (actionType === "downloadError") return;
+        const dm =
+          this._actionType === "loadAccountsError"
+            ? this.accountsApiDm.value
+            : this.newTransferApiDm.value;
         this._callDm(dm);
         return;
       }
@@ -137,138 +135,129 @@ export class MyElement extends LitElement {
       this._actionModalOpen = true;
       return;
     }
-    this._retryCount = 0;
-    //this.step = 4;
-  }
-
-  _callDm(dm){
-    const fnDm = {
-      "loadAccountsError": () => dm.getAccounts(),
-      "technicalError": () => dm.getAccountDestination(this.accountNumberDestinatari),
-    };
-    return fnDm[this._actionType]();
-  }
-
-  _getDm(id) {
-    const dm = {
-      0: "accounts",
-      1: "newTransfer",
-    };
-    return dm[id] ?? "" ;
-  }
-  
-  _getAccountCustomer(event) {
-    this.customerAccount = event.detail;
-    this.step = 1;
-  }
- 
-  _handleConfirmRequested(event) {
-    this._transferData = event.detail;
-    this._transferStatus = "";
-    this.step = 2;
-  }
-
-  async _handleConfirmAccept(event) {
-    const transferDm = this.shadowRoot.getElementById("transfers");
-    const transferData = event.detail?.transferData ?? {};
-    if (transferDm) {
-      await transferDm.executeTransfer(transferData);
+    if (
+      this._actionType === "loadAccountsError" ||
+      this._actionType === "finalError"
+    ) {
+      this._step = 4;
     }
+    this._retryCount = 0;
   }
- 
+
+  _callDm(dm) {
+    if (!dm) return;
+    const fnDm = {
+      loadAccountsError: () => dm.getAccounts(),
+      technicalError: () =>
+        dm.getAccountDestination(this._recipientAccountNumber),
+    };
+    return fnDm[this._actionType]?.();
+  }
+
+  _getAccountCustomer({ detail }) {
+    this._accountCustomer = detail.account;
+    this._step = 1;
+  }
+
+  _handleConfirmRequested({ detail }) {
+    this._transferData = detail;
+    this._transferStatus = "";
+    this._step = 2;
+  }
+
+  async _handleConfirmAccept({ detail }) {
+    const transferData = detail?.transferData ?? {};
+    await this.transfersApiDm.value.executeTransfer(transferData);
+  }
+
   _handleConfirmCancel() {
     this._transferStatus = "";
-    this.step = 1;
-    this.destinationAccount = {};
+    this._step = 1;
+    this._destinationAccount = {};
+    this._isDataReady = false;
   }
 
   _handleTransferRetry() {
     this._transferStatus = "";
-    const transferDm = this.shadowRoot.getElementById("transfers");
-    if (transferDm) {
-      transferDm.executeTransfer(this._transferData);
+    if (this.transfersApiDm.value) {
+      this.transfersApiDm.value.executeTransfer(this._transferData);
     }
   }
- 
-  _handleDataSuccess(event) {
-    const data = event.detail;
-    this.current = data.current;
-    this.amount = data.amount;
-    this.transactionNumber = data.transactionNumber;
-    this.date = data.date;
-    this.time = data.time;
-    this.originAccount = data.originAccount;
-    this.originAccountNumber = data.originAccountNumber;
-    this.beneficiaryName = data.beneficiaryName;
-    this.beneficiaryLastName = data.beneficiaryLastName;
-    this.concept = data.concept;
-    this.status = data.status;
-    this.isDataReady = true;
+
+  _handleDataSuccess({ detail }) {
+    const response = detail.response;
+    const accounts = detail.accounts;
+    this._transferSummary = { ...response };
+    this._accountsData = [ ...accounts ];
+    this._isDataReady = true;
     this._transferStatus = "";
-    this.step = 3;
+    this._step = 3;
   }
- 
-  _handleError(event) {
+
+  _handleError() {
     this._transferStatus = "error";
   }
- 
-  _updateStep(event) {
-    this.step = event.detail;
-    this.destinationAccount = {};
+
+  _updateStep({ detail }) {
+    this._step = detail?.step ?? detail ?? 0;
+    this._destinationAccount = {};
+    this._isDataReady = false;
   }
 
-  _updateExitStep(event) {
-    this.step = event.detail.step;
-  }
- 
   get locale() {
-    return locales[this.lang];
+    return locales[this.lang] ?? {};
   }
 
-  _getAccountDestinatari(event) {
-    this._loading = true;
-    this.accountNumberDestinatari =  event.detail;
-    this.shadowRoot.getElementById("newTransfer")?.getAccountDestination(event.detail);
+  _getAccountDestinatari({ detail }) {
+    this._loaded = false;
+    this._recipientAccountNumber = detail;
+    if (this.newTransferApiDm.value) {
+      this.newTransferApiDm.value.getAccountDestination(detail);
+    }
   }
 
-  _handleSuccessAccountDestinatari(event) {
-    this.destinationAccount = {...event.detail};
-    this._loading = false;
+  _handleRecipientAccountSuccess({ detail }) {
+    this._destinationAccount = { ...detail };
+    this._loaded = true;
   }
 
-  _handleErrorAccountDestinatari(event) {
-    this._loading = false;
+  _handleDestinationAccountError() {
+    this._loaded = true;
     if (this._retryCount >= 3) {
-      this.step = 0;
+      this._step = 0;
       this._actionType = "";
       this._retryCount = 0;
-      return
+      return;
     }
     this._actionType = "technicalError";
     this._actionModalOpen = true;
   }
+
+  _handleChildAccountsError(e) {
+    this._actionType = e.detail.actionType;
+    this._actionModalOpen = true;
+  }
+
   _renderAcountsPage() {
-    return html`
-      ${!this._loading && !this._actionModalOpen ? html`<accounts-page
-        .data=${this.accountsData ?? []}
-        @account=${this._getAccountCustomer}
-        @exit=${this._updateExitStep}
-      ></accounts-page>` : nothing}
-      
-    `;
-    
+    return html`<accounts-page
+      ?open=${this._loaded}
+      .data=${this._accountsData ?? []}
+      @account-validated=${this._getAccountCustomer}
+      @accounts-error=${this._handleChildAccountsError}
+      @exit=${this._updateStep}
+    ></accounts-page>`;
   }
 
   _renderNewTransferPage() {
     return html`<new-transfer-page
-      .customerAccount=${this.customerAccount}
-      .destinationAccount=${this.destinationAccount}
+      .accountCustomer=${this._accountCustomer}
+      .destinationAccount=${this._destinationAccount}
       @confirm-requested=${this._handleConfirmRequested}
       @get-account-destinatari=${this._getAccountDestinatari}
       @return-page=${this._updateStep}
     ></new-transfer-page>`;
   }
- 
+
   _renderConfirmTransferPage() {
     return html`<confirm-transfer-page
       ?open=${true}
@@ -279,78 +268,90 @@ export class MyElement extends LitElement {
       @transfer-retry=${this._handleTransferRetry}
     ></confirm-transfer-page>`;
   }
- 
+
   _renderSuccessfulTransferPage() {
     return html` <successful-transfer-page
       .locale=${this.locale}
-      .current=${this.current}
-      .amount=${this.amount}
-      .transactionNumber=${this.transactionNumber}
-      .time=${this.time}
-      .date=${this.date}
-      .originAccount=${this.originAccount}
-      .originAccountNumber=${this.originAccountNumber}
-      .beneficiaryName=${this.beneficiaryName}
-      .beneficiaryLastName=${this.beneficiaryLastName}
-      .concept=${this.concept}
-      .status=${this.status}
-      .isDataReady=${this.isDataReady}
-      .isOpen=${this.isDataReady}
+      ?isOpen=${this._isDataReady}
       @return-home=${this._updateStep}
+      .amount=${this._transferSummary.amount}
+      .currency=${this._transferSummary.currency}
+      .transactionNumber=${this._transferSummary.transactionNumber}
+      .time=${this._transferSummary.time}
+      .date=${this._transferSummary.date}
+      .originAccount=${this._transferSummary.originAccount}
+      .originAccountNumber=${this._transferSummary.originAccountNumber}
+      .beneficiaryName=${this._transferSummary.beneficiaryName}
+      .beneficiaryLastName=${this._transferSummary.beneficiaryLastName}
+      .concept=${this._transferSummary.concept}
+      .status=${this._transferSummary.status}
+      @accounts-error=${this._handleChildAccountsError}
     ></successful-transfer-page>`;
   }
 
-  _renderExitPage(e) {
-    return html`<transfer-exit-page
-      .locale=${this.locale}
-      ></transfer-exit-page>`;
+  _renderExitPage() {
+    return html`<exit-page .locale=${this.locale}></exit-page>`;
   }
 
   _renderStep(page) {
     const steps = {
-      0: this._renderAcountsPage(),
-      1: this._renderNewTransferPage(),
-      2: this._renderConfirmTransferPage(),
-      3: this._renderSuccessfulTransferPage(),
-      4: this._renderExitPage(),
+      0: () => this._renderAcountsPage(),
+      1: () => this._renderNewTransferPage(),
+      2: () => this._renderConfirmTransferPage(),
+      3: () => this._renderSuccessfulTransferPage(),
+      4: () => this._renderExitPage(),
     };
-    return steps[page] ?? nothing;
+    return steps[page]?.() ?? nothing;
   }
 
-  _renderActionModal() {
+  get _renderActionModal() {
     return html`
       <action-modal
-        ?open=${true}
-        action-type=${this._actionType}
+        ?open=${this._actionModalOpen}
+        .actionType=${this._actionType}
         @action-modal-action=${this._handleActionModal}
       ></action-modal>
     `;
   }
 
-  render() {
+  get _renderTransfersApiDm() {
     return html`
-      ${this._loading ? html`<loading-overlay></loading-overlay>` : nothing}
-      ${this._renderStep(this.step)}
-
       <entelgy-global-transfers-api-dm
-        id="transfers"
+        ${ref(this.transfersApiDm)}
+        .accounts=${this._accountsData}
         @transfer-api-dm-create=${this._handleDataSuccess}
         @transfer-api-dm-fetch-error=${this._handleError}
-      >
-      </entelgy-global-transfers-api-dm>
+      ></entelgy-global-transfers-api-dm>
+    `;
+  }
+
+  get _renderAccountsApiDm() {
+    return html`
       <entelgy-global-accounts-api-dm
-        id="accounts" 
+        ${ref(this.accountsApiDm)}
         @accounts-api-dm-success=${this._handleSuccessAccounts}
         @accounts-api-dm-error=${this._handleErrorAccounts}
-        >
+      >
       </entelgy-global-accounts-api-dm>
+    `;
+  }
+
+  get _renderNewTransferApiDm() {
+    return html`
       <entelgy-global-new-transfer-api-dm
-        id="newTransfer"
-        @new-tranfer-api-dm-success=${this._handleSuccessAccountDestinatari}
-        @new-tranfer-api-dm-error=${this._handleErrorAccountDestinatari}
-        >
-      </entelgy-global-new-transfer-api-dm>
-      ${this._actionModalOpen ? this._renderActionModal() : nothing}
+        ${ref(this.newTransferApiDm)}
+        @new-transfer-api-dm-success=${this._handleRecipientAccountSuccess}
+        @new-transfer-api-dm-error=${this._handleDestinationAccountError}
+      ></entelgy-global-new-transfer-api-dm>
+    `;
+  }
+
+  render() {
+    return html`
+      <loading-overlay ?active=${!this._loaded}></loading-overlay>
+      ${this._renderStep(this._step)} ${this._renderAccountsApiDm}
+      ${this._renderTransfersApiDm} ${this._renderNewTransferApiDm}
+      ${this._actionModalOpen ? this._renderActionModal : nothing}
     `;
   }
 }

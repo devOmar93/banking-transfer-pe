@@ -1,21 +1,23 @@
 import { html, LitElement, nothing } from "lit";
-import { styles } from "./accounts-page.css.js";
-import "@compositions/type-header/type-header.js";
+import "@/page/action-modal/action-modal.js";
+import "@/compositions/type-modal/type-modal.js";
+import "@/compositions/type-header/type-header.js";
+import "@/compositions/info-card/info-card.js";
+import "@/components/loading-overlay/loading-overlay.js";
 import "./compositions/account-list/account-list.js";
-import "@compositions/info-card/info-card.js";
-import "../action-modal/action-modal.js";
+import { styles } from "./accounts-page.css.js";
 import {
   ACCOUNTS_PAGE_ES as ES,
   ACCOUNTS_PAGE_CONFIG as CONFIG,
   STATES,
   PROCESS_ACCOUNT_RULES,
-} from "@utils/accounts-page/accounts.config.js";
+} from "@/page/accounts-page/utils/accounts.config.js";
 import {
   processAccounts,
   filterTopAccounts,
   validateAccount,
-} from "@utils/accounts-page/accounts.utils.js";
-import { fireEvent } from "@utils/utils.js";
+} from "@/page/accounts-page/utils/accounts.utils.js";
+import { fireEvent } from "@/utils/utils.js";
 
 export class AccountsPage extends LitElement {
   static properties = {
@@ -52,6 +54,8 @@ export class AccountsPage extends LitElement {
      * @private
      */
     _accountsProcessed: { type: Array },
+
+    open: { type: Boolean },
   };
 
   constructor() {
@@ -61,12 +65,13 @@ export class AccountsPage extends LitElement {
     this._actionType = "";
     this._isInitialError = false;
     this._accountsProcessed = [];
+    this.open = false;
   }
 
   static styles = styles;
 
   willUpdate(changedProps) {
-    if (changedProps.has("data")) {
+    if (this.open && changedProps.has("data")) {
       this._loadAccounts();
     }
   }
@@ -74,8 +79,8 @@ export class AccountsPage extends LitElement {
   _loadAccounts() {
     const result = this._processAccounts();
     this._handleProcessResult(result);
-  } 
-  
+  }
+
   _processAccounts() {
     const filteredAccounts = filterTopAccounts(
       this.data,
@@ -90,9 +95,9 @@ export class AccountsPage extends LitElement {
     if (result.errorState) {
       this._isInitialError = true;
       this._accountsProcessed = result.accounts;
-      return this._showActionModal(
-          this._mapErrorStateToActionType(result.errorState),
-        );
+      const actionType = this._mapErrorStateToActionType(result.errorState);
+      fireEvent(this, "accounts-error", { actionType });
+      return;
     }
 
     if (result.singleAccount) {
@@ -103,9 +108,9 @@ export class AccountsPage extends LitElement {
   }
 
   _goToNextStep(account) {
-    fireEvent(this, "account", account);
+    fireEvent(this, "account-validated", { account });
   }
-  
+
   _goToExitStep() {
     fireEvent(this, "exit", { step: 4 });
   }
@@ -116,25 +121,22 @@ export class AccountsPage extends LitElement {
       STATES.SUCCESS.ACTIVE,
       STATES.ERROR_TYPES,
     );
-
     if (error) {
-      this._isInitialError = isInitial;
-      this._showActionModal(this._mapErrorStateToActionType(error));
+      const actionType = this._mapErrorStateToActionType(error);
+      fireEvent(this, "accounts-error", { actionType });
       return;
     }
 
     this._goToNextStep(account);
   }
 
-  _selectedAccount(e) {
-    const account = e.detail;
+  _handleAccountSelected({detail}) {
+    const account = detail.account;
     this._validateSingleAccount(account);
   }
 
-   _mapErrorStateToActionType(errorState) {
-    return (
-      STATES.ERROR_MODAL_TYPES[errorState] || "loadAccountsError"
-    );
+  _mapErrorStateToActionType(errorState) {
+    return STATES.ERROR_MODAL_TYPES[errorState] || "loadAccountsError";
   }
 
   _showActionModal(actionType) {
@@ -143,7 +145,7 @@ export class AccountsPage extends LitElement {
   }
 
   _closeActionModal() {
-    if(this._isInitialError) {
+    if (this._isInitialError) {
       this._isInitialError = false;
       this._goToExitStep();
       return;
@@ -153,21 +155,21 @@ export class AccountsPage extends LitElement {
     this._actionType = "";
   }
 
-  _renderActionModal() {
-    return html`
-      <action-modal
-        ?open=${true}
-        action-type=${this._actionType}
-        @action-modal-action=${this._closeActionModal}
-      ></action-modal>
-    `;
-  }
+  // _renderActionModal() {
+  //   return html`
+  //     <action-modal
+  //       ?open=${this._actionModalOpen}
+  //       .actionType=${this._actionType}
+  //       @action-modal-action=${this._closeActionModal}
+  //     ></action-modal>
+  //   `;
+  // }
 
   _renderAccountsList() {
     return html`
       <account-list
         .accounts=${this._accountsProcessed ?? []}
-        @select-account=${this._selectedAccount}
+        @account-selected=${this._handleAccountSelected}
       ></account-list>
     `;
   }
@@ -175,7 +177,7 @@ export class AccountsPage extends LitElement {
   render() {
     return html`
       <type-modal
-        ?open=${true}
+        ?open=${this.open}
         ?scrollable=${true}
         ?full-height=${true}
         ?has-footer=${true}
@@ -194,8 +196,6 @@ export class AccountsPage extends LitElement {
           ?hasIcon=${true}
         ></info-card>
       </type-modal>
-          
-      ${this._actionModalOpen ? this._renderActionModal() : nothing}
     `;
   }
 }

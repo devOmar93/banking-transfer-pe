@@ -3,7 +3,6 @@ import { classMap } from "lit/directives/class-map.js";
 import styles from "./type-modal.css.js";
 
 export class TypeModal extends LitElement {
-
   static properties = {
     open: { type: Boolean, reflect: true },
     variant: { type: String, reflect: true },
@@ -35,7 +34,7 @@ export class TypeModal extends LitElement {
 
     if (this.open) {
       this._onOpen();
-    } else if (changedProps.get("open") === true) {
+    } else if (changedProps.get("open")) {
       this._onClose();
     }
   }
@@ -73,7 +72,9 @@ export class TypeModal extends LitElement {
     this._closing = true;
 
     let aborted = false;
-    this._abortClose = () => { aborted = true; };
+    this._abortClose = () => {
+      aborted = true;
+    };
 
     this.updateComplete.then(() => {
       if (aborted) return;
@@ -107,7 +108,10 @@ export class TypeModal extends LitElement {
       this._bodyScrollLocked = false;
     }
 
-    if (this._previousActiveElement && typeof this._previousActiveElement.focus === "function") {
+    if (
+      this._previousActiveElement &&
+      typeof this._previousActiveElement.focus === "function"
+    ) {
       this._previousActiveElement.focus();
     }
     this._previousActiveElement = null;
@@ -177,34 +181,38 @@ export class TypeModal extends LitElement {
     if (!this.open && !this._closing) return nothing;
 
     return html`
-      <div class=${classMap({
-        "type-modal-backdrop": true,
-        "type-modal-backdrop--closing": this._closing,
-    })}>
+      <div
+        class=${classMap({
+          "type-modal-backdrop": true,
+          "type-modal-backdrop--closing": this._closing,
+        })}
+      >
         <div
           class=${classMap({
             "type-modal-content": true,
             "type-modal-content--closing": this._closing,
           })}
-                    role="dialog"
-                    aria-modal="true"
-                    @click=${this._handleContentClick}
-                >
-                    <header class="type-modal-header">
-                        <slot name="header"></slot>
-                    </header>
-                    <section class="type-modal-body">
-                        <slot name="body"></slot>
-                    </section>
-                    ${this.hasFooter ? html`
-                        <footer class="type-modal-footer">
-                            <slot name="footer"></slot>
-                        </footer>
-                    ` : nothing}
-                </div>
-            </div>
-        `;
+          role="dialog"
+          aria-modal="true"
+          @click=${this._handleContentClick}
+        >
+          <header class="type-modal-header">
+            <slot name="header"></slot>
+          </header>
+          <section class="type-modal-body">
+            <slot name="body"></slot>
+          </section>
+          ${this.hasFooter
+            ? html`
+                <footer class="type-modal-footer">
+                  <slot name="footer"></slot>
+                </footer>
+              `
+            : nothing}
+        </div>
+      </div>
+    `;
   }
 }
 
-customElements.define("type-modal", TypeModal); 
+customElements.define("type-modal", TypeModal);

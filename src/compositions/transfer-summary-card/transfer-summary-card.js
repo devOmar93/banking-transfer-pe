@@ -8,7 +8,7 @@ class TransferSummaryCard extends LitElement {
     locale: {
       type: Object,
     },
-    current: { type: String },
+    currency: { type: String },
     amount: { type: String },
     transactionNumber: { type: String },
     time: { type: String },
@@ -24,7 +24,7 @@ class TransferSummaryCard extends LitElement {
   constructor() {
     super();
     this.locale = {};
-    this.current = "";
+    this.currency = "";
     this.amount = "";
     this.transactionNumber = "";
     this.time = "";
@@ -49,7 +49,7 @@ class TransferSummaryCard extends LitElement {
           ></type-text>
           <div class="amount-container">
             <type-text
-              .text=${this.current}
+              .text=${this.currency}
               .weight=${"bold"}
               size="l"
             ></type-text>

@@ -43,7 +43,7 @@ export const ACCOUNTS_BASE_CASE = {
       accountName: "Cuenta Corriente", 
       accountType: "Corriente", 
       availableBalance: 4000, 
-      currency: "USD", 
+      currency: "PEN", 
       status: "ACTIVE" 
     },
     { 
@@ -141,7 +141,7 @@ export const ACCOUNTS_CASE_5 = {
     },
     {
       id: 2,
-      accountNumber: "10101010101022",
+      accountNumber: "56785678",
       accountName: "Cuenta Ahorros",
       accountType: "Ahorros",
       availableBalance: 0,
@@ -156,7 +156,7 @@ export const ACCOUNTS_CASE_6 = {
   accounts: [
     {
       id: 1,
-      accountNumber: "10101010101023",
+      accountNumber: "12341234",
       accountName: "Cuenta Corriente",
       accountType: "Corriente",
       availableBalance: 5250.00,
