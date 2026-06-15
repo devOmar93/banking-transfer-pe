@@ -35,8 +35,8 @@ export class TypeIcon extends LitElement {
   constructor() {
     super();
     this.iconName = "";
-    this.variant = "";
-    this.size = "";
+    this.variant = "default";
+    this.size = "m";
   }
 
   get svg() {
