@@ -138,6 +138,7 @@ export class MyElement extends LitElement {
       if (this._retryCount < 3) {
         this._retryCount++;
         if (actionType === "downloadError") return;
+        this._loaded = false;
         const dm =
           this._actionType === "loadAccountsError"
             ? this.accountsApiDm.value
