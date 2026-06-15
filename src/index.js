@@ -89,14 +89,6 @@ export class MyElement extends LitElement {
     this._loaded = true;
   }
 
-  _handleLoadingAccounts(e) {
-    const isLoading = e.detail.isLoading;
-    if (isLoading) {
-      this._accountsStatus = "loading";
-      this._accountsData = [];
-    }
-  }
-
   _handleSuccessAccounts(e) {
     const data = e.detail;
     this._accountsData = data.accounts ?? [];
