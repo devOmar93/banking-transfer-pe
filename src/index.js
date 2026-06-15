@@ -56,6 +56,9 @@ export class MyElement extends LitElement {
     _actionModalOpen: {
       type: Boolean,
     },
+    _isInitialError: {
+      type: Boolean,
+    },
   };
 
   constructor() {
@@ -75,6 +78,7 @@ export class MyElement extends LitElement {
     this._actionType = "";
     this._recipientAccountNumber = "";
     this._actionModalOpen = false;
+    this._isInitialError = false;
   }
 
   async firstUpdated() {
@@ -103,7 +107,7 @@ export class MyElement extends LitElement {
   }
 
   _handleErrorAccounts() {
-    this._loaded = false;
+    this._loaded = true;
 
     if (this._retryCount >= 3) {
       this._actionType = "finalError";
@@ -115,7 +119,18 @@ export class MyElement extends LitElement {
     this._actionModalOpen = true;
   }
 
-  _handleActionModal({ detail }) {
+  _closeActionModal({ detail }) {
+    if (this._isInitialError) {
+      this._isInitialError = false;
+      this._actionModalOpen = false;
+      this._step = 4;
+      return;
+    }
+
+    this._handleActionModal(detail);
+  }
+
+  _handleActionModal(detail) {
     const { buttonAction, actionType } = detail;
     this._actionModalOpen = false;
 
@@ -236,6 +251,7 @@ export class MyElement extends LitElement {
   _handleChildAccountsError(e) {
     this._actionType = e.detail.actionType;
     this._actionModalOpen = true;
+    this._isInitialError = e.detail.initialError;
   }
 
   _renderAcountsPage() {
@@ -244,7 +260,6 @@ export class MyElement extends LitElement {
       .data=${this._accountsData ?? []}
       @account-validated=${this._getAccountCustomer}
       @accounts-error=${this._handleChildAccountsError}
-      @exit=${this._updateStep}
     ></accounts-page>`;
   }
 
@@ -309,7 +324,7 @@ export class MyElement extends LitElement {
       <action-modal
         ?open=${this._actionModalOpen}
         .actionType=${this._actionType}
-        @action-modal-action=${this._handleActionModal}
+        @action-modal-action=${this._closeActionModal}
       ></action-modal>
     `;
   }

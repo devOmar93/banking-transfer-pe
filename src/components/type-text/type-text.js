@@ -9,7 +9,6 @@ export class TypeText extends LitElement {
      * HTML tag to render
      * @type { String }
      * @default ""
-     * @attribute "tag"
      */
     tag: { type: String },
 
@@ -17,7 +16,6 @@ export class TypeText extends LitElement {
      * Text content to display inside the component
      * @type { String }
      * @default ""
-     * @attribute "text"
      */
     text: { type: String },
 
@@ -25,7 +23,6 @@ export class TypeText extends LitElement {
      * Typography size (s, m, l, xl)
      * @type { String }
      * @default ""
-     * @attribute "size"
      */
     size: { type: String },
 
@@ -33,7 +30,6 @@ export class TypeText extends LitElement {
      * Horizontal alignment (left, center, right)
      * @type { String }
      * @default ""
-     * @attribute "align"
      */
     align: { type: String },
 
@@ -41,7 +37,6 @@ export class TypeText extends LitElement {
      * Font weight (light, regular, semibold, bold)
      * @type { String }
      * @default ""
-     * @attribute "weight"
      */
     weight: { type: String },
   };

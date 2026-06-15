@@ -5,12 +5,17 @@ import { styles } from "./account-list.css.js";
 
 export class AccountList extends LitElement{
   static properties = {
-    accounts: {type: Object}
+    /**
+     * Holds the raw accounts data received from the parent component
+     * @type {Array}
+     * @default []
+     */
+    accounts: {type: Array}
   }
 
   constructor(){
     super();
-    this.accounts = {};
+    this.accounts = [];
   }
 
   static styles = styles;
@@ -20,7 +25,7 @@ export class AccountList extends LitElement{
       <div class="container-list">
         ${
           repeat(
-            Object.values(this.accounts),
+            this.accounts,
             (account) => account.id,
             (account) => html`
               <account-card
