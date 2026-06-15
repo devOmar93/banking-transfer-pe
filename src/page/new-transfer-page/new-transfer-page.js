@@ -4,7 +4,6 @@ import "@/compositions/type-header/type-header.js";
 import "@/page/action-modal/action-modal.js";
 import "@/page/new-transfer-page/compositions/from-account-card/from-account-card.js";
 import "@/page/new-transfer-page/compositions/transfer-form/transfer-form.js";
-import "@/components/loading-overlay/loading-overlay.js";
 import "@/compositions/type-button/type-button.js";
 import { resolveDestinationAccount } from "@/services/bankingTransferService.js";
 import { TRANSFER_FORM_FIELDS } from "@/page/new-transfer-page/compositions/transfer-form/utils/configTransferForm.js";
@@ -34,10 +33,6 @@ export class NewTransferPage extends LitElement {
       type: Object,
     },
 
-    _loading: {
-      type: Boolean,
-    },
-
     _actionType: {
       type: String,
     },
@@ -51,39 +46,13 @@ export class NewTransferPage extends LitElement {
     super();
     this.accountCustomer = {};
     this._sourceAccount = {};
-    this._loading = false;
     this._actionType = "";
     this._actionModalOpen = false;
     this._retryCount = 0;
     this.destinationAccount = {};
     this.dataForm = {};
   }
-  connectedCallback() {
-    super.connectedCallback();
-    this._handleKeyDown = this._handleKeyDown.bind(this);
-    window.addEventListener("keydown", this._handleKeyDown);
-  }
 
-  disconnectedCallback() {
-    window.removeEventListener("keydown", this._handleKeyDown);
-    super.disconnectedCallback();
-  }
-
-  _handleKeyDown(e) {
-    if (e.key === "Escape" && !this._loading) {
-      this._returnPage();
-    }
-  }
-  firstUpdated() {
-    const firstFocusable = this.renderRoot.querySelector("type-button");
-    firstFocusable?.focus();
-  }
-  updated(changed) {
-    if (changed.has("_actionModalOpen") && this._actionModalOpen) {
-      const modal = this.renderRoot.querySelector("action-modal");
-      modal?.focus?.();
-    }
-  }
   willUpdate(changedProperties) {
     if (
       changedProperties.has("destinationAccount") &&
@@ -188,16 +157,6 @@ export class NewTransferPage extends LitElement {
 
   render() {
     return html`
-      ${this._loading
-        ? html`
-            <loading-overlay
-              role="status"
-              aria-live="polite"
-              aria-label="Cargando datos, por favor espere"
-            ></loading-overlay>
-          `
-        : nothing}
-
       <type-modal
         role="dialog"
         aria-modal="true"
