@@ -1,7 +1,6 @@
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
-import { html, LitElement, nothing } from "lit";
-import { validateAllowedProp } from "@utils/utils.js";
-import { validateRequiredProp } from "@utils/utils";
+import { html, LitElement } from "lit";
+import { validateAllowedProp, validateRequiredProp } from "@/utils/utils.js";
 import { ICONS, ICONS_RUTE } from "./utils/icons.js";
 import styles from "./type-icon.css";
 
@@ -22,14 +21,14 @@ export class TypeIcon extends LitElement {
      * @type { String }
      * @default ""
      */
-    variant: { type: String, reflect: true },
+    variant: { type: String },
 
     /**
      * Controls size
      * @type { String }
      * @default ""
      */
-    size: { type: String, reflect: true },
+    size: { type: String },
   };
 
   constructor() {
