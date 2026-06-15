@@ -15,6 +15,12 @@ export const NEW_TRANSFER_PAGE_LITERALS = {
     text: lang["new-transfer-page-continue-button"],
   },
 
+  fromAccountCard: {
+    fromLabel: lang["new-transfer-page-from-account-label"],
+    availableBalanceLabel: lang["new-transfer-page-available-balance-label"],
+    emptyAccountText: lang["new-transfer-page-empty-account"],
+  },
+
   errors: {
     BLOCKED: {
       title: lang["account-page-errors-blocked-title"],

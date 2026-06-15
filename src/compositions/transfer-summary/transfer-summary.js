@@ -8,12 +8,26 @@ export class TransferSummary extends LitElement {
   static properties = {
     transferData: { type: Object },
     amountLabel: { type: String, attribute: "amount-label" },
+    sourceAccountLabel: { type: String, attribute: "source-account-label" },
+    beneficiaryLabel: { type: String, attribute: "beneficiary-label" },
+    emptySourceAccountText: {
+      type: String,
+      attribute: "empty-source-account-text",
+    },
+    emptyBeneficiaryText: {
+      type: String,
+      attribute: "empty-beneficiary-text",
+    },
   };
  
   constructor() {
     super();
     this.transferData = null;
-    this.amountLabel = "Monto a transferir";
+    this.amountLabel = "";
+    this.sourceAccountLabel = "";
+    this.beneficiaryLabel = "";
+    this.emptySourceAccountText = "";
+    this.emptyBeneficiaryText = "";
   }
  
   static styles = styles;
@@ -27,7 +41,7 @@ export class TransferSummary extends LitElement {
   }
  
   get _sourceAccountName() {
-    return this._data.sourceAccount?.accountName ?? "Sin cuenta";
+    return this._data.sourceAccount?.accountName ?? this.emptySourceAccountText;
   }
  
   get _sourceAccountNumber() {
@@ -35,7 +49,7 @@ export class TransferSummary extends LitElement {
   }
  
   get _beneficiaryName() {
-    return this._data.beneficiary?.fullName ?? "Sin beneficiario";
+    return this._data.beneficiary?.fullName ?? this.emptyBeneficiaryText;
   }
  
   get _beneficiaryAccount() {
@@ -70,7 +84,7 @@ export class TransferSummary extends LitElement {
           slot="label"
           tag="span"
           size="s"
-          text="Cuenta origen"
+          text=${this.sourceAccountLabel}
           class="transfer-summary__field-label"
         ></type-text>
         <div slot="value" class="transfer-summary__value-block">
@@ -101,7 +115,7 @@ export class TransferSummary extends LitElement {
           slot="label"
           tag="span"
           size="s"
-          text="Beneficiario"
+          text=${this.beneficiaryLabel}
           class="transfer-summary__field-label"
         ></type-text>
         <div slot="value" class="transfer-summary__value-block">

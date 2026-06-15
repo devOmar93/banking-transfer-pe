@@ -8,12 +8,12 @@ import "@pages/action-modal/action-modal.js";
 import {
   CONFIRM_TRANSFER_PAGE_CONFIG as CONFIG,
   CONFIRM_TRANSFER_PAGE_LITERALS as LITERALS,
-} from "@utils/confirm-transfer-page/confirmTransferPageConfig.js";
+} from "./utils/confirmTransferPageConfig.js";
 
 export class ConfirmTransferPage extends LitElement {
   static properties = {
     transferData: { type: Object },
-    open: { type: Boolean, reflect: true },
+    open: { type: Boolean },
     transferStatus: { type: String },
     _retryCount: { state: true },
     _actionModalOpen: { state: true },
@@ -107,7 +107,7 @@ export class ConfirmTransferPage extends LitElement {
     return html`
       <type-modal
         class="modal-page-primary"
-        .variant=${CONFIG.modalVariant}
+        .variant=${CONFIG.modal.variant}
         ?open=${this.open}
         ?scrollable=${CONFIG.modal.scrollable}
         ?full-height=${CONFIG.modal.fullHeight}
@@ -116,9 +116,9 @@ export class ConfirmTransferPage extends LitElement {
         <div slot="header" class="confirm-transfer-page__header">
           <type-button
             class="confirm-transfer-page__back-btn"
-            type=${CONFIG.backButton.type}
-            text=${LITERALS.backButton.text}
-            variant=${CONFIG.backButton.variant}
+            .type=${CONFIG.backButton.type}
+            .text=${LITERALS.backButton.text}
+            .variant=${CONFIG.backButton.variant}
             icon-name=${CONFIG.backButton.iconName}
             icon-position=${CONFIG.backButton.iconPosition}
             @click=${this._handleCancel}
@@ -131,16 +131,20 @@ export class ConfirmTransferPage extends LitElement {
         <div slot="body">
           <transfer-summary
             .transferData=${this.transferData}
-            amount-label=${LITERALS.transferSummary.amountLabel}
+            .amountLabel=${LITERALS.transferSummary.amountLabel}
+            .sourceAccountLabel=${LITERALS.transferSummary.sourceAccountLabel}
+            .beneficiaryLabel=${LITERALS.transferSummary.beneficiaryLabel}
+            .emptySourceAccountText=${LITERALS.transferSummary.emptySourceAccountText}
+            .emptyBeneficiaryText=${LITERALS.transferSummary.emptyBeneficiaryText}
           ></transfer-summary>
         </div>
  
         <div slot="footer" class="confirm-transfer-page__footer">
           <type-button
-            type=${CONFIG.submitButton.type}
-            text=${LITERALS.submitButton.text}
-            icon-position=${CONFIG.submitButton.iconPosition}
-            variant=${CONFIG.submitButton.variant}
+            .type=${CONFIG.submitButton.type}
+            .text=${LITERALS.submitButton.text}
+            .iconPosition=${CONFIG.submitButton.iconPosition}
+            .variant=${CONFIG.submitButton.variant}
             @click=${this._handleAccept}
           ></type-button>
         </div>

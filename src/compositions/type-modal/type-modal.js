@@ -5,12 +5,11 @@ import styles from "./type-modal.css.js";
 export class TypeModal extends LitElement {
 
   static properties = {
-    open: { type: Boolean, reflect: true },
-    variant: { type: String, reflect: true },
-    scrollable: { type: Boolean, reflect: true },
-    fullHeight: { type: Boolean, reflect: true, attribute: "full-height" },
-    hasFooter: { type: Boolean, reflect: true, attribute: "has-footer" },
-    _closing: { state: true },
+    open: { type: Boolean },
+    variant: { type: String },
+    scrollable: { type: Boolean },
+    fullHeight: { type: Boolean, attribute: "full-height" },
+    hasFooter: { type: Boolean, attribute: "has-footer" },
   };
 
   constructor() {
@@ -20,9 +19,6 @@ export class TypeModal extends LitElement {
     this.scrollable = false;
     this.fullHeight = false;
     this.hasFooter = false;
-    this._closing = false;
-    this._previousActiveElement = null;
-    this._abortClose = null;
     this._bodyScrollLocked = false;
   }
 
@@ -30,87 +26,31 @@ export class TypeModal extends LitElement {
     return styles;
   }
 
-  updated(changedProps) {
+  willUpdate(changedProps) {
     if (!changedProps.has("open")) return;
 
     if (this.open) {
-      this._onOpen();
+      this._lockScrollIfNeeded();
     } else if (changedProps.get("open") === true) {
-      this._onClose();
+      this._unlockScrollIfNeeded();
     }
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-
-    if (this._abortClose) {
-      this._abortClose();
-      this._abortClose = null;
-    }
-    if (this._bodyScrollLocked) {
-      TypeModal._unlockBodyScroll();
-      this._bodyScrollLocked = false;
-    }
-    this._closing = false;
+    this._unlockScrollIfNeeded();
   }
 
-  _onOpen() {
-    if (this._abortClose) {
-      this._abortClose();
-      this._abortClose = null;
-      this._closing = false;
-      this.updateComplete.then(() => this._focusFirst());
-      return;
-    }
-
+  _lockScrollIfNeeded() {
+    if (this._bodyScrollLocked) return;
     TypeModal._lockBodyScroll();
     this._bodyScrollLocked = true;
-    this._previousActiveElement = document.activeElement;
-    this.updateComplete.then(() => this._focusFirst());
   }
 
-  _onClose() {
-    this._closing = true;
-
-    let aborted = false;
-    this._abortClose = () => { aborted = true; };
-
-    this.updateComplete.then(() => {
-      if (aborted) return;
-
-      const content = this.renderRoot.querySelector(".type-modal-content");
-      if (!content) {
-        if (!aborted) this._cleanupAfterClose();
-        return;
-      }
-
-      const fallback = setTimeout(() => {
-        if (!aborted) this._cleanupAfterClose();
-      }, 300);
-
-      const handleAnimationEnd = () => {
-        clearTimeout(fallback);
-        content.removeEventListener("animationend", handleAnimationEnd);
-        if (!aborted) this._cleanupAfterClose();
-      };
-
-      content.addEventListener("animationend", handleAnimationEnd);
-    });
-  }
-
-  _cleanupAfterClose() {
-    this._abortClose = null;
-    this._closing = false;
-
-    if (this._bodyScrollLocked) {
-      TypeModal._unlockBodyScroll();
-      this._bodyScrollLocked = false;
-    }
-
-    if (this._previousActiveElement && typeof this._previousActiveElement.focus === "function") {
-      this._previousActiveElement.focus();
-    }
-    this._previousActiveElement = null;
+  _unlockScrollIfNeeded() {
+    if (!this._bodyScrollLocked) return;
+    TypeModal._unlockBodyScroll();
+    this._bodyScrollLocked = false;
   }
 
   static _openCount = 0;
@@ -131,80 +71,53 @@ export class TypeModal extends LitElement {
     }
   }
 
-  _getFocusableElements() {
-    const selectors = [
-      "a[href]",
-      "button:not([disabled])",
-      "input:not([disabled])",
-      "select:not([disabled])",
-      "textarea:not([disabled])",
-      "[tabindex]:not([tabindex='-1'])",
-    ].join(",");
-
-    const focusables = [];
-    const slots = this.renderRoot.querySelectorAll("slot");
-    slots.forEach((slot) => {
-      slot.assignedElements({ flatten: true }).forEach((el) => {
-        if (el.matches && el.matches(selectors)) {
-          focusables.push(el);
-        }
-        if (el.querySelectorAll) {
-          focusables.push(...el.querySelectorAll(selectors));
-        }
-      });
-    });
-    return focusables;
-  }
-
-  _focusFirst() {
-    const focusables = this._getFocusableElements();
-    if (focusables.length > 0) {
-      focusables[0].focus();
-      return;
-    }
-    const content = this.renderRoot.querySelector(".type-modal-content");
-    if (content) {
-      content.setAttribute("tabindex", "-1");
-      content.focus();
-    }
-  }
-
   _handleContentClick(e) {
     e.stopPropagation();
   }
 
   render() {
-    if (!this.open && !this._closing) return nothing;
+    if (!this.open) return nothing;
 
     return html`
-      <div class=${classMap({
-        "type-modal-backdrop": true,
-        "type-modal-backdrop--closing": this._closing,
-    })}>
+      <div
+        class=${classMap({
+          "type-modal-backdrop": true,
+          "type-modal-backdrop--page": this.variant === "page",
+        })}
+      >
         <div
           class=${classMap({
             "type-modal-content": true,
-            "type-modal-content--closing": this._closing,
+            "type-modal-content--page": this.variant === "page",
+            "type-modal-content--dialog": this.variant === "dialog",
+            "type-modal-content--full-height": this.fullHeight,
           })}
-                    role="dialog"
-                    aria-modal="true"
-                    @click=${this._handleContentClick}
-                >
-                    <header class="type-modal-header">
-                        <slot name="header"></slot>
-                    </header>
-                    <section class="type-modal-body">
-                        <slot name="body"></slot>
-                    </section>
-                    ${this.hasFooter ? html`
-                        <footer class="type-modal-footer">
-                            <slot name="footer"></slot>
-                        </footer>
-                    ` : nothing}
-                </div>
-            </div>
-        `;
+          role="dialog"
+          aria-modal="true"
+          @click=${this._handleContentClick}
+        >
+          <header class="type-modal-header">
+            <slot name="header"></slot>
+          </header>
+          <section
+            class=${classMap({
+              "type-modal-body": true,
+              "type-modal-body--scrollable": this.scrollable,
+            })}
+          >
+            <slot name="body"></slot>
+          </section>
+          ${this.hasFooter
+            ? html`
+                <footer class="type-modal-footer">
+                  <slot name="footer"></slot>
+                </footer>
+              `
+            : nothing}
+        </div>
+      </div>
+    `;
   }
 }
 
-customElements.define("type-modal", TypeModal); 
+customElements.define("type-modal", TypeModal);

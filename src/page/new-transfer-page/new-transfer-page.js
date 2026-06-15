@@ -181,6 +181,9 @@ export class NewTransferPage extends LitElement {
         <div slot="body" class="container-body">
           <from-account-card
             .account=${this.accountCustomer}
+            .fromLabel=${LITERALS.fromAccountCard.fromLabel}
+            .availableBalanceLabel=${LITERALS.fromAccountCard.availableBalanceLabel}
+            .emptyAccountText=${LITERALS.fromAccountCard.emptyAccountText}
           ></from-account-card>
           <transfer-form
             .configFormFields=${TRANSFER_FORM_FIELDS}
