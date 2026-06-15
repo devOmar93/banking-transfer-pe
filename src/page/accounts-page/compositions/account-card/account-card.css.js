@@ -2,9 +2,9 @@
 import { css } from "lit";
 
 export const styles = css`
- :host{
-  font-family: 'Inter', 'Roboto', 'Segoe UI', sans-serif;
-}
+  :host {
+    font-family: inherit;
+  }
   .account-card {
     display: flex;
     align-items: center;
@@ -14,21 +14,22 @@ export const styles = css`
     background: white;
     border: 1px solid #d7d7d7;
     border-radius: 1rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     cursor: pointer;
-    transition: box-shadow 0.15s ease, transform 0.12s ease;
-    
-    
+    transition:
+      box-shadow 0.15s ease,
+      transform 0.12s ease;
   }
-    .account-card:hover {
-    box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+  .account-card:hover {
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px);
   }
 
-  .account-card:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
-  }
+  .account-card:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 2px;
+}
+
 
   .account-left {
     display: flex;
@@ -54,21 +55,34 @@ export const styles = css`
 
   .account-right {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    justify-content: flex-end;
+    flex-direction: column; 
+    align-items: flex-end;
+    gap: 1rem;
+    flex-grow: 1;
+    padding-right: 0.2rem;
   }
-    
-.account-right type-icon {
-  --icon-color: #909096; 
-}
-.account-right type-icon {
-  --icon-size: 1rem;
+
+.balance {
+  margin-top: 0.5rem;
 }
 
+  .balance type-text {
+    text-align: right;
+    letter-spacing: -0.3px;
+  }
 
+  .account-right type-text {
+    text-align: right;
+  }
 
+  .account-right type-icon {
+    --icon-color: #909096;
+    --icon-size: 1.25rem;
+    flex-shrink: 0;
+  }
 
   .p-subtitle {
-    color: var(--text-secondary);
+    --text-color: var(--text-secondary);
   }
 `;

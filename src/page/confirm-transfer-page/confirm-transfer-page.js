@@ -1,10 +1,15 @@
 import { html, LitElement, nothing } from "lit";
+import "@/compositions/type-modal/type-modal.js";
+import "@/compositions/type-header/type-header.js";
+import "@/compositions/type-button/type-button.js";
+import "@/compositions/transfer-summary/transfer-summary.js";
 import { styles } from "./confirm-transfer-page.css.js";
-import "@compositions/type-modal/type-modal.js";
-import "@compositions/type-header/type-header.js";
-import "@compositions/type-button/type-button.js";
-import "@compositions/transfer-summary/transfer-summary.js";
-import "@pages/action-modal/action-modal.js";
+import { fireEvent } from "@/utils/utils.js";
+import "@/page/action-modal/action-modal.js";
+import {
+  CONFIRM_TRANSFER_PAGE_CONFIG as CONFIG,
+  CONFIRM_TRANSFER_PAGE_LITERALS as LITERALS,
+} from "@utils/confirm-transfer-page/confirmTransferPageConfig.js";
 
 export class ConfirmTransferPage extends LitElement {
   static properties = {
@@ -18,7 +23,7 @@ export class ConfirmTransferPage extends LitElement {
 
   constructor() {
     super();
-    this.transferData = null;
+    this.transferData = {};
     this.open = false;
     this.transferStatus = "";
     this._retryCount = 0;
@@ -64,18 +69,11 @@ export class ConfirmTransferPage extends LitElement {
   }
 
   _requestRetry() {
-    this.dispatchEvent(new CustomEvent("transfer-retry", {
-      bubbles: true,
-      composed: true,
-    }));
+    fireEvent(this, "transfer-retry")
   }
 
   _handleAccept() {
-    this.dispatchEvent(new CustomEvent("confirm-accept", {
-      detail: { transferData: this.transferData },
-      bubbles: true,
-      composed: true,
-    }));
+    fireEvent(this, "confirm-accept", { transferData: this.transferData })
   }
 
   _handleCancel() {
@@ -83,10 +81,7 @@ export class ConfirmTransferPage extends LitElement {
   }
 
   _dispatchCancel() {
-    this.dispatchEvent(new CustomEvent("confirm-cancel", {
-      bubbles: true,
-      composed: true,
-    }));
+    fireEvent(this, "confirm-cancel")
   }
 
   _renderActionModal() {
@@ -100,48 +95,48 @@ export class ConfirmTransferPage extends LitElement {
   }
 
   _renderContent() {
-    console.log('transferData', this.transferData);
     return html`
       <type-modal
-        variant="page"
+        class="modal-page-primary"
+        .variant=${CONFIG.modalVariant}
         ?open=${this.open}
-        ?scrollable=${true}
-        ?full-height=${true}
-        ?has-footer=${true}
+        ?scrollable=${CONFIG.modal.scrollable}
+        ?full-height=${CONFIG.modal.fullHeight}
+        ?has-footer=${CONFIG.modal.hasFooter}
       >
         <div slot="header" class="confirm-transfer-page__header">
           <type-button
             class="confirm-transfer-page__back-btn"
-            type="button"
-            text="Volver"
-            variant="secondary"
-            icon-name="arrow-left"
-            icon-position="left"
+            type=${CONFIG.backButton.type}
+            text=${LITERALS.backButton.text}
+            variant=${CONFIG.backButton.variant}
+            icon-name=${CONFIG.backButton.iconName}
+            icon-position=${CONFIG.backButton.iconPosition}
             @click=${this._handleCancel}
           ></type-button>
           <type-header
-            .title=${"Confirmar transferencia"}
+            .title=${LITERALS.header.title}
           ></type-header>
         </div>
- 
+
         <div slot="body">
           <transfer-summary
             .transferData=${this.transferData}
-            amount-label="Monto a transferir"
+            amount-label=${LITERALS.transferSummary.amountLabel}
           ></transfer-summary>
         </div>
- 
+
         <div slot="footer" class="confirm-transfer-page__footer">
           <type-button
-            type="button"
-            text="Transferir"
-            icon-position="right"
-            variant="default"
+            type=${CONFIG.submitButton.type}
+            text=${LITERALS.submitButton.text}
+            icon-position=${CONFIG.submitButton.iconPosition}
+            variant=${CONFIG.submitButton.variant}
             @click=${this._handleAccept}
           ></type-button>
         </div>
       </type-modal>
- 
+
       ${this._actionModalOpen ? this._renderActionModal() : nothing}
     `;
   }

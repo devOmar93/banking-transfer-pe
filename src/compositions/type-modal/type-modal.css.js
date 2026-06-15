@@ -131,6 +131,40 @@ export default css`
         to   { opacity: 0; }
     }
 
+    @media (max-width: 768px) {
+        :host([variant="dialog"]) {
+            --type-modal-max-width: 90vw;
+            --type-modal-padding: 1.25rem;
+        }
+
+        .type-modal-content {
+            padding: var(--type-modal-padding);
+            gap: 0.875rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        :host([variant="page"]) .type-modal-content {
+            padding: 1rem;
+        }
+
+        :host([variant="dialog"]) {
+            --type-modal-max-width: 95vw;
+            --type-modal-padding: 1rem;
+        }
+
+        .type-modal-content {
+            padding: var(--type-modal-padding);
+            gap: 0.75rem;
+        }
+
+        .type-modal-header,
+        .type-modal-body,
+        .type-modal-footer {
+            overflow-x: hidden;
+        }
+    }
+
     @media (prefers-reduced-motion: reduce) {
         .type-modal-backdrop,
         .type-modal-content,

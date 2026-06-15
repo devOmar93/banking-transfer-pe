@@ -146,8 +146,8 @@ export class SuccessfulTransferPage extends LitElement {
 
   render() {
     return html`
-      <type-modal .open=${this.isOpen} .hasFooter=${true}>
-        <div slot="body">
+      <type-modal class="modal-page-primary" .open=${this.isOpen} .hasFooter=${true}>
+        <div class="modal-body" slot="body">
           <div class="header">
             <type-icon
               name="success"
@@ -232,7 +232,7 @@ export class SuccessfulTransferPage extends LitElement {
             .size=${"s"}
           ></type-text>
         </div>
-        <div slot="body">
+        <div  slot="body">
           <div class="alert-footer">
             <type-button
               .text=${this.locale[

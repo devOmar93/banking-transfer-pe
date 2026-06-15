@@ -3,6 +3,7 @@ import { html, LitElement } from "lit";
 import { styles } from "./account-card.css.js";
 import "@components/type-icon/type-icon.js";
 import "@components/type-text/type-text.js";
+import { fireEvent } from "@/utils/utils.js";
 
 export class AccountCard extends LitElement {
   /**
@@ -38,6 +39,13 @@ export class AccountCard extends LitElement {
     return symbols[currency] || "";
   }
 
+  _formatAmount() {
+    return new Intl.NumberFormat("es-PE", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(this.availableBalance);
+  }
+
   /**
    * Renders the account card content
    */
@@ -48,10 +56,10 @@ export class AccountCard extends LitElement {
         class="account-card"
         role="button"
         tabindex="0"
+        aria-label=${`Cuenta ${this.accountName}, saldo ${this._formatCurrency()}${this._formatAmount()}`}
         @click=${() => this._onClick()}
-       @keydown=${(e) => this._onKeyDown(e)}
+        @keydown=${(e) => this._onKeyDown(e)}
       >
-
         <div class="account-left">
           <type-icon
             variant="secondary"
@@ -85,19 +93,19 @@ export class AccountCard extends LitElement {
           </div>
         </div>
 
-
-
         <div class="account-right">
-          <type-text
-            tag="p"
-            size="ml"
-            weight="bold"
-            .text=${`${this._formatCurrency()} ${this.availableBalance}`}
-          ></type-text>
+          <div class="balance">
+            <type-text
+              tag="p"
+              size="ml"
+              weight="bold"
+              .text=${`${this._formatCurrency()} ${this._formatAmount()}`}
+            ></type-text>
+          </div>
 
           <type-icon
             icon-name="arrow-right"
-            size="s"
+            size="m"
             variant="secondary"
           ></type-icon>
         </div>
@@ -111,20 +119,16 @@ export class AccountCard extends LitElement {
    */
 
   _onClick() {
-    this.dispatchEvent(
-      new CustomEvent("account-selected", {
-        detail: {
-          accountName: this.accountName,
-          accountNumber: this.accountNumber,
-          accountType: this.accountType,
-          availableBalance: this.availableBalance,
-          currency: this.currency,
-          status: this.status,
-        },
-        bubbles: true,
-        composed: true,
-      }),
-    );
+    fireEvent(this, "account-selected", {
+      account: {
+        accountName: this.accountName,
+        accountNumber: this.accountNumber,
+        accountType: this.accountType,
+        availableBalance: this.availableBalance,
+        currency: this.currency,
+        status: this.status,
+      },
+    });
   }
 
   /**
