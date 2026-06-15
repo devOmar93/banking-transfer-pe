@@ -9,7 +9,8 @@ export const styles = css`
   padding: 12px;
   }
 
-  .subtitle {
-    color: var(--text-secondary);
-  }
+ .subtitle {
+  --text-color: var(--text-secondary);
+}
+
 `;

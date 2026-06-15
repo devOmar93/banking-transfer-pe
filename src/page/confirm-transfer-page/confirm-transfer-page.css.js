@@ -5,6 +5,11 @@ export const styles = css`
     display: contents;
   }
 
+  .modal-page-primary {
+    --type-modal-bg-color: var(--surface-page-primary-bg);
+    --type-modal-backdrop-color: var(--surface-page-primary-backdrop);
+  }
+
   .confirm-transfer-page__header {
     display: flex;
     flex-direction: column;
