@@ -3,12 +3,19 @@ import { css } from "lit";
 
 export const styles = css`
   :host {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
     font-family: inherit;
   }
   .account-card {
+    all: unset;
+    box-sizing: border-box;
+    font: inherit;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
     padding: 1rem;
     gap: 3rem;
     background: white;

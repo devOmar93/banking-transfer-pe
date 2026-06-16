@@ -11,43 +11,43 @@ export class AccountCard extends LitElement {
    */
 
   static properties = {
-    /** 
-     * The name of the account 
+    /**
+     * The name of the account
      * @type {String}
      * @default ""
      **/
     accountName: { type: String },
 
-    /** 
-     * The number of the account 
+    /**
+     * The number of the account
      * @type {String}
      * @default ""
      */
     accountNumber: { type: String },
 
-    /** 
-     * The type of the account 
+    /**
+     * The type of the account
      * @type {String}
      * @default ""
      */
     accountType: { type: String },
 
-    /** 
-     * The type currency of the account 
+    /**
+     * The type currency of the account
      * @type {String}
      * @default ""
      */
     currency: { type: String },
 
-    /** 
-     * The available balance of the account 
+    /**
+     * The available balance of the account
      * @type {Number}
      * @default 0
      */
     availableBalance: { type: Number },
 
-    /** 
-     * The status of the account (e.g., active, inactive) 
+    /**
+     * The status of the account (e.g., active, inactive)
      * @type {String}
      * @default ""
      */
@@ -87,9 +87,9 @@ export class AccountCard extends LitElement {
 
   _renderContent() {
     return html`
-      <div
+      <button
+        type="button"
         class="account-card"
-        role="button"
         tabindex="0"
         aria-label=${`Cuenta ${this.accountName}, saldo ${this._formatCurrency()}${this._formatAmount()}`}
         @click=${() => this._onClick()}
@@ -144,7 +144,8 @@ export class AccountCard extends LitElement {
             variant="secondary"
           ></type-icon>
         </div>
-      </div>
+
+      </button>
     `;
   }
 
