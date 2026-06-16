@@ -1,9 +1,9 @@
-import { LitElement, html, nothing } from "lit";
-import "@compositions/transfer-summary-card/transfer-summary-card.js";
-import "@compositions/type-button/type-button.js";
-import "@compositions/type-modal/type-modal.js";
-import "@compositions/info-card/info-card.js";
-import { fireEvent } from "@utils/utils.js";
+import { LitElement, html } from "lit";
+import "@/compositions/transfer-summary-card/transfer-summary-card.js";
+import "@/compositions/type-button/type-button.js";
+import "@/compositions/type-modal/type-modal.js";
+import "@/compositions/info-card/info-card.js";
+import { fireEvent } from "@/utils/utils.js";
 import styles from "./successful-transfer-page.css.js";
 import { generateTransferSummaryPdf } from "./services/generate-transfer-summary-pdf.js";
 
@@ -99,10 +99,10 @@ export class SuccessfulTransferPage extends LitElement {
     ];
     try {
       generateTransferSummaryPdf(this.amount, dataPdf);
-    } catch(error) {
+    } catch (error) {
       fireEvent(this, "error-retry", {
-        title : "Error al descargar el PDF",
-        message : error.message
+        title: "Error al descargar el PDF",
+        message: error.message,
       });
     }
   }
@@ -138,7 +138,11 @@ export class SuccessfulTransferPage extends LitElement {
 
   render() {
     return html`
-      <type-modal class="modal-page-primary" .open=${this.isOpen} .hasFooter=${true}>
+      <type-modal
+        class="modal-page-primary"
+        .open=${this.isOpen}
+        .hasFooter=${true}
+      >
         <div class="modal-body" slot="body">
           <div class="header">
             <type-icon
@@ -223,7 +227,7 @@ export class SuccessfulTransferPage extends LitElement {
             .size=${"s"}
           ></type-text>
         </div>
-        <div  slot="body">
+        <div slot="body">
           <div class="alert-footer">
             <type-button
               .text=${this.locale[

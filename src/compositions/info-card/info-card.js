@@ -1,7 +1,7 @@
 import { html, LitElement, nothing } from "lit";
 import { styles } from "./info-card.css.js";
-import "@components/type-icon/type-icon.js";
-import "@components/type-text/type-text.js";
+import "@/components/type-icon/type-icon.js";
+import "@/components/type-text/type-text.js";
 /** @element info-card
  * A simple info card component that displays a message
  * and an icon based on the type of information

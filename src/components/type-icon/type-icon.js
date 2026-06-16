@@ -1,7 +1,8 @@
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
+import { until } from "lit/directives/until.js";
 import { html, LitElement } from "lit";
 import { validateAllowedProp, validateRequiredProp } from "@/utils/utils.js";
-import { ICONS, ICONS_RUTE } from "./utils/icons.js";
+import { ICONS } from "./utils/icons.js";
 import styles from "./type-icon.css";
 
 const ALLOWED_VARIANTS = ["default", "secondary"];
@@ -38,9 +39,23 @@ export class TypeIcon extends LitElement {
     this.size = "";
   }
 
-  get svg() {
-    const key = `${ICONS_RUTE}/${this.iconName}.svg`;
-    return ICONS[key] || null;
+  async loadSvg() {
+    if (!this.iconName) return "";
+
+    const iconLoader = ICONS[this.iconName];
+
+    if (!iconLoader) {
+      console.warn(`No se encontró el ícono: ${this.iconName}`);
+      return "";
+    }
+
+    try {
+      const module = await iconLoader();
+      return module.default;
+    } catch (error) {
+      console.error(`Error cargando el icono ${this.iconName}:`, error);
+      return "";
+    }
   }
 
   willUpdate(changedProperties) {
@@ -56,19 +71,16 @@ export class TypeIcon extends LitElement {
       validateAllowedProp("size", this.size, ALLOWED_SIZES);
     }
 
-    if (changedProperties.has("iconName") && this.iconName) {
-      if (!this.svg) {
-        throw new Error(`No se encontró el ícono: ${this.iconName}`);
-      }
-    }
   }
 
   static styles = styles;
 
   render() {
+    const svgPromise = this.loadSvg().then((svgString) => unsafeSVG(svgString));
+
     return html`
       <div class="container-icon" aria-hidden="true">
-        ${unsafeSVG(this.svg)}
+        ${until(svgPromise, html``)}
       </div>
     `;
   }

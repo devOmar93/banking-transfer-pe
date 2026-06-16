@@ -1,7 +1,7 @@
 import { html, LitElement, nothing } from "lit";
 import { styles } from "./transfer-summary-card.css.js";
-import "@components/type-text/type-text.js";
-import "@compositions/transfer-summary-list/transfer-summary-list.js";
+import "@/components/type-text/type-text.js";
+import "@/compositions/transfer-summary-list/transfer-summary-list.js";
 
 class TransferSummaryCard extends LitElement {
   static properties = {
