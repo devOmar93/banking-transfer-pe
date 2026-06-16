@@ -291,7 +291,6 @@ export class MyElement extends LitElement {
       .originAccountNumber=${this._transferSummary.originAccountNumber}
       .beneficiaryName=${this._transferSummary.beneficiaryName}
       .beneficiaryLastName=${this._transferSummary.beneficiaryLastName}
-      .concept=${this._transferSummary.concept}
       .status=${this._transferSummary.status}
       @accounts-error=${this._handleChildAccountsError}
     ></successful-transfer-page>`;

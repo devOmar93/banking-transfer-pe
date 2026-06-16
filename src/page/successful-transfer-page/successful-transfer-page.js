@@ -39,9 +39,6 @@ export class SuccessfulTransferPage extends LitElement {
     beneficiaryLastName: {
       type: String,
     },
-    concept: {
-      type: String,
-    },
     isDataReady: {
       type: Object,
     },
@@ -65,7 +62,6 @@ export class SuccessfulTransferPage extends LitElement {
     this.originAccountNumber = "";
     this.beneficiaryName = "";
     this.beneficiaryLastName = "";
-    this.concept = "";
     this.status = "";
     this.isDataReady = false;
     this.isOpen = false;
@@ -95,10 +91,6 @@ export class SuccessfulTransferPage extends LitElement {
       {
         label: this.locale["successful-transfer-page-beneficiary"],
         value: `${this.beneficiaryName} ${this.beneficiaryLastName}`,
-      },
-      {
-        label: this.locale["successful-transfer-page-concept"],
-        value: this.concept,
       },
       {
         label: this.locale["successful-transfer-page-status"],
@@ -180,7 +172,6 @@ export class SuccessfulTransferPage extends LitElement {
             .originAccountNumber=${this.originAccountNumber}
             .beneficiaryName=${this.beneficiaryName}
             .beneficiaryLastName=${this.beneficiaryLastName}
-            .concept=${this.concept}
             .status=${this.status}
           ></transfer-summary-card>
           <div class="actions">

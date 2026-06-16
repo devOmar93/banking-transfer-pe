@@ -17,8 +17,6 @@ class TransferSummaryCard extends LitElement {
     originAccountNumber: { type: String },
     beneficiaryName: { type: String },
     beneficiaryLastName: { type: String },
-    concept: { type: String },
-    status: { type: String },
   };
 
   constructor() {
@@ -33,7 +31,6 @@ class TransferSummaryCard extends LitElement {
     this.originAccountNumber = "";
     this.beneficiaryName = "";
     this.beneficiaryLastName = "";
-    this.concept = "";
     this.status = "";
   }
 
@@ -71,7 +68,6 @@ class TransferSummaryCard extends LitElement {
             .originAccountNumber=${this.originAccountNumber}
             .beneficiaryName=${this.beneficiaryName}
             .beneficiaryLastName=${this.beneficiaryLastName}
-            .concept=${this.concept}
             .status=${this.status}
             .isDataReady=${this.isDataReady}
           ></transfer-summary-list>
