@@ -2,7 +2,7 @@ import { html, LitElement } from "lit";
 import { styles } from "./transfer-summary.css.js";
 import "@components/type-text/type-text.js";
 import "@compositions/info-field/info-field.js";
-import { formatAmount, maskAccountNumber } from "@utils/format.js";
+import { formatAmount, maskAccountNumber } from "@/utils/format.js";
  
 export class TransferSummary extends LitElement {
   static properties = {
@@ -22,7 +22,7 @@ export class TransferSummary extends LitElement {
  
   constructor() {
     super();
-    this.transferData = null;
+    this.transferData = {};
     this.amountLabel = "";
     this.sourceAccountLabel = "";
     this.beneficiaryLabel = "";
@@ -37,7 +37,7 @@ export class TransferSummary extends LitElement {
   }
  
   get _formattedAmount() {
-    return formatAmount(this._data.amount, this._data.currency);
+    return formatAmount(this._data.sourceAccount.amount, this._data.sourceAccount.currency);
   }
  
   get _sourceAccountName() {
@@ -49,11 +49,11 @@ export class TransferSummary extends LitElement {
   }
  
   get _beneficiaryName() {
-    return this._data.beneficiary?.fullName ?? this.emptyBeneficiaryText;
+    return `${this._data.destinationAccount?.firstName} ${this._data.destinationAccount?.lastName}`;
   }
  
   get _beneficiaryAccount() {
-    return maskAccountNumber(this._data.beneficiary?.accountNumber);
+    return maskAccountNumber(this._data.destinationAccount?.accountNumber);
   }
  
   _renderAmountCard() {
@@ -63,14 +63,14 @@ export class TransferSummary extends LitElement {
           tag="span"
           size="s"
           weight="medium"
-          text=${this.amountLabel}
+          .text=${this.amountLabel}
           class="transfer-summary__amount-label"
         ></type-text>
         <type-text
           tag="p"
           size="xl"
           weight="bold"
-          text=${this._formattedAmount}
+          .text=${this._formattedAmount}
           class="transfer-summary__amount-value"
         ></type-text>
       </div>

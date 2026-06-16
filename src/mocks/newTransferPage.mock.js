@@ -24,3 +24,25 @@ export const NEW_TRANSFER_PAGE_RESPONSE_MOCK = {
     },
   },
 };
+
+/* Case 6: Cuenta general*/
+export const ACCOUNT_CASE_GENERAL = {
+  account: {
+    firstName: "Pedro",
+    lastName: "Ramires Pardo",
+    id: 999,
+    accountNumber: "10000000000000",
+    accountName: "Cuenta Corriente",
+    accountType: "Corriente",
+    availableBalance: 5250.0,
+    currency: "USD",
+    status: "ACTIVE",
+  },
+};
+
+/* Case 6: Error Cuenta inextitente */
+export const ACCOUNT_CASE_NOT_EXIST = {
+  account: {
+    status: "ERROR",
+  },
+};

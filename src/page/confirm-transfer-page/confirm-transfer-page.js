@@ -1,10 +1,11 @@
 import { html, LitElement, nothing } from "lit";
+import "@/compositions/type-modal/type-modal.js";
+import "@/compositions/type-header/type-header.js";
+import "@/compositions/type-button/type-button.js";
+import "@/compositions/transfer-summary/transfer-summary.js";
 import { styles } from "./confirm-transfer-page.css.js";
-import "@compositions/type-modal/type-modal.js";
-import "@compositions/type-header/type-header.js";
-import "@compositions/type-button/type-button.js";
-import "@compositions/transfer-summary/transfer-summary.js";
-import "@pages/action-modal/action-modal.js";
+import { fireEvent } from "@/utils/utils.js";
+import "@/page/action-modal/action-modal.js";
 import {
   CONFIRM_TRANSFER_PAGE_CONFIG as CONFIG,
   CONFIRM_TRANSFER_PAGE_LITERALS as LITERALS,
@@ -22,7 +23,7 @@ export class ConfirmTransferPage extends LitElement {
 
   constructor() {
     super();
-    this.transferData = null;
+    this.transferData = {};
     this.open = false;
     this.transferStatus = "";
     this._retryCount = 0;
@@ -68,18 +69,11 @@ export class ConfirmTransferPage extends LitElement {
   }
 
   _requestRetry() {
-    this.dispatchEvent(new CustomEvent("transfer-retry", {
-      bubbles: true,
-      composed: true,
-    }));
+    fireEvent(this, "transfer-retry")
   }
 
   _handleAccept() {
-    this.dispatchEvent(new CustomEvent("confirm-accept", {
-      detail: { transferData: this.transferData },
-      bubbles: true,
-      composed: true,
-    }));
+    fireEvent(this, "confirm-accept", { transferData: this.transferData })
   }
 
   _handleCancel() {
@@ -87,10 +81,7 @@ export class ConfirmTransferPage extends LitElement {
   }
 
   _dispatchCancel() {
-    this.dispatchEvent(new CustomEvent("confirm-cancel", {
-      bubbles: true,
-      composed: true,
-    }));
+    fireEvent(this, "confirm-cancel")
   }
 
   _renderActionModal() {
@@ -127,7 +118,7 @@ export class ConfirmTransferPage extends LitElement {
             .title=${LITERALS.header.title}
           ></type-header>
         </div>
- 
+
         <div slot="body">
           <transfer-summary
             .transferData=${this.transferData}
@@ -138,7 +129,7 @@ export class ConfirmTransferPage extends LitElement {
             .emptyBeneficiaryText=${LITERALS.transferSummary.emptyBeneficiaryText}
           ></transfer-summary>
         </div>
- 
+
         <div slot="footer" class="confirm-transfer-page__footer">
           <type-button
             .type=${CONFIG.submitButton.type}
@@ -149,7 +140,7 @@ export class ConfirmTransferPage extends LitElement {
           ></type-button>
         </div>
       </type-modal>
- 
+
       ${this._actionModalOpen ? this._renderActionModal() : nothing}
     `;
   }

@@ -3,7 +3,6 @@ import { classMap } from "lit/directives/class-map.js";
 import styles from "./type-modal.css.js";
 
 export class TypeModal extends LitElement {
-
   static properties = {
     open: { type: Boolean },
     variant: { type: String },

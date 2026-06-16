@@ -26,7 +26,7 @@ export default css`
     margin: 1rem;
   }
 
-  [slot="body"] {
+  .modal-body {
     width: 100%;
     height: 100%;
     overflow-y: scroll;

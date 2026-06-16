@@ -3,6 +3,7 @@ import { html, LitElement } from "lit";
 import { styles } from "./account-card.css.js";
 import "@components/type-icon/type-icon.js";
 import "@components/type-text/type-text.js";
+import { fireEvent } from "@/utils/utils.js";
 
 export class AccountCard extends LitElement {
   /**
@@ -118,20 +119,16 @@ export class AccountCard extends LitElement {
    */
 
   _onClick() {
-    this.dispatchEvent(
-      new CustomEvent("account-selected", {
-        detail: {
-          accountName: this.accountName,
-          accountNumber: this.accountNumber,
-          accountType: this.accountType,
-          availableBalance: this.availableBalance,
-          currency: this.currency,
-          status: this.status,
-        },
-        bubbles: true,
-        composed: true,
-      }),
-    );
+    fireEvent(this, "account-selected", {
+      account: {
+        accountName: this.accountName,
+        accountNumber: this.accountNumber,
+        accountType: this.accountType,
+        availableBalance: this.availableBalance,
+        currency: this.currency,
+        status: this.status,
+      },
+    });
   }
 
   /**

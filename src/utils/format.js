@@ -18,7 +18,6 @@ export function formatAmount(amount, currency) {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(number);
- 
   return `${symbol}${formatted}`;
 }
  

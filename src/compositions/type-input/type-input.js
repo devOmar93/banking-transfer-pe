@@ -117,25 +117,6 @@ export class TypeInput extends LitElement {
 
     return valorActual = valorActual.replace(/^0+/, '');
   }
-  _/*formatAmount3(value) {
-    let valorActual = value;
-    valorActual = valorActual.replace(/[^0-9.]/g, '');
-    const indicePunto = valorActual.indexOf('.');
-    const [intPartRaw, decimalRaw = ''] = valorActual.split('.');
-    
-    console.log('intPartRaw', intPartRaw);
-    console.log('decimalRaw', decimalRaw);
-    let intPart = intPartRaw.replace(/^0+/, '') || '0';
-    console.log('intPart', intPart);
-
-    let decimalPart = decimalRaw.replace(/\./g, '').substring(0, 2);
-    valorActual = intPart;
-    if (decimalPart) {
-      valorActual = intPart + '.' + decimalPart;
-    }
-
-    return valorActual;
-  }*/
 
   _formatAccountDestinatari(value) {
     let valorActual = value;
