@@ -1,6 +1,6 @@
 import { fixture, html, expect } from '@open-wc/testing';
 import sinon from 'sinon';
-import '../../../page/successful-transfer-page/successful-transfer-page.js';
+import '@/page/successful-transfer-page/successful-transfer-page.js';
 
 describe('SuccessfulTransferPage', () => {
   let el;
