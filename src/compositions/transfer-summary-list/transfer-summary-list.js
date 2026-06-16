@@ -1,8 +1,8 @@
 import { html, LitElement, nothing } from "lit";
 import { styles } from "./transfer-summary-list.css.js";
-import "@components/type-text/type-text.js";
-import "@components/type-tag/type-tag.js";
-import "@compositions/info-field/info-field.js";
+import "@/components/type-text/type-text.js";
+import "@/components/type-tag/type-tag.js";
+import "@/compositions/info-field/info-field.js";
 
 export class TransferSummaryList extends LitElement {
   static properties = {
@@ -14,7 +14,6 @@ export class TransferSummaryList extends LitElement {
     originAccountNumber: { type: String },
     beneficiaryName: { type: String },
     beneficiaryLastName: { type: String },
-    concept: { type: String },
     status: { type: String },
   };
 
@@ -30,7 +29,6 @@ export class TransferSummaryList extends LitElement {
     this.originAccountNumber = "";
     this.beneficiaryName = "";
     this.beneficiaryLastName = "";
-    this.concept = "";
     this.status = "";
   }
 
@@ -101,10 +99,6 @@ export class TransferSummaryList extends LitElement {
           this.beneficiaryName,
           this.beneficiaryLastName,
         ),
-      },
-      {
-        label: this.locale["successful-transfer-page-concept"],
-        value: this._renderTextValue(this.concept),
       },
       {
         label: this.locale["successful-transfer-page-status"],

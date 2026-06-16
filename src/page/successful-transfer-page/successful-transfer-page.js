@@ -1,9 +1,9 @@
-import { LitElement, html, nothing } from "lit";
-import "@compositions/transfer-summary-card/transfer-summary-card.js";
-import "@compositions/type-button/type-button.js";
-import "@compositions/type-modal/type-modal.js";
-import "@compositions/info-card/info-card.js";
-import { fireEvent } from "@utils/utils.js";
+import { LitElement, html } from "lit";
+import "@/compositions/transfer-summary-card/transfer-summary-card.js";
+import "@/compositions/type-button/type-button.js";
+import "@/compositions/type-modal/type-modal.js";
+import "@/compositions/info-card/info-card.js";
+import { fireEvent } from "@/utils/utils.js";
 import styles from "./successful-transfer-page.css.js";
 import { generateTransferSummaryPdf } from "./services/generate-transfer-summary-pdf.js";
 
@@ -39,9 +39,6 @@ export class SuccessfulTransferPage extends LitElement {
     beneficiaryLastName: {
       type: String,
     },
-    concept: {
-      type: String,
-    },
     isDataReady: {
       type: Object,
     },
@@ -65,7 +62,6 @@ export class SuccessfulTransferPage extends LitElement {
     this.originAccountNumber = "";
     this.beneficiaryName = "";
     this.beneficiaryLastName = "";
-    this.concept = "";
     this.status = "";
     this.isDataReady = false;
     this.isOpen = false;
@@ -97,20 +93,16 @@ export class SuccessfulTransferPage extends LitElement {
         value: `${this.beneficiaryName} ${this.beneficiaryLastName}`,
       },
       {
-        label: this.locale["successful-transfer-page-concept"],
-        value: this.concept,
-      },
-      {
         label: this.locale["successful-transfer-page-status"],
         value: this.status,
       },
     ];
     try {
       generateTransferSummaryPdf(this.amount, dataPdf);
-    } catch(error) {
+    } catch (error) {
       fireEvent(this, "error-retry", {
-        title : "Error al descargar el PDF",
-        message : error.message
+        title: "Error al descargar el PDF",
+        message: error.message,
       });
     }
   }
@@ -146,7 +138,11 @@ export class SuccessfulTransferPage extends LitElement {
 
   render() {
     return html`
-      <type-modal class="modal-page-primary" .open=${this.isOpen} .hasFooter=${true}>
+      <type-modal
+        class="modal-page-primary"
+        .open=${this.isOpen}
+        .hasFooter=${true}
+      >
         <div class="modal-body" slot="body">
           <div class="header">
             <type-icon
@@ -180,7 +176,6 @@ export class SuccessfulTransferPage extends LitElement {
             .originAccountNumber=${this.originAccountNumber}
             .beneficiaryName=${this.beneficiaryName}
             .beneficiaryLastName=${this.beneficiaryLastName}
-            .concept=${this.concept}
             .status=${this.status}
           ></transfer-summary-card>
           <div class="actions">
@@ -232,7 +227,7 @@ export class SuccessfulTransferPage extends LitElement {
             .size=${"s"}
           ></type-text>
         </div>
-        <div  slot="body">
+        <div slot="body">
           <div class="alert-footer">
             <type-button
               .text=${this.locale[

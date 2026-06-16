@@ -1,12 +1,12 @@
 import { html, LitElement, nothing } from "lit";
 import styles from "./type-button.css";
-import "@components/type-text/type-text.js";
-import "@components/type-icon/type-icon.js";
+import "@/components/type-text/type-text.js";
+import "@/components/type-icon/type-icon.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import {
   validateAllowedProp,
   validateRequiredProp,
-} from "@utils/utils.js";
+} from "@/utils/utils.js";
 
 const ALLOWED_VARIANTS = ["default", "secondary", "ghost"];
 const ALLOWED_POSITIONS = ["left", "right"];
