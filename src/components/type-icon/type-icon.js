@@ -39,9 +39,8 @@ export class TypeIcon extends LitElement {
     this.size = "";
   }
 
-  async loadSvg() {
+async loadSvg() {
     if (!this.iconName) return "";
-
     const iconLoader = ICONS[this.iconName];
 
     if (!iconLoader) {
@@ -50,8 +49,8 @@ export class TypeIcon extends LitElement {
     }
 
     try {
-      const module = await iconLoader();
-      return module.default;
+      const svgText = await iconLoader();
+      return svgText; 
     } catch (error) {
       console.error(`Error cargando el icono ${this.iconName}:`, error);
       return "";
