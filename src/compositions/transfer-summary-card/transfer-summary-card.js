@@ -1,4 +1,4 @@
-import { html, LitElement, nothing } from "lit";
+import { html, LitElement } from "lit";
 import { styles } from "./transfer-summary-card.css.js";
 import "@/components/type-text/type-text.js";
 import "@/compositions/transfer-summary-list/transfer-summary-list.js";

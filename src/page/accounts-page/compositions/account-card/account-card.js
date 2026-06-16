@@ -1,8 +1,8 @@
 // src/compositions/account-card/account-card.js
 import { html, LitElement } from "lit";
 import { styles } from "./account-card.css.js";
-import "@components/type-icon/type-icon.js";
-import "@components/type-text/type-text.js";
+import "@/components/type-icon/type-icon.js";
+import "@/components/type-text/type-text.js";
 import { fireEvent } from "@/utils/utils.js";
 
 export class AccountCard extends LitElement {

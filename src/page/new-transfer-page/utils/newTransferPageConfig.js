@@ -1,4 +1,4 @@
-import ES from "@locales/locales.json";
+import ES from "@/locales/locales.json";
 const lang = ES["es_LA"];
 
 export const NEW_TRANSFER_PAGE_LITERALS = {
@@ -24,34 +24,34 @@ export const NEW_TRANSFER_PAGE_LITERALS = {
   errors: {
     BLOCKED: {
       title: lang["account-page-errors-blocked-title"],
-      message: lang["account-page-errors-blocked-message"]
+      message: lang["account-page-errors-blocked-message"],
     },
     INACTIVE: {
       title: lang["account-page-errors-inactive-title"],
-      message: lang["account-page-errors-inactive-message"]
+      message: lang["account-page-errors-inactive-message"],
     },
-  }
+  },
 };
 
 export const NEW_TRANSFER_PAGE_CONFIG = {
-  modal:{
+  modal: {
     variant: "page",
     scrollable: true,
     fullHeight: true,
     hasFooter: true,
   },
 
-  backButton:{
+  backButton: {
     iconName: "arrow-left",
     iconPosition: "left",
     variant: "secondary",
     type: "button",
   },
 
-  continueButton:{
+  continueButton: {
     iconName: "arrow-right",
     iconPosition: "right",
     variant: "default",
     type: "button",
   },
-}
+};
