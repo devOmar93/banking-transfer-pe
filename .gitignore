@@ -24,3 +24,4 @@ package-lock
 *.sln
 *.sw?
 package-lock.json
+coverage

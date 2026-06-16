@@ -9,7 +9,7 @@ import "@/page/successful-transfer-page/successful-transfer-page.js";
 import "@/page/confirm-transfer-page/confirm-transfer-page.js";
 import "@/page/exit-page/exit-page.js";
 import "@/page/action-modal/action-modal.js";
-import locales from "@locales/locales.json";
+import locales from "@/locales/locales.json";
 
 export class MyElement extends LitElement {
   transfersApiDm = createRef();
@@ -291,7 +291,6 @@ export class MyElement extends LitElement {
       .originAccountNumber=${this._transferSummary.originAccountNumber}
       .beneficiaryName=${this._transferSummary.beneficiaryName}
       .beneficiaryLastName=${this._transferSummary.beneficiaryLastName}
-      .concept=${this._transferSummary.concept}
       .status=${this._transferSummary.status}
       @accounts-error=${this._handleChildAccountsError}
     ></successful-transfer-page>`;

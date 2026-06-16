@@ -1,6 +1,6 @@
 import { html, LitElement } from "lit";
 import { styles } from "./type-tag.css.js";
-import "@components/type-text/type-text.js";
+import "@/components/type-text/type-text.js";
 
 export class TypeTag extends LitElement {
   static properties = {

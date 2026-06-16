@@ -1,8 +1,8 @@
 import { unsafeSVG } from "lit/directives/unsafe-svg.js";
-import { html, LitElement, nothing } from "lit";
-import { validateAllowedProp } from "@utils/utils.js";
-import { validateRequiredProp } from "@utils/utils";
-import { ICONS, ICONS_RUTE } from "./utils/icons.js";
+import { until } from "lit/directives/until.js";
+import { html, LitElement } from "lit";
+import { validateAllowedProp, validateRequiredProp } from "@/utils/utils.js";
+import { ICONS } from "./utils/icons.js";
 import styles from "./type-icon.css";
 
 const ALLOWED_VARIANTS = ["default", "secondary"];
@@ -22,14 +22,14 @@ export class TypeIcon extends LitElement {
      * @type { String }
      * @default ""
      */
-    variant: { type: String, reflect: true },
+    variant: { type: String },
 
     /**
      * Controls size
      * @type { String }
      * @default ""
      */
-    size: { type: String, reflect: true },
+    size: { type: String },
   };
 
   constructor() {
@@ -39,9 +39,22 @@ export class TypeIcon extends LitElement {
     this.size = "";
   }
 
-  get svg() {
-    const key = `${ICONS_RUTE}/${this.iconName}.svg`;
-    return ICONS[key] || null;
+async loadSvg() {
+    if (!this.iconName) return "";
+    const iconLoader = ICONS[this.iconName];
+
+    if (!iconLoader) {
+      console.warn(`No se encontró el ícono: ${this.iconName}`);
+      return "";
+    }
+
+    try {
+      const svgText = await iconLoader();
+      return svgText; 
+    } catch (error) {
+      console.error(`Error cargando el icono ${this.iconName}:`, error);
+      return "";
+    }
   }
 
   willUpdate(changedProperties) {
@@ -57,19 +70,16 @@ export class TypeIcon extends LitElement {
       validateAllowedProp("size", this.size, ALLOWED_SIZES);
     }
 
-    if (changedProperties.has("iconName") && this.iconName) {
-      if (!this.svg) {
-        throw new Error(`No se encontró el ícono: ${this.iconName}`);
-      }
-    }
   }
 
   static styles = styles;
 
   render() {
+    const svgPromise = this.loadSvg().then((svgString) => unsafeSVG(svgString));
+
     return html`
       <div class="container-icon" aria-hidden="true">
-        ${unsafeSVG(this.svg)}
+        ${until(svgPromise, html``)}
       </div>
     `;
   }
