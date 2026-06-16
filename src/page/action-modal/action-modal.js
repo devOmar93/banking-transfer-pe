@@ -6,7 +6,7 @@ import "../../components/type-icon/type-icon.js";
 import { fireEvent } from "@utils/utils.js";
 import locales from "@locales/locales.json";
 
-const DEFAULT_LANGUAGE = "es_LA";
+const DEFAULT_LANGUAGE = "es-PE";
 const BUTTON_TYPES = {
   retry: "primary",
   exit: "secondary",

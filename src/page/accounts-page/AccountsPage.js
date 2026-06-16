@@ -169,6 +169,7 @@ export class AccountsPage extends LitElement {
         ?scrollable=${true}
         ?full-height=${true}
         ?has-footer=${true}
+        title="Seleccionar cuenta de origen"
         class="modal-accounts"
       >
         <type-header

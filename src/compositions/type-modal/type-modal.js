@@ -9,6 +9,7 @@ export class TypeModal extends LitElement {
     scrollable: { type: Boolean },
     fullHeight: { type: Boolean, attribute: "full-height" },
     hasFooter: { type: Boolean, attribute: "has-footer" },
+    title: { type: String }
   };
 
   constructor() {
@@ -93,6 +94,7 @@ export class TypeModal extends LitElement {
           })}
           role="dialog"
           aria-modal="true"
+          aria-label=${this.title}
           @click=${this._handleContentClick}
         >
           <header class="type-modal-header">

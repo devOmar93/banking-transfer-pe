@@ -1,5 +1,5 @@
 import ES from "@locales/locales.json";
-const lang = ES["es_LA"];
+const lang = ES["es-PE"];
 
 export const NEW_TRANSFER_PAGE_LITERALS = {
   header: {
