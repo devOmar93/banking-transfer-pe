@@ -5,14 +5,13 @@ import "@/page/action-modal/action-modal.js";
 import "@/page/new-transfer-page/compositions/from-account-card/from-account-card.js";
 import "@/page/new-transfer-page/compositions/transfer-form/transfer-form.js";
 import "@/compositions/type-button/type-button.js";
-import { resolveDestinationAccount } from "@/services/bankingTransferService.js";
 import { TRANSFER_FORM_FIELDS } from "@/page/new-transfer-page/compositions/transfer-form/utils/configTransferForm.js";
 import {
   NEW_TRANSFER_PAGE_LITERALS as LITERALS,
   NEW_TRANSFER_PAGE_CONFIG as CONFIG,
 } from "@/page/new-transfer-page/utils/newTransferPageConfig.js";
-import "../action-modal/action-modal.js";
-import { fireEvent } from "@utils/utils";
+import "@/page/action-modal/action-modal.js";
+import { fireEvent } from "@/utils/utils";
 import styles from "./new-transfer-page.css.js";
 
 export class NewTransferPage extends LitElement {
@@ -91,12 +90,12 @@ export class NewTransferPage extends LitElement {
 
   _getActionModalType(idErrorModalType) {
     const ERROR_MODAL_TYPES = {
-      BLOCKED: 'blockedAccount',
-      INACTIVE: 'inactiveAccount',
-      NO_BALANCE: 'insufficientBalance',
-      NO_ACCOUNTS: 'noAccountsAvailable',
-      ALL_NO_BALANCE: 'insufficientBalance'
-    }
+      BLOCKED: "blockedAccount",
+      INACTIVE: "inactiveAccount",
+      NO_BALANCE: "insufficientBalance",
+      NO_ACCOUNTS: "noAccountsAvailable",
+      ALL_NO_BALANCE: "insufficientBalance",
+    };
 
     return ERROR_MODAL_TYPES[idErrorModalType] ?? "";
   }
@@ -191,7 +190,8 @@ export class NewTransferPage extends LitElement {
           <from-account-card
             .account=${this.accountCustomer}
             .fromLabel=${LITERALS.fromAccountCard.fromLabel}
-            .availableBalanceLabel=${LITERALS.fromAccountCard.availableBalanceLabel}
+            .availableBalanceLabel=${LITERALS.fromAccountCard
+              .availableBalanceLabel}
             .emptyAccountText=${LITERALS.fromAccountCard.emptyAccountText}
           ></from-account-card>
           <transfer-form

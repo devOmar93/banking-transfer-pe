@@ -1,4 +1,4 @@
-import ES from "@locales/locales.json";
+import ES from "@/locales/locales.json";
 const lang = ES["es_LA"];
 
 export const TRANSFER_FORM_FIELDS = {

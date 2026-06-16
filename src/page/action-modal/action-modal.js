@@ -1,10 +1,10 @@
 import { LitElement, html } from "lit";
 import { actionModalStyles } from "./action-modal.css.js";
-import "../../compositions/type-modal/type-modal.js";
-import "../../compositions/type-button/type-button.js";
-import "../../components/type-icon/type-icon.js";
-import { fireEvent } from "@utils/utils.js";
-import locales from "@locales/locales.json";
+import "@/compositions/type-modal/type-modal.js";
+import "@/compositions/type-button/type-button.js";
+import "@/components/type-icon/type-icon.js";
+import { fireEvent } from "@/utils/utils.js";
+import locales from "@/locales/locales.json";
 
 const DEFAULT_LANGUAGE = "es_LA";
 const BUTTON_TYPES = {

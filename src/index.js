@@ -9,7 +9,7 @@ import "@/page/successful-transfer-page/successful-transfer-page.js";
 import "@/page/confirm-transfer-page/confirm-transfer-page.js";
 import "@/page/exit-page/exit-page.js";
 import "@/page/action-modal/action-modal.js";
-import locales from "@locales/locales.json";
+import locales from "@/locales/locales.json";
 
 export class MyElement extends LitElement {
   transfersApiDm = createRef();

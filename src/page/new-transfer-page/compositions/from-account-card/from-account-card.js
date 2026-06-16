@@ -1,8 +1,8 @@
 import { html, LitElement } from "lit";
 import { styles } from "./from-account-card.css.js";
-import "@components/type-text/type-text.js";
-import { formatAmount, maskAccountNumber } from "@utils/format.js";
- 
+import "@/components/type-text/type-text.js";
+import { formatAmount, maskAccountNumber } from "@/utils/format.js";
+
 export class FromAccountCard extends LitElement {
   static properties = {
     account: { type: Object },
@@ -13,7 +13,7 @@ export class FromAccountCard extends LitElement {
     },
     emptyAccountText: { type: String, attribute: "empty-account-text" },
   };
- 
+
   constructor() {
     super();
     this.account = null;
@@ -21,34 +21,34 @@ export class FromAccountCard extends LitElement {
     this.availableBalanceLabel = "";
     this.emptyAccountText = "";
   }
- 
+
   static styles = styles;
- 
+
   get _hasAccount() {
     return Boolean(
       this.account &&
       typeof this.account === "object" &&
-      !Array.isArray(this.account)
+      !Array.isArray(this.account),
     );
   }
- 
+
   get _accountName() {
     if (!this._hasAccount || !this.account.accountName) {
       return this.emptyAccountText;
     }
     return this.account.accountName;
   }
- 
+
   get _accountNumber() {
     if (!this._hasAccount) return "";
     return maskAccountNumber(this.account.accountNumber);
   }
- 
+
   get _balance() {
     if (!this._hasAccount) return "";
     return formatAmount(this.account.availableBalance, this.account.currency);
   }
- 
+
   render() {
     return html`
       <article class="from-account-card">
@@ -72,7 +72,7 @@ export class FromAccountCard extends LitElement {
             class="from-account-card__muted"
           ></type-text>
         </div>
- 
+
         <div class="from-account-card__column from-account-card__column--right">
           <type-text
             tag="span"
@@ -93,5 +93,5 @@ export class FromAccountCard extends LitElement {
     `;
   }
 }
- 
+
 customElements.define("from-account-card", FromAccountCard);

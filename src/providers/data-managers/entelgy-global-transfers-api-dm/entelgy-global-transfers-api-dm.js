@@ -1,5 +1,5 @@
 import { LitElement } from "lit";
-import { fireEvent } from "@utils/utils";
+import { fireEvent } from "@/utils/utils";
 import { createSuccessfulTransferMock } from "@/mocks/transfer.mock";
 
 const EXCHANGE_RATE = {

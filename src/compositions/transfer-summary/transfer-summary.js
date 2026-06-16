@@ -1,7 +1,7 @@
 import { html, LitElement } from "lit";
 import { styles } from "./transfer-summary.css.js";
-import "@components/type-text/type-text.js";
-import "@compositions/info-field/info-field.js";
+import "@/components/type-text/type-text.js";
+import "@/compositions/info-field/info-field.js";
 import { formatAmount, maskAccountNumber } from "@/utils/format.js";
  
 export class TransferSummary extends LitElement {

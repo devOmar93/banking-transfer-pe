@@ -1,6 +1,6 @@
 import { html, LitElement, nothing } from "lit";
 import { classMap } from "lit/directives/class-map.js";
-import "../../components/type-text/type-text.js";
+import "@/components/type-text/type-text.js";
 
 import styles from "./type-input.css.js";
 
