@@ -27,3 +27,11 @@ export function maskAccountNumber(accountNumber) {
   if (value.length <= 4) return value;
   return `****${value.slice(-4)}`;
 }
+
+export function getCurrencyName(currency) {
+  const names = {
+    PEN: "soles",
+    USD: "dólares",
+  };
+  return names[currency] || "";
+}

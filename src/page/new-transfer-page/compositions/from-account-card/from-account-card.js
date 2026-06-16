@@ -1,7 +1,7 @@
 import { html, LitElement } from "lit";
 import { styles } from "./from-account-card.css.js";
 import "@/components/type-text/type-text.js";
-import { formatAmount, maskAccountNumber } from "@/utils/format.js";
+import { formatAmount, maskAccountNumber, getCurrencyName } from "@/utils/format.js";
 
 export class FromAccountCard extends LitElement {
   static properties = {
@@ -48,10 +48,16 @@ export class FromAccountCard extends LitElement {
     if (!this._hasAccount) return "";
     return formatAmount(this.account.availableBalance, this.account.currency);
   }
+  
+  get _accessibleBalance() {
+    if (!this._hasAccount) return "";
+
+    return `Saldo ${this.account.availableBalance} ${getCurrencyName(this.account.currency)}`;
+  }
 
   render() {
     return html`
-      <article class="from-account-card">
+      <article class="from-account-card" aria-label="Cuenta origen">
         <div class="from-account-card__column">
           <type-text
             tag="span"
@@ -86,6 +92,7 @@ export class FromAccountCard extends LitElement {
             size="m"
             weight="semibold"
             align="right"
+            aria-label=${this._accessibleBalance}
             text=${this._balance}
           ></type-text>
         </div>
