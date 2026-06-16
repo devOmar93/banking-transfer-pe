@@ -6,11 +6,20 @@ import { formatAmount, maskAccountNumber } from "@utils/format.js";
 export class FromAccountCard extends LitElement {
   static properties = {
     account: { type: Object },
+    fromLabel: { type: String, attribute: "from-label" },
+    availableBalanceLabel: {
+      type: String,
+      attribute: "available-balance-label",
+    },
+    emptyAccountText: { type: String, attribute: "empty-account-text" },
   };
  
   constructor() {
     super();
     this.account = null;
+    this.fromLabel = "";
+    this.availableBalanceLabel = "";
+    this.emptyAccountText = "";
   }
  
   static styles = styles;
@@ -24,7 +33,9 @@ export class FromAccountCard extends LitElement {
   }
  
   get _accountName() {
-    if (!this._hasAccount || !this.account.accountName) return "Sin cuenta";
+    if (!this._hasAccount || !this.account.accountName) {
+      return this.emptyAccountText;
+    }
     return this.account.accountName;
   }
  
@@ -45,7 +56,7 @@ export class FromAccountCard extends LitElement {
           <type-text
             tag="span"
             size="xs"
-            text="Desde"
+            text=${this.fromLabel}
             class="from-account-card__label"
           ></type-text>
           <type-text
@@ -66,7 +77,7 @@ export class FromAccountCard extends LitElement {
           <type-text
             tag="span"
             size="xs"
-            text="Saldo disponible"
+            text=${this.availableBalanceLabel}
             align="right"
             class="from-account-card__label"
           ></type-text>
