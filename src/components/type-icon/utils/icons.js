@@ -35,7 +35,7 @@ export const ICONS = {
   'share-2': () =>
     fetch('/src/assets/icons/share-2.svg').then(res => res.text()),
 
-  'alert': () =>
+  'triangle-alert': () =>
     fetch('/src/assets/icons/triangle-alert.svg').then(res => res.text()),
 
   'user': () =>
