@@ -11,11 +11,46 @@ export class AccountCard extends LitElement {
    */
 
   static properties = {
+    /** 
+     * The name of the account 
+     * @type {String}
+     * @default ""
+     **/
     accountName: { type: String },
+
+    /** 
+     * The number of the account 
+     * @type {String}
+     * @default ""
+     */
     accountNumber: { type: String },
+
+    /** 
+     * The type of the account 
+     * @type {String}
+     * @default ""
+     */
     accountType: { type: String },
+
+    /** 
+     * The type currency of the account 
+     * @type {String}
+     * @default ""
+     */
     currency: { type: String },
+
+    /** 
+     * The available balance of the account 
+     * @type {Number}
+     * @default 0
+     */
     availableBalance: { type: Number },
+
+    /** 
+     * The status of the account (e.g., active, inactive) 
+     * @type {String}
+     * @default ""
+     */
     status: { type: String },
   };
 
