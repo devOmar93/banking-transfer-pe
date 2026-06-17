@@ -27,7 +27,7 @@ export class SuccessfulTransferPage extends LitElement {
      * @type {String}
      * @default ""
      */
-    current: {
+    currency: {
       type: String,
     },
     /**
@@ -124,7 +124,7 @@ export class SuccessfulTransferPage extends LitElement {
   constructor() {
     super();
     this.locale = {};
-    this.current = "";
+    this.currency = "";
     this.amount = "";
     this.transactionNumber = "";
     this.time = "";
@@ -256,7 +256,7 @@ export class SuccessfulTransferPage extends LitElement {
           </div>
           <transfer-summary-card
             .locale=${this.locale}
-            .current=${this.current}
+            .currency=${this.currency}
             .amount=${this.amount}
             .transactionNumber=${this.transactionNumber}
             .date=${this.date}
