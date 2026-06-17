@@ -1,7 +1,7 @@
 import { html, LitElement } from "lit";
 import { styles } from "./from-account-card.css.js";
 import "@/components/type-text/type-text.js";
-import { formatAmount, maskAccountNumber, getCurrencyName } from "@/utils/format.js";
+import { formatAmount, maskAccountNumber, getAccessibleAmount } from "@/utils/format.js";
 
 export class FromAccountCard extends LitElement {
   static properties = {
@@ -52,7 +52,7 @@ export class FromAccountCard extends LitElement {
   get _accessibleBalance() {
     if (!this._hasAccount) return "";
 
-    return `Saldo ${this.account.availableBalance} ${getCurrencyName(this.account.currency)}`;
+    return `Saldo ${getAccessibleAmount(this.account.availableBalance , this.account.currency)}`;
   }
 
   render() {

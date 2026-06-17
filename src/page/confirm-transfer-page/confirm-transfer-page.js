@@ -103,6 +103,7 @@ export class ConfirmTransferPage extends LitElement {
         ?scrollable=${CONFIG.modal.scrollable}
         ?full-height=${CONFIG.modal.fullHeight}
         ?has-footer=${CONFIG.modal.hasFooter}
+        aria-label=${LITERALS.modal.title}
       >
         <div slot="header" class="confirm-transfer-page__header">
           <type-button

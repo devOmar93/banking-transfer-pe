@@ -28,10 +28,12 @@ export function maskAccountNumber(accountNumber) {
   return `****${value.slice(-4)}`;
 }
 
-export function getCurrencyName(currency) {
+
+export function getAccessibleAmount(amount, currency) {
   const names = {
     PEN: "soles",
     USD: "dólares",
   };
-  return names[currency] || "";
+  const currencyName = names[currency] || "";
+  return `${amount} ${currencyName}`.trim();
 }

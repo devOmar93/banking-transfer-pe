@@ -82,6 +82,12 @@
     "new-transfer-page-field-amount-error-insufficient-balance": "Tu saldo es insuficiente para pagar.",
     "new-transfer-page-field-amount-error-amount-not-allowed": "El monto debe ser mayor que 0.",
     "exit-page-title": "¡Hasta luego!",
-    "exit-page-subtitle": "Has salido de la aplicación de transferencias"
+    "exit-page-subtitle": "Has salido de la aplicacion de transferencias",
+    "successful-transfer-page-modal-aria": "Modal de Exito",
+    "account-page-modal-aria": "Modal de cuentas bancarias",
+    "action-modal-modal-aria": "Modal de Advertencias",
+    "confirm-transfer-page-modal-aria": "Modal de confirmación de transferencias",
+    "new-transfer-page-modal-aria": "Modal de Realizar trasnferencia",
+    "exit-page-modal-aria": "Modal de Salida"
   }
 }

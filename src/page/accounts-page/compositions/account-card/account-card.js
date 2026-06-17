@@ -3,7 +3,7 @@ import { html, LitElement } from "lit";
 import { styles } from "./account-card.css.js";
 import "@/components/type-icon/type-icon.js";
 import "@/components/type-text/type-text.js";
-import { getCurrencyName } from "@/utils/format.js";
+import { getAccessibleAmount } from "@/utils/format.js";
 import { fireEvent } from "@/utils/utils.js";
 
 export class AccountCard extends LitElement {
@@ -82,6 +82,9 @@ export class AccountCard extends LitElement {
     }).format(this.availableBalance);
   }
 
+   _getAccesibleAccount(){
+    return `${this.accountName}, número de cuenta${this.accountNumber}, saldo ${getAccessibleAmount(this._formatAmount(),this.currency)}`
+  }
   /**
    * Renders the account card content
    */
@@ -92,7 +95,7 @@ export class AccountCard extends LitElement {
         type="button"
         class="account-card"
         tabindex="0"
-        aria-label=${`${this.accountName}, saldo ${this._formatAmount()} ${getCurrencyName(this.currency)}`}
+        aria-label=${this._getAccesibleAccount()}
         @click=${() => this._onClick()}
         @keydown=${(e) => this._onKeyDown(e)}
       >

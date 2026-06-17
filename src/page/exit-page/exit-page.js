@@ -18,6 +18,7 @@ class ExitPage extends LitElement {
         ?full-height=${true}
         ?has-footer=${true}
         class="modal-page-primary"
+        aria-label=${this.locale["exit-page-modal-aria"]}
       >
         <type-header
           slot="header"

@@ -49,6 +49,11 @@ export class TypeInput extends LitElement {
     valor: {
       type: String,
     },
+
+    ariaLabel: {
+      type: String,
+      attribute: "aria-label",
+    },
   };
 
   constructor() {
@@ -62,6 +67,7 @@ export class TypeInput extends LitElement {
     this.errorMessage = "";
     this.formatCurrency = "";
     this.valor = "";
+    this.ariaLabel = "";
   }
   _onInput(event) {
     const input = event.target;
@@ -155,6 +161,9 @@ export class TypeInput extends LitElement {
             id=${`input${this.idInput}`}
             .type=${this.typeInput}
             placeholder=${this.placeholderInput}
+            aria-label=${this.ariaLabel}
+            aria-invalid=${invalid ? "true" : "false"}
+            aria-describedby=${invalid ? `error-${this.idInput}` : nothing}
             ?required=${this.requiredInput}
             .value="${this.valor}"
             @input=${this._onInput}
@@ -162,8 +171,9 @@ export class TypeInput extends LitElement {
         </div>
         ${invalid && this.errorMessage
           ? html`
-              <type-text tag="span" .text=${this.errorMessage} weight="medium">
-              </type-text>
+              <p id="error-${this.idInput}" role="alert">
+              ${this.errorMessage}
+              </p>
             `
           : nothing}
       </div>

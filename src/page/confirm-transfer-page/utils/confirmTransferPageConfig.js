@@ -19,6 +19,9 @@ export const CONFIRM_TRANSFER_PAGE_LITERALS = {
     emptySourceAccountText: lang["confirm-transfer-page-empty-source-account"],
     emptyBeneficiaryText: lang["confirm-transfer-page-empty-beneficiary"],
   },
+  modal: {
+    title: lang["confirm-transfer-page-modal-aria"],
+  },
 };
 
 export const CONFIRM_TRANSFER_PAGE_CONFIG = {

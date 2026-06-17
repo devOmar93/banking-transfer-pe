@@ -2,7 +2,7 @@ import { html, LitElement } from "lit";
 import { styles } from "./transfer-summary.css.js";
 import "@/components/type-text/type-text.js";
 import "@/compositions/info-field/info-field.js";
-import { formatAmount, maskAccountNumber } from "@/utils/format.js";
+import { formatAmount, maskAccountNumber, getAccessibleAmount } from "@/utils/format.js";
  
 export class TransferSummary extends LitElement {
   static properties = {
@@ -55,6 +55,10 @@ export class TransferSummary extends LitElement {
   get _beneficiaryAccount() {
     return maskAccountNumber(this._data.destinationAccount?.accountNumber);
   }
+
+  get _accessibleAmount() {
+    return getAccessibleAmount( this._data.sourceAccount.amount, this._data.sourceAccount.currency)
+  }
  
   _renderAmountCard() {
     return html`
@@ -70,7 +74,8 @@ export class TransferSummary extends LitElement {
           tag="p"
           size="xl"
           weight="bold"
-          .text=${this._formattedAmount}
+          .text=${this._formattedAmount}  
+          aria-label=${this._accessibleAmount}
           class="transfer-summary__amount-value"
         ></type-text>
       </div>

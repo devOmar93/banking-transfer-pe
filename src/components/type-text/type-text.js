@@ -1,4 +1,4 @@
-import { html, LitElement } from "lit";
+import { html, LitElement, nothing } from "lit";
 import { styles } from "./type-text.css.js";
 import { unsafeStatic, html as staticHtml } from "lit/static-html.js";
 import { TYPOGRAPHY_CONFIG, validateText} from "./utils/type-text.utils.js";
@@ -39,6 +39,24 @@ export class TypeText extends LitElement {
      * @default ""
      */
     weight: { type: String },
+
+    /**
+     * Aria Label to tag HTML
+     * @type { String }
+     * @default ""
+     * @attribute "aria-label"
+     */
+    ariaLabel: { 
+      type: String, 
+      attribute: "aria-label" 
+    },
+
+    /**
+     * Id to tag HTML
+     * @type { String }
+     * @default ""
+     */
+    id: { type: String },
   };
 
   constructor() {
@@ -48,6 +66,8 @@ export class TypeText extends LitElement {
     this.size = "";
     this.align = "";
     this.weight = "";
+    this.ariaLabel = "";
+    this.id = "";
   }
   
   static styles = styles;
@@ -76,7 +96,9 @@ export class TypeText extends LitElement {
 
     return staticHtml`
       <${tag}
+        id=${this.id || nothing}
         class=${className}
+        aria-label=${this.ariaLabel || nothing}
       >
         ${this.text}
       </${tag}>

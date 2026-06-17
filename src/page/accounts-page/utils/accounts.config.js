@@ -2,6 +2,7 @@ import ES from "@locales/locales.json";
 const lang = ES["es-PE"];
 
 export const ACCOUNTS_PAGE_ES = {
+  modal: lang["account-page-modal-aria"],
   header:{
     title: lang["account-page-header-title"],
     subtitle: lang["account-page-header-subtitle"],
