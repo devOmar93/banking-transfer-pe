@@ -16,22 +16,43 @@ import styles from "./transfer-form.css.js";
 
 export class TransferForm extends LitElement {
   static properties = {
+    /** The state of each form field. 
+     *  It holds the current value, validity, and error message for each field
+     * @type {Object}
+     * @default {}
+     */
     formFieldStates: {
       type: Object,
     },
 
+    /** The overall state of the form, indicating whether it is valid
+     * @type {boolean}
+     * @default false
+     */
     stateForm: {
       type: Boolean,
     },
 
+    /** The configuration for each form field
+     * @type {Object}
+     * @default {}
+     */
     configFormFields: {
       type: Object,
     },
 
+    /** The available balance for the source account
+     * @type {Number}
+     * @default 0
+     */
     availableBalance: {
       type: Number,
     },
 
+    /** The currency of the available balance for the source account
+     * @type {String}
+     * @default ""
+     */
     currency: {
       type: String,
     },
@@ -41,7 +62,7 @@ export class TransferForm extends LitElement {
     super();
     this.formFieldStates = {};
     this.configFormFields = {};
-    this.availableBalance = 100;
+    this.availableBalance = 0;
     this.stateForm = false;
     this.currency = "";
   }
