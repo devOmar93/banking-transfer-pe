@@ -64,7 +64,7 @@ export class TransferSummary extends LitElement {
     return html`
       <div class="transfer-summary__amount-card">
         <type-text
-          tag="span"
+          tag="p"
           size="s"
           weight="medium"
           .text=${this.amountLabel}
@@ -87,14 +87,14 @@ export class TransferSummary extends LitElement {
       <info-field>
         <type-text
           slot="label"
-          tag="span"
+          tag="p"
           size="s"
           text=${this.sourceAccountLabel}
           class="transfer-summary__field-label"
         ></type-text>
         <div slot="value" class="transfer-summary__value-block">
           <type-text
-            tag="span"
+            tag="p"
             size="s"
             weight="semibold"
             align="right"
@@ -102,7 +102,7 @@ export class TransferSummary extends LitElement {
             class="transfer-summary__field-value"
           ></type-text>
           <type-text
-            tag="span"
+            tag="p"
             size="xs"
             align="right"
             text=${this._sourceAccountNumber}
@@ -118,14 +118,14 @@ export class TransferSummary extends LitElement {
       <info-field>
         <type-text
           slot="label"
-          tag="span"
+          tag="p"
           size="s"
           text=${this.beneficiaryLabel}
           class="transfer-summary__field-label"
         ></type-text>
         <div slot="value" class="transfer-summary__value-block">
           <type-text
-            tag="span"
+            tag="p"
             size="s"
             weight="semibold"
             align="right"
@@ -133,7 +133,7 @@ export class TransferSummary extends LitElement {
             class="transfer-summary__field-value"
           ></type-text>
           <type-text
-            tag="span"
+            tag="p"
             size="xs"
             align="right"
             text=${this._beneficiaryAccount}

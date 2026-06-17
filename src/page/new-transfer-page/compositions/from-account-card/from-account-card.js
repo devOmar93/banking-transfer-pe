@@ -60,7 +60,7 @@ export class FromAccountCard extends LitElement {
       <article class="from-account-card" aria-label="Cuenta origen">
         <div class="from-account-card__column">
           <type-text
-            tag="span"
+            tag="p"
             size="xs"
             text=${this.fromLabel}
             class="from-account-card__label"
@@ -72,7 +72,7 @@ export class FromAccountCard extends LitElement {
             text=${this._accountName}
           ></type-text>
           <type-text
-            tag="span"
+            tag="p"
             size="s"
             text=${this._accountNumber}
             class="from-account-card__muted"
@@ -81,7 +81,7 @@ export class FromAccountCard extends LitElement {
 
         <div class="from-account-card__column from-account-card__column--right">
           <type-text
-            tag="span"
+            tag="p"
             size="xs"
             text=${this.availableBalanceLabel}
             align="right"
