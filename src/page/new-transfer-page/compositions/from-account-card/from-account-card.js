@@ -80,19 +80,19 @@ export class FromAccountCard extends LitElement {
           <type-text
             tag="span"
             size="xs"
-            text=${this.fromLabel}
+            .text=${this.fromLabel}
             class="from-account-card__label"
           ></type-text>
           <type-text
             tag="p"
             size="m"
             weight="semibold"
-            text=${this._accountName}
+            .text=${this._accountName}
           ></type-text>
           <type-text
             tag="span"
             size="s"
-            text=${this._accountNumber}
+            .text=${this._accountNumber}
             class="from-account-card__muted"
           ></type-text>
         </div>
@@ -101,7 +101,7 @@ export class FromAccountCard extends LitElement {
           <type-text
             tag="span"
             size="xs"
-            text=${this.availableBalanceLabel}
+            .text=${this.availableBalanceLabel}
             align="right"
             class="from-account-card__label"
           ></type-text>
@@ -110,7 +110,7 @@ export class FromAccountCard extends LitElement {
             size="m"
             weight="semibold"
             align="right"
-            text=${this._balance}
+            .text=${this._balance}
           ></type-text>
         </div>
       </article>
