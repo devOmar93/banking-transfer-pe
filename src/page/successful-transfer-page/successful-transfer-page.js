@@ -141,6 +141,8 @@ export class SuccessfulTransferPage extends LitElement {
       <type-modal
         class="modal-page-primary"
         .open=${this.isOpen}
+        .scrollable=${true}
+        .hideScrollbar=${true}
         .hasFooter=${true}
       >
         <div class="modal-body" slot="body">

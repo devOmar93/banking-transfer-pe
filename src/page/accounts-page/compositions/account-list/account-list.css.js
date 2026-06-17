@@ -21,6 +21,5 @@ export const styles = css`
   bottom: 0;
   height: 10px;
   background: linear-gradient(transparent,  var(--type-modal-bg-color));
-
-
+}
 `;
