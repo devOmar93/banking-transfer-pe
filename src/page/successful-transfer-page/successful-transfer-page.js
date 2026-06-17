@@ -15,7 +15,7 @@ import styles from "./successful-transfer-page.css.js";
 export class SuccessfulTransferPage extends LitElement {
   static properties = {
     /**
-     * Localization dictionary object containing internationalization strings.
+     * Localization string for the page, used to display text in different languages based on user preference.
      * @type {Object}
      * @default {}
      */
@@ -117,7 +117,7 @@ export class SuccessfulTransferPage extends LitElement {
      * @private
      */
     _showShareModal: {
-      type: Boolean,
+      type: Boolean, state: true
     },
   };
 
@@ -242,16 +242,16 @@ export class SuccessfulTransferPage extends LitElement {
             ></type-icon>
             <type-text
               .text=${this.locale["successful-transfer-page-title"]}
-              .tag=${"h1"}
-              .weight=${"bold"}
-              .size=${"l"}
-              .align=${"center"}
+              tag="h1"
+              weight="bold"
+              size="l"
+              align="center"
             ></type-text>
             <type-text
               .text=${this.locale["successful-transfer-page-subtitle"]}
-              .tag=${"p"}
-              .size=${"m"}
-              .align=${"center"}
+              tag="p"
+              size="m"
+              align="center"
             ></type-text>
           </div>
           <transfer-summary-card
@@ -273,7 +273,7 @@ export class SuccessfulTransferPage extends LitElement {
               icon-position="left"
               text=${this.locale["successful-transfer-page-download-button"]}
               variant="secondary"
-              .type=${"button"}
+              type="button"
               @click=${this._handleDownload}
             ></type-button>
             <type-button
@@ -281,7 +281,7 @@ export class SuccessfulTransferPage extends LitElement {
               icon-position="left"
               text=${this.locale["successful-transfer-page-share-button"]}
               variant="secondary"
-              .type=${"button"}
+              type="button"
               @click=${this._handleShare}
             ></type-button>
           </div>
@@ -290,7 +290,7 @@ export class SuccessfulTransferPage extends LitElement {
             icon-position="left"
             text=${this.locale["successful-transfer-page-new-transfer-button"]}
             variant="default"
-            .type=${"button"}
+            type="button"
             @click=${this._handleNewTransfer}
           ></type-button>
           <info-card
@@ -300,20 +300,22 @@ export class SuccessfulTransferPage extends LitElement {
           </info-card>
         </div>
       </type-modal>
-      <type-modal ?open=${this._showShareModal} variant=${"dialog"}>
+      <type-modal 
+        ?open=${this._showShareModal} 
+        variant="dialog">
         <div slot="header">
           <type-text
             .text=${this.locale["successful-transfer-page-share-modal-title"]}
-            .weight=${"bold"}
-            .tag=${"h1"}
-            .size=${"m"}
+            weight="bold"
+            tag="h1"
+            size="m"
           ></type-text>
           <type-text
             .text=${this.locale[
               "successful-transfer-page-share-modal-subtitle"
             ]}
-            .tag=${"p"}
-            .size=${"s"}
+            tag="p"
+            size="s"
           ></type-text>
         </div>
         <div slot="body">
@@ -322,8 +324,8 @@ export class SuccessfulTransferPage extends LitElement {
               .text=${this.locale[
                 "successful-transfer-page-share-modal-accept-button"
               ]}
-              .variant=${"default"}
-              .type=${"button"}
+              variant="default"
+              type="button"
               @click=${this._closeShareModal}
               .iconPosition=${"left"}
             ></type-button>
