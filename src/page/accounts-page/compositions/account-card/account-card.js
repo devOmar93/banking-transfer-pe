@@ -4,6 +4,7 @@ import { styles } from "./account-card.css.js";
 import "@/components/type-icon/type-icon.js";
 import "@/components/type-text/type-text.js";
 import { fireEvent } from "@/utils/utils.js";
+import { maskAccountNumber } from "@/utils/format.js";
 
 export class AccountCard extends LitElement {
   /**
@@ -81,6 +82,10 @@ export class AccountCard extends LitElement {
     }).format(this.availableBalance);
   }
 
+  get _formatAccountNumber() {
+    return maskAccountNumber(this.accountNumber);
+  }
+
   /**
    * Renders the account card content
    */
@@ -115,7 +120,7 @@ export class AccountCard extends LitElement {
               size="s"
               weight="medium"
               class="p-subtitle"
-              .text=${this.accountNumber}
+              .text=${this._formatAccountNumber}
             ></type-text>
 
             <type-text

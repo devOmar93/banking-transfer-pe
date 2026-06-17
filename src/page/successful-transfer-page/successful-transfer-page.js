@@ -4,47 +4,118 @@ import "@/compositions/type-button/type-button.js";
 import "@/compositions/type-modal/type-modal.js";
 import "@/compositions/info-card/info-card.js";
 import { fireEvent } from "@/utils/utils.js";
-import styles from "./successful-transfer-page.css.js";
 import { generateTransferSummaryPdf } from "./services/generate-transfer-summary-pdf.js";
+import styles from "./successful-transfer-page.css.js";
 
+/**
+ * SuccessfulTransferPage component.
+ * Displays the summary details of a successful banking transfer, allowing the user to download a PDF receipt, share the transaction status, or initiate a new transfer.
+ * * @element successful-transfer-page
+ */
 export class SuccessfulTransferPage extends LitElement {
   static properties = {
+    /**
+     * Localization dictionary object containing internationalization strings.
+     * @type {Object}
+     * @default {}
+     */
     locale: {
       type: Object,
     },
+    /**
+     * Type of currency symbol or code (e.g., S/, $) currently being used.
+     * @type {String}
+     * @default ""
+     */
     current: {
       type: String,
     },
+    /**
+     * The monetary amount transferred.
+     * @type {String}
+     * @default ""
+     */
     amount: {
       type: String,
     },
+    /**
+     * Unique transaction operation or voucher number.
+     * @type {String}
+     * @default ""
+     */
     transactionNumber: {
       type: String,
     },
+    /**
+     * Time string when the transaction occurred (e.g., "11:30").
+     * @type {String}
+     * @default ""
+     */
     time: {
       type: String,
     },
+    /**
+     * Date string when the transaction occurred (e.g., "16/06/2026").
+     * @type {String}
+     * @default ""
+     */
     date: {
       type: String,
     },
+    /**
+     * The name/alias of the source bank account.
+     * @type {String}
+     * @default ""
+     */
     originAccount: {
       type: String,
     },
+    /**
+     * The account number of the source bank account.
+     * @type {String}
+     * @default ""
+     */
     originAccountNumber: {
       type: String,
     },
+    /**
+     * First name of the transfer beneficiary.
+     * @type {String}
+     * @default ""
+     */
     beneficiaryName: {
       type: String,
     },
+    /**
+     * Last name of the transfer beneficiary.
+     * @type {String}
+     * @default ""
+     */
     beneficiaryLastName: {
       type: String,
     },
+    /**
+     * Flag or object checking if the raw application data is fully loaded and ready.
+     * @type {Boolean}
+     * @default false
+     */
     isDataReady: {
-      type: Object,
+      type: Boolean,
     },
+    /**
+     * Controls the visibility state of the primary transfer modal page.
+     * @type {Boolean}
+     * @default false
+     */
     isOpen: {
       type: Boolean,
     },
+    /**
+     * Internal state determining if the secondary sharing option dialog is visible.
+     * @type {Boolean}
+     * @default false
+     * @private
+     */
     _showShareModal: {
       type: Boolean,
     },
@@ -70,6 +141,11 @@ export class SuccessfulTransferPage extends LitElement {
 
   static styles = styles;
 
+  /**
+   * Compiles transaction data and triggers the third-party PDF service download wrapper.
+   * If an exception occurs, a generic error event is dispatched to the application layout.
+   * * @private
+   */
   _handleDownload() {
     const dataPdf = [
       {
@@ -107,6 +183,10 @@ export class SuccessfulTransferPage extends LitElement {
     }
   }
 
+  /**
+   * Updates state to display the native share dialogue modal and opens it safely after Lit updates DOM.
+   * * @private
+   */
   _handleShare() {
     this._showShareModal = true;
     this.updateComplete.then(() => {
@@ -117,6 +197,10 @@ export class SuccessfulTransferPage extends LitElement {
     });
   }
 
+  /**
+   * Closes the active native sharing dialog element and resets visibility state trackers.
+   * * @private
+   */
   _closeShareModal() {
     const dialog = this.renderRoot.querySelector("#shareDialog");
     if (dialog && dialog.open) {
@@ -125,6 +209,11 @@ export class SuccessfulTransferPage extends LitElement {
     this._showShareModal = false;
   }
 
+  /**
+   * Handles navigation back to the app home dashboard view by bubbling up a custom global event.
+   * Resets open modal attributes.
+   * * @private
+   */
   _handleNewTransfer() {
     this.dispatchEvent(
       new CustomEvent("return-home", {

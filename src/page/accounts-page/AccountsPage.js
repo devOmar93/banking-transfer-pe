@@ -87,7 +87,6 @@ export class AccountsPage extends LitElement {
   }
 
   _loadAccounts() {
-    
     const result = this._processAccounts();
     this._handleProcessResult(result);
   }
