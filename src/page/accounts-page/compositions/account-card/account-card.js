@@ -4,6 +4,7 @@ import { styles } from "./account-card.css.js";
 import "@/components/type-icon/type-icon.js";
 import "@/components/type-text/type-text.js";
 import { fireEvent } from "@/utils/utils.js";
+import { formatAmount, maskAccountNumber } from "@/utils/format.js";
 
 export class AccountCard extends LitElement {
   /**
@@ -66,19 +67,12 @@ export class AccountCard extends LitElement {
 
   static styles = styles;
 
-  _formatCurrency(currency = this.currency) {
-    const symbols = {
-      PEN: "S/",
-      USD: "$",
-    };
-    return symbols[currency] || "";
+  get _formattedBalance() {
+    return formatAmount(this.availableBalance, this.currency);
   }
 
-  _formatAmount() {
-    return new Intl.NumberFormat("es-PE", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(this.availableBalance);
+  get _maskedAccountNumber() {
+    return maskAccountNumber(this.accountNumber);
   }
 
   /**
@@ -91,7 +85,7 @@ export class AccountCard extends LitElement {
         type="button"
         class="account-card"
         tabindex="0"
-        aria-label=${`Cuenta ${this.accountName}, saldo ${this._formatCurrency()}${this._formatAmount()}`}
+        aria-label=${`Cuenta ${this.accountName}, número ${this._maskedAccountNumber}, saldo ${this._formattedBalance}`}
         @click=${() => this._onClick()}
         @keydown=${(e) => this._onKeyDown(e)}
       >
@@ -115,7 +109,7 @@ export class AccountCard extends LitElement {
               size="s"
               weight="medium"
               class="p-subtitle"
-              .text=${this.accountNumber}
+              .text=${this._maskedAccountNumber}
             ></type-text>
 
             <type-text
@@ -134,7 +128,7 @@ export class AccountCard extends LitElement {
               tag="p"
               size="ml"
               weight="bold"
-              .text=${`${this._formatCurrency()} ${this._formatAmount()}`}
+              .text=${this._formattedBalance}
             ></type-text>
           </div>
 
