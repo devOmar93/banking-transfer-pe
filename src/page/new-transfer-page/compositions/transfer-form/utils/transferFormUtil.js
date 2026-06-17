@@ -112,7 +112,7 @@ export const createInitialFormStates = (formFields) =>
   Object.values(formFields).reduce((initialFormStates, { name }) => {
     initialFormStates[name] = {
       value: "",
-      isValid: undefined,
+      isValid: true,
       errorMessage: "",
     };
     return initialFormStates;
