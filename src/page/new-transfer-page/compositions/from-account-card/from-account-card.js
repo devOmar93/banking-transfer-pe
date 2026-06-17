@@ -5,18 +5,42 @@ import { styles } from "./from-account-card.css.js";
 
 export class FromAccountCard extends LitElement {
   static properties = {
+    /** 
+     * The source account details 
+     * @type {Object}
+     * @default {}
+    */
     account: { type: Object },
+
+    /** 
+     * The label for the "From" section
+     * @type {String}
+     * @default ""
+    */
     fromLabel: { type: String, attribute: "from-label" },
+
+    /** 
+     * The label for the available balance
+     * @type {String}
+     * @default ""
+    */
     availableBalanceLabel: {
       type: String,
       attribute: "available-balance-label",
     },
+
+    /**
+     * The text to display when there is no account information available
+     * @type {String}
+     * @default ""
+     * @attribute "empty-account-text"
+     */
     emptyAccountText: { type: String, attribute: "empty-account-text" },
   };
 
   constructor() {
     super();
-    this.account = null;
+    this.account = {};
     this.fromLabel = "";
     this.availableBalanceLabel = "";
     this.emptyAccountText = "";
