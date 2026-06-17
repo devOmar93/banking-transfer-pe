@@ -6,7 +6,6 @@ import "@/compositions/info-card/info-card.js";
 import { fireEvent } from "@/utils/utils.js";
 import { generateTransferSummaryPdf } from "./services/generate-transfer-summary-pdf.js";
 import styles from "./successful-transfer-page.css.js";
-import { state } from "lit/decorators.js";
 
 /**
  * SuccessfulTransferPage component.
@@ -16,7 +15,7 @@ import { state } from "lit/decorators.js";
 export class SuccessfulTransferPage extends LitElement {
   static properties = {
     /**
-     * Localization dictionary object containing internationalization strings.
+     * Localization string for the page, used to display text in different languages based on user preference.
      * @type {Object}
      * @default {}
      */
