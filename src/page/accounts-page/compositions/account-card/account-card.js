@@ -5,6 +5,7 @@ import "@/components/type-icon/type-icon.js";
 import "@/components/type-text/type-text.js";
 import { getAccessibleAmount } from "@/utils/format.js";
 import { fireEvent } from "@/utils/utils.js";
+import { maskAccountNumber } from "@/utils/format.js";
 
 export class AccountCard extends LitElement {
   /**
@@ -82,6 +83,14 @@ export class AccountCard extends LitElement {
     }).format(this.availableBalance);
   }
 
+  get _formatAccountNumber() {
+    return maskAccountNumber(this.accountNumber);
+  }
+
+  get _formatAccountNumber() {
+    return maskAccountNumber(this.accountNumber);
+  }
+
    _getAccesibleAccount(){
     return `${this.accountName}, número de cuenta${this.accountNumber}, saldo ${getAccessibleAmount(this._formatAmount(),this.currency)}`
   }
@@ -119,7 +128,7 @@ export class AccountCard extends LitElement {
               size="s"
               weight="medium"
               class="p-subtitle"
-              .text=${this.accountNumber}
+              .text=${this._formatAccountNumber}
             ></type-text>
 
             <type-text

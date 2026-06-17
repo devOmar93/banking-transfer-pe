@@ -16,4 +16,14 @@ export default defineConfig({
       "@DM": path.resolve(__dirname, "./src/providers/data-managers"),
     },
   },
+  test: {
+    coverage: {
+      provider: 'v8',
+      exclude: [
+        'node_modules/**',
+        'dist/**',
+        '**/*.d.ts',
+      ],
+    },
+  },
 });

@@ -1,22 +1,46 @@
 import { html, LitElement } from "lit";
-import { styles } from "./from-account-card.css.js";
 import "@/components/type-text/type-text.js";
 import { formatAmount, maskAccountNumber, getAccessibleAmount } from "@/utils/format.js";
+import { styles } from "./from-account-card.css.js";
 
 export class FromAccountCard extends LitElement {
   static properties = {
+    /** 
+     * The source account details 
+     * @type {Object}
+     * @default {}
+    */
     account: { type: Object },
+
+    /** 
+     * The label for the "From" section
+     * @type {String}
+     * @default ""
+    */
     fromLabel: { type: String, attribute: "from-label" },
+
+    /** 
+     * The label for the available balance
+     * @type {String}
+     * @default ""
+    */
     availableBalanceLabel: {
       type: String,
       attribute: "available-balance-label",
     },
+
+    /**
+     * The text to display when there is no account information available
+     * @type {String}
+     * @default ""
+     * @attribute "empty-account-text"
+     */
     emptyAccountText: { type: String, attribute: "empty-account-text" },
   };
 
   constructor() {
     super();
-    this.account = null;
+    this.account = {};
     this.fromLabel = "";
     this.availableBalanceLabel = "";
     this.emptyAccountText = "";
@@ -62,19 +86,19 @@ export class FromAccountCard extends LitElement {
           <type-text
             tag="p"
             size="xs"
-            text=${this.fromLabel}
+            .text=${this.fromLabel}
             class="from-account-card__label"
           ></type-text>
           <type-text
             tag="p"
             size="m"
             weight="semibold"
-            text=${this._accountName}
+            .text=${this._accountName}
           ></type-text>
           <type-text
             tag="p"
             size="s"
-            text=${this._accountNumber}
+            .text=${this._accountNumber}
             class="from-account-card__muted"
           ></type-text>
         </div>
@@ -83,7 +107,7 @@ export class FromAccountCard extends LitElement {
           <type-text
             tag="p"
             size="xs"
-            text=${this.availableBalanceLabel}
+            .text=${this.availableBalanceLabel}
             align="right"
             class="from-account-card__label"
           ></type-text>
@@ -93,7 +117,7 @@ export class FromAccountCard extends LitElement {
             weight="semibold"
             align="right"
             aria-label=${this._accessibleBalance}
-            text=${this._balance}
+            .text=${this._balance}
           ></type-text>
         </div>
       </article>
