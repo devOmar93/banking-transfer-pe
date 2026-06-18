@@ -6,7 +6,7 @@ export const updateField = ({
   configFormFields,
   context,
 }) => {
-  const { name, isValid, value, businessValidation } = field;
+  const { name, isValid, value } = field;
   if (!formFieldStates[name]) return;
 
   let newFieldState = {
@@ -79,15 +79,6 @@ export const destinationAccountBusinessValidation = (
   configFormFields,
   context,
 ) => {
-  const isOnlyNumbers = /^[0-9]+$/.test(newFieldState.value);
-  if (!isOnlyNumbers) {
-    return {
-      ...newFieldState,
-      isValid: false,
-      errorMessage:
-        configFormFields.destinationAccount.errorMessages.nonNumericaAccount,
-    };
-  }
 
   if (newFieldState.value.length < 14) {
     return {
@@ -97,11 +88,11 @@ export const destinationAccountBusinessValidation = (
     };
   }
 
-  if (newFieldState.value.length > 20) {
+  if (newFieldState.value === context.customerAccountNumber) {
     return {
       ...newFieldState,
       isValid: false,
-      errorMessage: configFormFields.destinationAccount.errorMessages.maxLength,
+      errorMessage: configFormFields.destinationAccount.errorMessages.sameAccount,
     };
   }
 

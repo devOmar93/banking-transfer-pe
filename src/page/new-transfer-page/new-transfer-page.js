@@ -212,6 +212,7 @@ _goNextStep(transferData) {
             aria-label="Formulario de transferencia"
             .configFormFields=${TRANSFER_FORM_FIELDS}
             .availableBalance=${this.accountCustomer.availableBalance}
+            .customerAccountNumber=${this.accountCustomer.accountNumber}
             .currency=${this._getCurrency(this.accountCustomer.currency)}
             @form-submit="${this._handleFormSubmit}"
           ></transfer-form>
