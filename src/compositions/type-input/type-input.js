@@ -1,54 +1,108 @@
 import { html, LitElement, nothing } from "lit";
 import { classMap } from "lit/directives/class-map.js";
-import "@/components/type-text/type-text.js";
 
 import styles from "./type-input.css.js";
 
 export class TypeInput extends LitElement {
   static properties = {
+    /** 
+     * The label text for the input field 
+     * @type {String}
+     * @default ""
+     * */
     textLabel: {
       type: String,
     },
 
+    /** 
+     * The name of the input field 
+     * @type {String}
+     * @default ""
+     * */
     nameField: {
       type: String,
     },
 
+    /** 
+     * The Id of the input field 
+     * @type {String}
+     * @default ""
+     * */
     idInput: {
       type: String,
     },
 
+    /** 
+     * The placeholder text for the input field 
+     * @type {String}
+     * @default ""
+     * */
     placeholderInput: {
       type: String,
     },
 
+    /** 
+     * The type of the input field 
+     * @type {String}
+     * @default ""
+     * */
     typeInput: {
       type: String,
     },
 
-    formatCurrency: {
-      type: String,
-    },
-
+    /** 
+     * Indicates if the input field is required 
+     * @type {Boolean}
+     * @default false
+     * */
     requiredInput: {
       type: Boolean,
     },
 
+    /** 
+     * Indicates if the input field is valid 
+     * @type {Boolean}
+     * @default false
+     * */
     valid: {
       type: Boolean,
     },
 
+    /** 
+     * Indicates if the input field is natively valid 
+     * @type {Boolean}
+     * @default false
+     * @private
+     * */
     _nativeValid: {
       type: Boolean,
+      state: true,
     },
 
+    /** 
+     * The error message for the input field 
+     * @type {String}
+     * @default ""
+     * */
     errorMessage: {
       type: String,
     },
 
-    valor: {
-      type: String,
+    /** 
+     * The value of the input field 
+     * @type {String}
+     * @default ""
+     * @private
+     * */
+    _value: {
+      type: String, 
+      state: true
     },
+
+    ariaLabel: {
+      type: String,
+      attribute: "aria-label",
+    }
   };
 
   constructor() {
@@ -58,16 +112,18 @@ export class TypeInput extends LitElement {
     this.placeholderInput = "";
     this.typeInput = "";
     this.nameField = "";
-    this.requiredInput = true;
+    this.requiredInput = false;
     this.errorMessage = "";
-    this.formatCurrency = "";
-    this.valor = "";
+    this._value = "";
+    this.valid = false;
+    this._nativeValid = false;
+    this.ariaLabel = "";
   }
   _onInput(event) {
     const input = event.target;
     let value = input.value;
     value = this._validateInput(value);
-    this.value = value;
+    this._value = value;
     input.value = value;
 
     if (this.nameField === "amount") {
@@ -97,13 +153,13 @@ export class TypeInput extends LitElement {
   }
 
   _formatAmount(value) {
-    let valorActual = value;
-    valorActual = valorActual.replace(/[^0-9.]/g, '');
-    const indicePunto = valorActual.indexOf('.');
+    let currentValue = value;
+    currentValue = currentValue.replace(/[^0-9.]/g, '');
+    const indicePunto = currentValue.indexOf('.');
 
     if (indicePunto !== -1) {
-      let intPart = valorActual.slice(0, indicePunto);
-      let decimalPart = valorActual.slice(indicePunto + 1);
+      let intPart = currentValue.slice(0, indicePunto);
+      let decimalPart = currentValue.slice(indicePunto + 1);
       intPart = intPart.replace(/^0+/, '');
 
       if (intPart === '') {
@@ -111,17 +167,17 @@ export class TypeInput extends LitElement {
       }
 
       decimalPart = decimalPart.replace(/\./g, '0').substring(0, 2);
-      valorActual = intPart + '.' + decimalPart;
-      return valorActual;  
+      currentValue = intPart + '.' + decimalPart;
+      return currentValue;  
     }
 
-    return valorActual = valorActual.replace(/^0+/, '');
+    return currentValue = currentValue.replace(/^0+/, '');
   }
 
   _formatAccountDestinatari(value) {
-    let valorActual = value;
-    valorActual = valorActual.replace(/[^0-9]/g, "");
-    return valorActual;
+    let currentValue = value;
+    currentValue = currentValue.replace(/[^0-9]/g, "");
+    return currentValue;
   }
 
   get _isValid() {
@@ -155,15 +211,19 @@ export class TypeInput extends LitElement {
             id=${`input${this.idInput}`}
             .type=${this.typeInput}
             placeholder=${this.placeholderInput}
+            aria-label=${this.ariaLabel}
+            aria-invalid=${invalid ? "true" : "false"}
+            aria-describedby=${invalid ? `error-${this.idInput}` : nothing}
             ?required=${this.requiredInput}
-            .value="${this.valor}"
+            .value="${this._value}"
             @input=${this._onInput}
           />
         </div>
         ${invalid && this.errorMessage
           ? html`
-              <type-text tag="span" .text=${this.errorMessage} weight="medium">
-              </type-text>
+              <p id="error-${this.idInput}" role="alert">
+              ${this.errorMessage}
+              </p>
             `
           : nothing}
       </div>

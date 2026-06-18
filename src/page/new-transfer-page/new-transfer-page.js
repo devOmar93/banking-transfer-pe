@@ -16,28 +16,60 @@ import styles from "./new-transfer-page.css.js";
 
 export class NewTransferPage extends LitElement {
   static properties = {
+    /** The customer's account information
+     * @type {Object}
+     * @default {}
+     */
     accountCustomer: {
       type: Object,
     },
 
+    /** The destination account information
+     * @type {Object}
+     * @default {}
+     */
     destinationAccount: {
       type: Object,
     },
 
-    dataForm: {
+    /** The data from the transfer form
+     * @type {Object}
+     * @default {}
+     * @private
+     */
+    _dataForm: {
       type: Object,
+      state: true
     },
 
+    /** Complete information of the source account
+     * @type {Object}
+     * @default {}
+     * @private
+     */
     _sourceAccount: {
       type: Object,
+      state: true
     },
 
+    /** Defines which type of action modal should be displayed
+     * @type {string}
+     * @default ""
+     * @private
+     */
     _actionType: {
       type: String,
+      state: true
     },
 
+    /** Controls whether the action modal is visible in the UI
+     * @type {boolean}
+     * @default false
+     * @private
+     */
     _actionModalOpen: {
       type: Boolean,
+      state: true
     },
   };
 
@@ -47,9 +79,8 @@ export class NewTransferPage extends LitElement {
     this._sourceAccount = {};
     this._actionType = "";
     this._actionModalOpen = false;
-    this._retryCount = 0;
     this.destinationAccount = {};
-    this.dataForm = {};
+    this._dataForm = {};
   }
 
   willUpdate(changedProperties) {
@@ -74,13 +105,13 @@ export class NewTransferPage extends LitElement {
   }
 
   _handleFormSubmit({ detail }) {
-    this.dataForm = detail;
+    this._dataForm = detail;
     const sourceAccount = {
       ...this.accountCustomer,
-      amount: this.dataForm.amount,
+      amount: this._dataForm.amount,
     };
     this._sourceAccount = sourceAccount;
-    this._dispatchGetdestinationAccount(this.dataForm.destinationAccount);
+    this._dispatchGetdestinationAccount(this._dataForm.destinationAccount);
   }
 
   _openModalError(idErrorModalType) {
@@ -127,14 +158,9 @@ export class NewTransferPage extends LitElement {
       }),
     );
   }
-  _handleActionModalAction(event) {
+  _handleActionModalAction() {
     this._actionType = "";
     this._actionModalOpen = false;
-    if (event.detail.buttonAction === "retry") {
-      this._retryCount += 1;
-      return this._dispatchGetdestinationAccount(this._sourceAccount);
-    }
-    this._retryCount = 0;
   }
 
   _renderActionModal() {
@@ -157,15 +183,13 @@ export class NewTransferPage extends LitElement {
   render() {
     return html`
       <type-modal
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-title"
         class="modal-page-primary"
         ?open=${true}
         .variant=${CONFIG.modal.variant}
         ?scrollable=${CONFIG.modal.scrollable}
         ?full-height=${CONFIG.modal.fullHeight}
         ?has-footer=${CONFIG.modal.hasFooter}
+        aria-label=${LITERALS.modal}
       >
         <div slot="header">
           <type-button

@@ -1,6 +1,6 @@
 import ES from "@/locales/locales.json";
 
-const lang = ES["es_LA"];
+const lang = ES["es-PE"];
 
 export const CONFIRM_TRANSFER_PAGE_LITERALS = {
   header: {
@@ -18,6 +18,9 @@ export const CONFIRM_TRANSFER_PAGE_LITERALS = {
     beneficiaryLabel: lang["confirm-transfer-page-beneficiary-label"],
     emptySourceAccountText: lang["confirm-transfer-page-empty-source-account"],
     emptyBeneficiaryText: lang["confirm-transfer-page-empty-beneficiary"],
+  },
+  modal: {
+    title: lang["confirm-transfer-page-modal-aria"],
   },
 };
 

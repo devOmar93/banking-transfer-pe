@@ -1,7 +1,7 @@
 export const TYPOGRAPHY_CONFIG = {
   tag: { 
-    allowed: ["span", "p", "h1", "h2", "h3"], 
-    default: "span" 
+    allowed: ["span", "p", "h1", "h2", "h3", "h4", "h5", "h6"], 
+    default: "p" 
   },
   size: { 
     allowed: ["xs", "s", "m", "ml", "sl", "l", "xl"], 

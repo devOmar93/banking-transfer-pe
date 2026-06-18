@@ -13,12 +13,50 @@ import {
 
 export class ConfirmTransferPage extends LitElement {
   static properties = {
+    /**
+     * Holds the transfer details to be displayed in the summary
+     * @type {Object}
+     * @default {}
+     */
     transferData: { type: Object },
+
+    /** 
+     * Controls the visibility of the confirmation modal
+     * @type {Boolean}
+     * @default false
+     */
     open: { type: Boolean },
+
+    /** 
+     * Represents the status of the transfer
+     * @type {String}
+     * @default ""
+     */
     transferStatus: { type: String },
-    _retryCount: { state: true },
-    _actionModalOpen: { state: true },
-    _actionType: { state: true },
+
+    /** 
+     * Transfer retry counter 
+     * @type {Number}
+     * @default 0
+     * @private
+     */
+    _retryCount: { type: Number, state: true },
+
+    /** 
+     * Controls the visibility of the action modal
+     * @type {Boolean}
+     * @default false
+     * @private
+     */
+    _actionModalOpen: { type: Boolean, state: true },
+
+    /** 
+     * Defines which type of action modal should be displayed
+     * @type {String}
+     * @default ""
+     * @private
+     */
+    _actionType: { type: String, state: true },
   };
 
   constructor() {
@@ -103,6 +141,7 @@ export class ConfirmTransferPage extends LitElement {
         ?scrollable=${CONFIG.modal.scrollable}
         ?full-height=${CONFIG.modal.fullHeight}
         ?has-footer=${CONFIG.modal.hasFooter}
+        aria-label=${LITERALS.modal.title}
       >
         <div slot="header" class="confirm-transfer-page__header">
           <type-button

@@ -1,7 +1,6 @@
 import { css } from "lit";
 
 export const styles = css`
-
 .container-list{
  display: flex;
   flex-direction: column;
@@ -12,14 +11,17 @@ export const styles = css`
 }
 
 .container-list::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
 
-.container-list::after {
-  content: "";
+.fade-bottom {
   position: sticky;
   bottom: 0;
-  height: 10px;
-  background: linear-gradient(transparent,  var(--type-modal-bg-color));
+  height: 16px;
+  background: linear-gradient(
+    transparent,
+    var(--type-modal-bg-color)
+  );
+  pointer-events: none;
 }
 `;

@@ -1,5 +1,5 @@
-import ES from "@/locales/locales.json";
-const lang = ES["es_LA"];
+import ES from "@locales/locales.json";
+const lang = ES["es-PE"];
 
 export const NEW_TRANSFER_PAGE_LITERALS = {
   header: {
@@ -31,6 +31,7 @@ export const NEW_TRANSFER_PAGE_LITERALS = {
       message: lang["account-page-errors-inactive-message"],
     },
   },
+  modal: lang["new-transfer-page-modal-aria"],
 };
 
 export const NEW_TRANSFER_PAGE_CONFIG = {

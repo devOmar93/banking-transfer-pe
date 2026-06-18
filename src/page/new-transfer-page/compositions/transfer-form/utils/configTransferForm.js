@@ -1,5 +1,5 @@
-import ES from "@/locales/locales.json";
-const lang = ES["es_LA"];
+import ES from "@locales/locales.json";
+const lang = ES["es-PE"];
 
 export const TRANSFER_FORM_FIELDS = {
   destinationAccount: {

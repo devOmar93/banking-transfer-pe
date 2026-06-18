@@ -3,6 +3,7 @@ import { styles } from "./transfer-summary-card.css.js";
 import "@/components/type-text/type-text.js";
 import "@/compositions/transfer-summary-list/transfer-summary-list.js";
 import { formatAmount } from "@/utils/format.js";
+import { getAccessibleAmount } from "@/utils/format.js";
 
 class TransferSummaryCard extends LitElement {
   static properties = {
@@ -41,20 +42,32 @@ class TransferSummaryCard extends LitElement {
     return formatAmount(this.amount, this.currency);
   }
 
+  get _accessibleAmount() {
+    return `${this.locale["successful-transfer-page-amount-transferred"]}. 
+      ${getAccessibleAmount(this.amount, this.currency)}.`;
+  }
+
   render() {
     return html`
       <div class="card">
-        <header class="header-container">
-          <type-text
-            size="xs"
-            .text=${this.locale["successful-transfer-page-amount-transferred"]}
-          ></type-text>
-          <div class="amount-container">
+        <header class="header-container" aria-label=${this._accessibleAmount}>
+        <div aria-hidden="true">
             <type-text
-              .text=${this._formattedAmount}
-              .weight=${"bold"}
-              size="l"
+              size="xs"
+              .text=${this.locale["successful-transfer-page-amount-transferred"]}
             ></type-text>
+            <div class="amount-container">
+              <type-text
+                .text=${this._formattedAmount}
+                .weight=${"bold"}
+                size="l"
+              ></type-text>
+              <type-text
+                .text=${this.amount}
+                .weight=${"bold"}
+                size="l"
+              ></type-text>
+            </div>
           </div>
         </header>
 

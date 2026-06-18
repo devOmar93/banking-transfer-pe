@@ -37,6 +37,10 @@ export const styles = css`
   outline-offset: 2px;
 }
 
+  .account-card:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 
   .account-left {
     display: flex;

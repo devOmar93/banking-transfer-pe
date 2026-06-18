@@ -30,7 +30,7 @@ export class LoadingOverlay extends LitElement {
   render() {
     return this.active
       ? html`
-          <div class="overlay" role="alert" aria-busy="true">
+          <div class="overlay" role="status" aria-label="Cargando..." aria-busy="true">
             <div class="spinner"></div>
           </div>
         `

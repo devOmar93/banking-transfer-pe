@@ -16,22 +16,43 @@ import styles from "./transfer-form.css.js";
 
 export class TransferForm extends LitElement {
   static properties = {
+    /** The state of each form field. 
+     *  It holds the current value, validity, and error message for each field
+     * @type {Object}
+     * @default {}
+     */
     formFieldStates: {
       type: Object,
     },
 
+    /** The overall state of the form, indicating whether it is valid
+     * @type {boolean}
+     * @default false
+     */
     stateForm: {
       type: Boolean,
     },
 
+    /** The configuration for each form field
+     * @type {Object}
+     * @default {}
+     */
     configFormFields: {
       type: Object,
     },
 
+    /** The available balance for the source account
+     * @type {Number}
+     * @default 0
+     */
     availableBalance: {
       type: Number,
     },
 
+    /** The currency of the available balance for the source account
+     * @type {String}
+     * @default ""
+     */
     currency: {
       type: String,
     },
@@ -41,7 +62,7 @@ export class TransferForm extends LitElement {
     super();
     this.formFieldStates = {};
     this.configFormFields = {};
-    this.availableBalance = 100;
+    this.availableBalance = 0;
     this.stateForm = false;
     this.currency = "";
   }
@@ -109,6 +130,7 @@ export class TransferForm extends LitElement {
     const invalidStateField = this.formFieldStates[name]?.isValid === false;
     const errorMessageField = this.formFieldStates[name]?.errorMessage ?? "";
     const isRequired = nativeValidation?.required ?? false;
+
     return html`
       <type-input
         class=${classMap({ error: invalidStateField })}
@@ -122,6 +144,7 @@ export class TransferForm extends LitElement {
         .formatCurrency=${formatCurrency ?? ""}
         .errorMessage=${errorMessageField}
         .valid=${this.formFieldStates[name]?.isValid}
+        aria-label=${`Ingresar ${label}`}
       >
         ${hasIcon && this.currency
           ? html`<type-icon
@@ -137,11 +160,14 @@ export class TransferForm extends LitElement {
 
   render() {
     return html`
-      <form class="form-container">
+      <form class="form-container" aria-label="Formulario de transferencia">
         <div class="field-container">
           ${Object.values(this.configFormFields).map((field) =>
             this._renderFormField(field),
           )}
+        </div>
+        <div aria-live="polite" class="sr-only">
+          ${this.stateForm ? "Formulario válido" : ""}
         </div>
         <type-button
           .text=${LITERALS.continueButton.text}
@@ -151,7 +177,11 @@ export class TransferForm extends LitElement {
           @click="${this._onSubmit}"
           .iconPosition=${CONFIG.continueButton.iconPosition}
           ?disabled="${!this.stateForm}"
+          aria-label="Continuar con la transferencia"
         ></type-button>
+        <div aria-live="polite" class="sr-only">
+          ${this.stateForm ? "Formulario válido" : ""}
+        </div>
       </form>
     `;
   }

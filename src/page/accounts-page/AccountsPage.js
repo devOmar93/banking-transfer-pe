@@ -1,9 +1,7 @@
-import { html, LitElement, nothing } from "lit";
-import "@/page/action-modal/action-modal.js";
+import { html, LitElement } from "lit";
 import "@/compositions/type-modal/type-modal.js";
 import "@/compositions/type-header/type-header.js";
 import "@/compositions/info-card/info-card.js";
-import "@/components/loading-overlay/loading-overlay.js";
 import "./compositions/account-list/account-list.js";
 import { styles } from "./accounts-page.css.js";
 import {
@@ -87,7 +85,6 @@ export class AccountsPage extends LitElement {
   }
 
   _loadAccounts() {
-    
     const result = this._processAccounts();
     this._handleProcessResult(result);
   }
@@ -171,6 +168,7 @@ export class AccountsPage extends LitElement {
         ?full-height=${true}
         ?has-footer=${true}
         class="modal-accounts"
+        aria-label=${ES.modal}
       >
         <type-header
           slot="header"
