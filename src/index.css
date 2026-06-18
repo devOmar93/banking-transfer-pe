@@ -23,8 +23,8 @@
   /* default*/
   --btn-bg-color: #4f38fb;
   --btn-text-color: #ffffff;
-  --btn-disabled-bg-color: #2c1f8d;
-  --btn-disabled-text-color: #b4b4b4;
+  --btn-disabled-bg-color: #c5c5c5;
+  --btn-disabled-text-color: #ffffff;
 
   /* secondary*/
   --btn-secondary-bg-color: rgb(255, 255, 255);

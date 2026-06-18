@@ -4,7 +4,7 @@ export const TYPOGRAPHY_CONFIG = {
     default: "span" 
   },
   size: { 
-    allowed: ["xs", "s", "m", "ml", "l", "xl"], 
+    allowed: ["xs", "s", "m", "ml", "sl", "l", "xl"], 
     default: "s" 
   },
   align: { 

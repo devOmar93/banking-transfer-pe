@@ -157,7 +157,7 @@ export class SuccessfulTransferPage extends LitElement {
               .text=${this.locale["successful-transfer-page-title"]}
               .tag=${"h1"}
               .weight=${"bold"}
-              .size=${"l"}
+              .size=${"sl"}
               .align=${"center"}
             ></type-text>
             <type-text

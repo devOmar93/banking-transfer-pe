@@ -44,7 +44,7 @@ export const NEW_TRANSFER_PAGE_CONFIG = {
   backButton: {
     iconName: "arrow-left",
     iconPosition: "left",
-    variant: "secondary",
+    variant: "ghost",
     type: "button",
   },
 
