@@ -87,7 +87,7 @@ export class TransferSummary extends LitElement {
         class="transfer-summary__amount-card"
         aria-label=${this._accessibleAmountCard}
       >
-        <div aria-haiden="true">
+        <div aria-hidden="true">
           <type-text
             tag="p"
             size="s"
