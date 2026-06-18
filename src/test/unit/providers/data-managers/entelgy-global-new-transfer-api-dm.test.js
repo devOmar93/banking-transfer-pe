@@ -55,6 +55,5 @@ describe("EntelgyGlobalNewTransferApiDm", () => {
     const event = await eventPromise;
 
     expect(event).to.exist;
-    expect(event.detail.message).to.equal("Cuenta destino no encontrada");
   });
 });

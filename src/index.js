@@ -266,6 +266,7 @@ export class MyElement extends LitElement {
   }
 
   _handleConfirmRequested({ detail }) {
+    console.log(detail)
     this._transferData = detail;
     this._transferStatus = "";
     this._step = 2;
