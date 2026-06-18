@@ -18,47 +18,145 @@ export class MyElement extends LitElement {
   newTransferApiDm = createRef();
 
   static properties = {
+    /** 
+     * Localization string for the page, used to display text in different languages based on user preference
+     * @type {String}
+     * @default ""
+     */
     lang: {
-      type: String,
+      type: String
     },
+
+    /** 
+     * The current step in the transfer process
+     * @type {Number}
+     * @default 0
+     * @private
+     */
     _step: {
       type: Number,
+      state: true
     },
+
+    /** 
+     * Customer accounts detail
+     * @type {Array}
+     * @default []
+     * @private
+     */
     _accountsData: {
       type: Array,
+      state: true
     },
+
+    /** 
+     * Data from a single customer account
+     * @type {Object}
+     * @default {}
+     * @private
+     */
     _accountCustomer: {
       type: Object,
+      state: true
     },
+
+    /** 
+     * Destination account data
+     * @type {Object}
+     * @default {}
+     * @private
+     */
     _destinationAccount: {
       type: Object,
+      state: true
     },
+
+    /** 
+     * Transfer summary data
+     * @type {Object}
+     * @default {}
+     * @private
+     */
     _transferSummary: {
       type: Object,
+      state: true
     },
+
+    /** 
+     * Data for executing the transfer
+     * @type {Object}
+     * @default {}
+     * @private
+     */
     _transferData: {
       type: Object,
+      state: true
     },
+
+    /** 
+     * Status of the transfer process
+     * @type {String}
+     * @default ""
+     * @private
+     */
     _transferStatus: {
       type: String,
+      state: true,
     },
+
+    /** 
+     * Indicates if the data is ready for use
+     * @type {Boolean}
+     * @default false
+     * @private
+     */
     _isDataReady: {
       type: Boolean,
+      state: true
     },
-    _accountsStatus: {
-      type: String,
-    },
+
+    /** 
+     * Specify whether the loading component should be displayed
+     * @type {Boolean}
+     * @default false
+     * @private
+     */
     _loaded: {
       type: Boolean,
+      state: true
     },
+
+    /** 
+     * Number of times the operation has been retried
+     * @type {Number}
+     * @default 0
+     * @private
+     */
     _retryCount: {
       type: Number,
+      state: true
     },
+
+    /** 
+     * Specify whether the action modal is open
+     * @type {Boolean}
+     * @default false
+     * @private
+     */
     _actionModalOpen: {
       type: Boolean,
+      state: true
     },
+
+    /** 
+     * Indicates if an initial error has occurred
+     * @type {Boolean}
+     * @default false
+     * @private
+     */
     _isInitialError: {
       type: Boolean,
+      state: true
     },
   };
 
@@ -69,10 +167,9 @@ export class MyElement extends LitElement {
     this._accountCustomer = {};
     this._destinationAccount = {};
     this._transferSummary = {};
-    this._transferData = null;
+    this._transferData = {};
     this._transferStatus = "";
     this._isDataReady = false;
-    this._accountsStatus = "";
     this._accountsData = [];
     this._loaded = false;
     this._retryCount = 0;
