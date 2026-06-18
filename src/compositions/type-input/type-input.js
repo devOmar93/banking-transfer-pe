@@ -213,6 +213,7 @@ export class TypeInput extends LitElement {
             ?required=${this.requiredInput}
             .value=${this._value}
             @input=${this._onInput}
+            maxlength=${this.nameField === "destinationAccount" ? 20 : -1}
           />
         </div>
         ${invalid && this.errorMessage

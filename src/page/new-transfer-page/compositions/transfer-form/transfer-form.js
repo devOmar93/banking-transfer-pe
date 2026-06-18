@@ -49,6 +49,13 @@ export class TransferForm extends LitElement {
     availableBalance: {
       type: Number,
     },
+    /** The account number of the customer
+     * @type {String}
+     * @default ""
+     */
+    customerAccountNumber: {
+      type: String,
+    },
 
     /** The currency of the available balance for the source account
      * @type {String}
@@ -64,6 +71,7 @@ export class TransferForm extends LitElement {
     this.formFieldStates = {};
     this.configFormFields = {};
     this.availableBalance = 0;
+    this.customerAccountNumber = "";
     this.stateForm = false;
     this.currency = "";
   }
@@ -96,7 +104,7 @@ export class TransferForm extends LitElement {
         field: event.detail,
         formFieldStates: this.formFieldStates,
         configFormFields: this.configFormFields,
-        context: { availableBalance: this.availableBalance },
+        context: { availableBalance: this.availableBalance, customerAccountNumber: this.customerAccountNumber },
       }),
     };
     event.stopPropagation();
