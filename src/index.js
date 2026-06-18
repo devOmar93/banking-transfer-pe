@@ -272,6 +272,7 @@ export class MyElement extends LitElement {
   }
 
   async _handleConfirmAccept({ detail }) {
+    this._loaded = false;
     const transferData = detail?.transferData ?? {};
     await this.transfersApiDm.value.executeTransfer(transferData);
   }
@@ -291,6 +292,7 @@ export class MyElement extends LitElement {
   }
 
   _handleDataSuccess({ detail }) {
+    this._loaded = true;
     const response = detail.response;
     const accounts = detail.accounts;
     this._transferSummary = { ...response };
@@ -301,6 +303,7 @@ export class MyElement extends LitElement {
   }
 
   _handleError() {
+    this._loaded = true;
     this._transferStatus = "error";
   }
 
