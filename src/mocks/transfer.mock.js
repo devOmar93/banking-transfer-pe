@@ -14,7 +14,7 @@ export const createSuccessfulTransferMock = (transferData) => {
     currency: getCurrencySymbol(sourceAccount.currency),
     date: now.toLocaleDateString("es-ES", dateOptions),
     time: now.toLocaleTimeString("en-US", timeOptions).toLowerCase(),
-    status: "Completado",
+    status: "Completada",
     originAccount: sourceAccount.accountName || "Cuenta Origen",
     originAccountNumber: `**** ${sourceAccount.accountNumber.slice(-4)}`,
     beneficiaryName: destinationAccount.firstName || "Beneficiario",
