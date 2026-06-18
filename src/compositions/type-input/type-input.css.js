@@ -79,10 +79,8 @@ export default css`
     font-weight: 500;
     margin-top: 0.25rem;
   }
-
-  input[type="number"]::-webkit-outer-spin-button,
-  input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+  
+  p {
     margin: 0;
   }
 
