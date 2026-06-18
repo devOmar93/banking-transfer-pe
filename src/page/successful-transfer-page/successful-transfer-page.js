@@ -118,7 +118,8 @@ export class SuccessfulTransferPage extends LitElement {
      * @private
      */
     _showShareModal: {
-      type: Boolean, state: true
+      type: Boolean,
+      state: true,
     },
   };
 
@@ -178,14 +179,8 @@ export class SuccessfulTransferPage extends LitElement {
         value: this.status,
       },
     ];
-    try {
-      generateTransferSummaryPdf(this._formattedAmount, dataPdf);
-    } catch (error) {
-      fireEvent(this, "error-retry", {
-        title: "Error al descargar el PDF",
-        message: error.message,
-      });
-    }
+
+    fireEvent(this, "download-summary-pdf", { dataPdf });
   }
 
   /**
@@ -277,6 +272,7 @@ export class SuccessfulTransferPage extends LitElement {
           ></transfer-summary-card>
           <div class="actions">
             <type-button
+              id="downloadBtn"
               icon-name="download"
               icon-position="left"
               text=${this.locale["successful-transfer-page-download-button"]}
@@ -285,6 +281,7 @@ export class SuccessfulTransferPage extends LitElement {
               @click=${this._handleDownload}
             ></type-button>
             <type-button
+              id="shareBtn"
               icon-name="share-2"
               icon-position="left"
               text=${this.locale["successful-transfer-page-share-button"]}
@@ -294,6 +291,7 @@ export class SuccessfulTransferPage extends LitElement {
             ></type-button>
           </div>
           <type-button
+            id="homeBtn"
             icon-name="house"
             icon-position="left"
             text=${this.locale["successful-transfer-page-new-transfer-button"]}
@@ -309,9 +307,11 @@ export class SuccessfulTransferPage extends LitElement {
           </info-card>
         </div>
       </type-modal>
-      <type-modal 
-        ?open=${this._showShareModal} 
-        variant="dialog">
+      <type-modal
+        id="shareModal"
+        ?open=${this._showShareModal}
+        variant="dialog"
+      >
         <div slot="header">
           <type-text
             .text=${this.locale["successful-transfer-page-share-modal-title"]}
@@ -330,6 +330,7 @@ export class SuccessfulTransferPage extends LitElement {
         <div slot="body">
           <div class="alert-footer">
             <type-button
+              id="closeShareBtn"
               .text=${this.locale[
                 "successful-transfer-page-share-modal-accept-button"
               ]}

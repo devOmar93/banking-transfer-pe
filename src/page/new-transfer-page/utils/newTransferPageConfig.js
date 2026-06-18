@@ -1,4 +1,4 @@
-import ES from "@locales/locales.json";
+import ES from "@/locales/locales.json";
 const lang = ES["es-PE"];
 
 export const NEW_TRANSFER_PAGE_LITERALS = {

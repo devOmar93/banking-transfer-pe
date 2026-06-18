@@ -2,6 +2,7 @@ import { html, LitElement, nothing } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 
 import styles from "./type-input.css.js";
+import { fireEvent } from "@/utils/utils.js";
 
 export class TypeInput extends LitElement {
   static properties = {
@@ -131,6 +132,7 @@ export class TypeInput extends LitElement {
     }
     this._nativeValid = input.checkValidity();
 
+    fireEvent(this, )
     this.dispatchEvent(
       new CustomEvent("text-change", {
         detail: {
