@@ -58,6 +58,10 @@ export class TransferSummary extends LitElement {
   }
 
   get _accessibleAmountCard() {
+    console.log(getAccessibleAmount(
+      this._data.sourceAccount.amount,
+      this._data.sourceAccount.currency
+    ))
     return `${this.amountLabel}. ${getAccessibleAmount(
       this._data.sourceAccount.amount,
       this._data.sourceAccount.currency

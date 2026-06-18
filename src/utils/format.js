@@ -31,8 +31,11 @@ export function maskAccountNumber(accountNumber) {
 export function getAccessibleAmount(amount, currency) {
   const names = {
     PEN: "soles",
-    USD: "dólares",
+    USD: "dólares",  
+    "S/": "soles",
+    "$": "dólares",
   };
+  
   const currencyName = names[currency] || "";
   return `${amount} ${currencyName}`.trim();
 }
