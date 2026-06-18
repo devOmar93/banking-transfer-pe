@@ -1,16 +1,22 @@
 export const TRANSFER_DATA_MOCK = {
-  amount: 1234.00,
-  currency: "USD",
-  sourceAccount: {
-    accountName: "Cuenta de Ahorros",
-    accountNumber: "56785678",
-    accountType: "Ahorros",
-    availableBalance: 12800.50,
-  },
-  beneficiary: {
-    fullName: "Juan Carlos Pérez Gómez",
-    accountNumber: "98765432",
-  },
+    "sourceAccount": {
+        "accountName": "Cuenta Corriente",
+        "accountNumber": "10101010101011",
+        "accountType": "Corriente",
+        "availableBalance": 5250,
+        "currency": "USD",
+        "status": "ACTIVE",
+        "amount": 100
+    },
+    "destinationAccount": {
+        "firstName": "John",
+        "lastName": "Ramos Sanchez",
+        "id": 4,
+        "accountNumber": "10101010101014",
+        "accountName": "Cuenta Corriente",
+        "accountType": "Corriente",
+        "availableBalance": 4000,
+        "currency": "PEN",
+        "status": "ACTIVE"
+    }
 };
-
-export const TRANSFER_DATA_EMPTY = null;
