@@ -62,11 +62,6 @@ class TransferSummaryCard extends LitElement {
                 .weight=${"bold"}
                 size="l"
               ></type-text>
-              <type-text
-                .text=${this.amount}
-                .weight=${"bold"}
-                size="l"
-              ></type-text>
             </div>
           </div>
         </header>

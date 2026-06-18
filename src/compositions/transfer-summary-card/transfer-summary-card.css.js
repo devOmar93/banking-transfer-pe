@@ -19,6 +19,7 @@ export const styles = css`
   }
 
   .header-container {
+    --text-color: white;
     background: linear-gradient(
       135deg,
       var(--transfer-summary-card-bg-gradient-start),
