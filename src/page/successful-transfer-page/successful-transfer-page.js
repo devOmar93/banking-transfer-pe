@@ -180,7 +180,7 @@ export class SuccessfulTransferPage extends LitElement {
       },
     ];
 
-    fireEvent(this, "download-summary-pdf", { dataPdf });
+    fireEvent(this, "download-summary-pdf", { amount : this._formattedAmount, dataPdf });
   }
 
   /**

@@ -11,6 +11,7 @@ import "@/page/exit-page/exit-page.js";
 import "@/page/action-modal/action-modal.js";
 import "@/components/loading-overlay/loading-overlay.js";
 import locales from "@/locales/locales.json";
+import { generateTransferSummaryPdf } from "./page/successful-transfer-page/services/generate-transfer-summary-pdf";
 
 export class MyElement extends LitElement {
   transfersApiDm = createRef();
@@ -395,6 +396,7 @@ export class MyElement extends LitElement {
       .beneficiaryLastName=${this._transferSummary.beneficiaryLastName}
       .status=${this._transferSummary.status}
       @accounts-error=${this._handleChildAccountsError}
+      @download-summary-pdf=${this._generatePDF}
     ></successful-transfer-page>`;
   }
 
@@ -404,9 +406,10 @@ export class MyElement extends LitElement {
 
   _generatePDF({ detail }) {
     const dataPdf = detail.dataPdf;
+    const amount = detail.amount;
 
     try {
-      generateTransferSummaryPdf(this._formattedAmount, dataPdf);
+      generateTransferSummaryPdf(amount, dataPdf);
     } catch (error) {
       throw new Error("Error al descargar el PDF");
     }
