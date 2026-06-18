@@ -6,7 +6,7 @@ import { styles } from "./exit-page.css.js";
 class ExitPage extends LitElement {
   static properties = {
     /**
-     * Localization string for the page, used to display text in different languages based on user preference.
+     * Localization string for the page, used to display text in different languages based on user preference
      * @type {Object}
      * @default {}
      */
