@@ -15,10 +15,6 @@ export const styles = css`
   }
 
   .from-account-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1.25rem;
     padding: var(--from-account-card-padding);
     background-color: var(--from-account-card-bg);
     border: 1px solid var(--from-account-card-border);
@@ -26,6 +22,14 @@ export const styles = css`
     box-shadow: var(--from-account-card-shadow);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: default;
+  }
+
+  .from-account-card__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.25rem;
+    width: 100%;
   }
 
   .from-account-card:hover,
@@ -49,6 +53,10 @@ export const styles = css`
     text-align: right;
   }
 
+  .from-account-card__column--right type-text:last-child {
+    white-space: nowrap;
+  }
+
   .from-account-card__label {
     --text-color: var(--from-account-card-label-color);
     font-weight: 600;
@@ -65,7 +73,7 @@ export const styles = css`
       --from-account-card-padding: 1rem;
     }
 
-    .from-account-card {
+    .from-account-card__content {
       gap: 1rem;
     }
 
@@ -79,16 +87,15 @@ export const styles = css`
       --from-account-card-padding: 0.875rem;
     }
 
-    .from-account-card {
-      flex-direction: column;
-      align-items: flex-start;
+    .from-account-card__content {
+      align-items: center;
       gap: 0.75rem;
     }
 
     .from-account-card__column--right {
-      align-items: flex-start;
-      text-align: left;
-      width: 100%;
+      align-items: flex-end;
+      text-align: right;
+      flex: 0 0 auto;
     }
 
     .from-account-card__label {

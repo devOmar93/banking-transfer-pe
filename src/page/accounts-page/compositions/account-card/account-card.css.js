@@ -3,14 +3,21 @@ import { css } from "lit";
 
 export const styles = css`
   :host {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
     font-family: inherit;
   }
   .account-card {
+    all: unset;
+    box-sizing: border-box;
+    font: inherit;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
     padding: 1rem;
-    gap: 3rem;
+    gap: 1rem;
     background: white;
     border: 1px solid #d7d7d7;
     border-radius: 1rem;
@@ -30,11 +37,17 @@ export const styles = css`
   outline-offset: 2px;
 }
 
+  .account-card:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 
   .account-left {
     display: flex;
     align-items: center;
     gap: 1rem;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .icon-box {
@@ -51,6 +64,7 @@ export const styles = css`
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    min-width: 0;
   }
 
   .account-right {
@@ -59,7 +73,8 @@ export const styles = css`
     flex-direction: column; 
     align-items: flex-end;
     gap: 1rem;
-    flex-grow: 1;
+    flex: 0 0 auto;
+    min-width: max-content;
     padding-right: 0.2rem;
   }
 
@@ -70,6 +85,7 @@ export const styles = css`
   .balance type-text {
     text-align: right;
     letter-spacing: -0.3px;
+    white-space: nowrap;
   }
 
   .account-right type-text {

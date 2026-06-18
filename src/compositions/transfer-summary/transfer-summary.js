@@ -1,19 +1,34 @@
 import { html, LitElement } from "lit";
 import { styles } from "./transfer-summary.css.js";
-import "@components/type-text/type-text.js";
-import "@compositions/info-field/info-field.js";
-import { formatAmount, maskAccountNumber } from "@/utils/format.js";
+import "@/components/type-text/type-text.js";
+import "@/compositions/info-field/info-field.js";
+import { formatAmount, maskAccountNumber, getAccessibleAmount } from "@/utils/format.js";
+import { getLastFourDigits } from "@/utils/format.js";
  
 export class TransferSummary extends LitElement {
   static properties = {
     transferData: { type: Object },
     amountLabel: { type: String, attribute: "amount-label" },
+    sourceAccountLabel: { type: String, attribute: "source-account-label" },
+    beneficiaryLabel: { type: String, attribute: "beneficiary-label" },
+    emptySourceAccountText: {
+      type: String,
+      attribute: "empty-source-account-text",
+    },
+    emptyBeneficiaryText: {
+      type: String,
+      attribute: "empty-beneficiary-text",
+    },
   };
  
   constructor() {
     super();
     this.transferData = {};
-    this.amountLabel = "Monto a transferir";
+    this.amountLabel = "";
+    this.sourceAccountLabel = "";
+    this.beneficiaryLabel = "";
+    this.emptySourceAccountText = "";
+    this.emptyBeneficiaryText = "";
   }
  
   static styles = styles;
@@ -27,7 +42,7 @@ export class TransferSummary extends LitElement {
   }
  
   get _sourceAccountName() {
-    return this._data.sourceAccount?.accountName ?? "Sin cuenta";
+    return this._data.sourceAccount?.accountName ?? this.emptySourceAccountText;
   }
  
   get _sourceAccountNumber() {
@@ -41,12 +56,39 @@ export class TransferSummary extends LitElement {
   get _beneficiaryAccount() {
     return maskAccountNumber(this._data.destinationAccount?.accountNumber);
   }
+
+  get _accessibleAmountCard() {
+    return `${this.amountLabel}. ${getAccessibleAmount(
+      this._data.sourceAccount.amount,
+      this._data.sourceAccount.currency
+    )}.`;
+  }
+
+  get _accessibleSourceAccount() {
+    return `${this.sourceAccountLabel}. 
+      ${this._sourceAccountName}. 
+      Cuenta terminada en ${getLastFourDigits(this._data.sourceAccount?.accountNumber)}.`;
+  }
+
+  get _accessibleBeneficiary() {
+    return `${this.beneficiaryLabel}. 
+      ${this._beneficiaryName}. 
+      Cuenta terminada en ${getLastFourDigits(this._data.destinationAccount?.accountNumber)}.`;
+  }
  
+  get _accessibleSummary() {
+    return `
+      ${this._accessibleAmountCard}
+      ${this._accessibleSourceAccount}
+      ${this._accessibleBeneficiary}
+    `.replace(/\s+/g, " ").trim();
+  }
+
   _renderAmountCard() {
     return html`
       <div class="transfer-summary__amount-card">
         <type-text
-          tag="span"
+          tag="p"
           size="s"
           weight="medium"
           .text=${this.amountLabel}
@@ -68,14 +110,14 @@ export class TransferSummary extends LitElement {
       <info-field>
         <type-text
           slot="label"
-          tag="span"
+          tag="p"
           size="s"
-          text="Cuenta origen"
+          text=${this.sourceAccountLabel}
           class="transfer-summary__field-label"
         ></type-text>
         <div slot="value" class="transfer-summary__value-block">
           <type-text
-            tag="span"
+            tag="p"
             size="s"
             weight="semibold"
             align="right"
@@ -83,7 +125,7 @@ export class TransferSummary extends LitElement {
             class="transfer-summary__field-value"
           ></type-text>
           <type-text
-            tag="span"
+            tag="p"
             size="xs"
             align="right"
             text=${this._sourceAccountNumber}
@@ -99,14 +141,14 @@ export class TransferSummary extends LitElement {
       <info-field>
         <type-text
           slot="label"
-          tag="span"
+          tag="p"
           size="s"
-          text="Beneficiario"
+          text=${this.beneficiaryLabel}
           class="transfer-summary__field-label"
         ></type-text>
         <div slot="value" class="transfer-summary__value-block">
           <type-text
-            tag="span"
+            tag="p"
             size="s"
             weight="semibold"
             align="right"
@@ -114,7 +156,7 @@ export class TransferSummary extends LitElement {
             class="transfer-summary__field-value"
           ></type-text>
           <type-text
-            tag="span"
+            tag="p"
             size="xs"
             align="right"
             text=${this._beneficiaryAccount}
@@ -127,12 +169,17 @@ export class TransferSummary extends LitElement {
  
   render() {
     return html`
-      <section class="transfer-summary">
-        ${this._renderAmountCard()}
-        <div class="transfer-summary__fields">
-          ${this._renderSourceAccountField()}
-          ${this._renderBeneficiaryField()}
-          <slot></slot>
+      <section 
+        class="transfer-summary"
+        aria-label=${this._accessibleSummary}
+      >
+        <div aria-hidden="true">
+          ${this._renderAmountCard()}
+          <div class="transfer-summary__fields">
+            ${this._renderSourceAccountField()}
+            ${this._renderBeneficiaryField()}
+            <slot></slot>
+          </div>
         </div>
       </section>
     `;

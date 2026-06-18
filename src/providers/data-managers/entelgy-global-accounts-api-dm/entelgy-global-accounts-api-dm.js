@@ -1,6 +1,6 @@
 import { LitElement } from "lit";
-import { ACCOUNTS_BASE_CASE } from "@mocks/accounts.mock.js";
-import { fireEvent } from "@utils/utils";
+import { ACCOUNTS_BASE_CASE } from "@/mocks/accounts.mock.js";
+import { fireEvent } from "@/utils/utils";
 
 class EntelgyGlobalAccountsApiDm extends LitElement {
   static properties = {

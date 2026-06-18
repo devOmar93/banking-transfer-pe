@@ -5,40 +5,71 @@ import "@/page/action-modal/action-modal.js";
 import "@/page/new-transfer-page/compositions/from-account-card/from-account-card.js";
 import "@/page/new-transfer-page/compositions/transfer-form/transfer-form.js";
 import "@/compositions/type-button/type-button.js";
-import { resolveDestinationAccount } from "@/services/bankingTransferService.js";
 import { TRANSFER_FORM_FIELDS } from "@/page/new-transfer-page/compositions/transfer-form/utils/configTransferForm.js";
 import {
   NEW_TRANSFER_PAGE_LITERALS as LITERALS,
   NEW_TRANSFER_PAGE_CONFIG as CONFIG,
 } from "@/page/new-transfer-page/utils/newTransferPageConfig.js";
-import "../action-modal/action-modal.js";
-import { fireEvent } from "@utils/utils";
+import "@/page/action-modal/action-modal.js";
+import { fireEvent } from "@/utils/utils";
 import styles from "./new-transfer-page.css.js";
 
 export class NewTransferPage extends LitElement {
   static properties = {
+    /** The customer's account information
+     * @type {Object}
+     * @default {}
+     */
     accountCustomer: {
       type: Object,
     },
 
+    /** The destination account information
+     * @type {Object}
+     * @default {}
+     */
     destinationAccount: {
       type: Object,
     },
 
-    dataForm: {
+    /** The data from the transfer form
+     * @type {Object}
+     * @default {}
+     * @private
+     */
+    _dataForm: {
       type: Object,
+      state: true
     },
 
+    /** Complete information of the source account
+     * @type {Object}
+     * @default {}
+     * @private
+     */
     _sourceAccount: {
       type: Object,
+      state: true
     },
 
+    /** Defines which type of action modal should be displayed
+     * @type {string}
+     * @default ""
+     * @private
+     */
     _actionType: {
       type: String,
+      state: true
     },
 
+    /** Controls whether the action modal is visible in the UI
+     * @type {boolean}
+     * @default false
+     * @private
+     */
     _actionModalOpen: {
       type: Boolean,
+      state: true
     },
   };
 
@@ -48,9 +79,8 @@ export class NewTransferPage extends LitElement {
     this._sourceAccount = {};
     this._actionType = "";
     this._actionModalOpen = false;
-    this._retryCount = 0;
     this.destinationAccount = {};
-    this.dataForm = {};
+    this._dataForm = {};
   }
 
   willUpdate(changedProperties) {
@@ -75,13 +105,13 @@ export class NewTransferPage extends LitElement {
   }
 
   _handleFormSubmit({ detail }) {
-    this.dataForm = detail;
+    this._dataForm = detail;
     const sourceAccount = {
       ...this.accountCustomer,
-      amount: this.dataForm.amount,
+      amount: this._dataForm.amount,
     };
     this._sourceAccount = sourceAccount;
-    this._dispatchGetdestinationAccount(this.dataForm.destinationAccount);
+    this._dispatchGetdestinationAccount(this._dataForm.destinationAccount);
   }
 
   _openModalError(idErrorModalType) {
@@ -91,12 +121,12 @@ export class NewTransferPage extends LitElement {
 
   _getActionModalType(idErrorModalType) {
     const ERROR_MODAL_TYPES = {
-      BLOCKED: 'blockedAccount',
-      INACTIVE: 'inactiveAccount',
-      NO_BALANCE: 'insufficientBalance',
-      NO_ACCOUNTS: 'noAccountsAvailable',
-      ALL_NO_BALANCE: 'insufficientBalance'
-    }
+      BLOCKED: "blockedAccount",
+      INACTIVE: "inactiveAccount",
+      NO_BALANCE: "insufficientBalance",
+      NO_ACCOUNTS: "noAccountsAvailable",
+      ALL_NO_BALANCE: "insufficientBalance",
+    };
 
     return ERROR_MODAL_TYPES[idErrorModalType] ?? "";
   }
@@ -128,14 +158,9 @@ export class NewTransferPage extends LitElement {
       }),
     );
   }
-  _handleActionModalAction(event) {
+  _handleActionModalAction() {
     this._actionType = "";
     this._actionModalOpen = false;
-    if (event.detail.buttonAction === "retry") {
-      this._retryCount += 1;
-      return this._dispatchGetdestinationAccount(this._sourceAccount);
-    }
-    this._retryCount = 0;
   }
 
   _renderActionModal() {
@@ -158,15 +183,13 @@ export class NewTransferPage extends LitElement {
   render() {
     return html`
       <type-modal
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-title"
         class="modal-page-primary"
         ?open=${true}
         .variant=${CONFIG.modal.variant}
         ?scrollable=${CONFIG.modal.scrollable}
         ?full-height=${CONFIG.modal.fullHeight}
         ?has-footer=${CONFIG.modal.hasFooter}
+        aria-label=${LITERALS.modal}
       >
         <div slot="header">
           <type-button
@@ -190,6 +213,10 @@ export class NewTransferPage extends LitElement {
         <div slot="body" class="container-body">
           <from-account-card
             .account=${this.accountCustomer}
+            .fromLabel=${LITERALS.fromAccountCard.fromLabel}
+            .availableBalanceLabel=${LITERALS.fromAccountCard
+              .availableBalanceLabel}
+            .emptyAccountText=${LITERALS.fromAccountCard.emptyAccountText}
           ></from-account-card>
           <transfer-form
             aria-label="Formulario de transferencia"

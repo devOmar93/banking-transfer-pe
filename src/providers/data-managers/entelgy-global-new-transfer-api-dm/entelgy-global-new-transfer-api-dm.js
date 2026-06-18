@@ -1,7 +1,7 @@
 import { LitElement } from "lit";
-import { ACCOUNTS_BASE_CASE } from "@mocks/accounts.mock.js";
-import { ACCOUNT_CASE_GENERAL, ACCOUNT_CASE_NOT_EXIST } from "@mocks/newTransferPage.mock.js";
-import { fireEvent } from "@utils/utils";
+import { ACCOUNTS_BASE_CASE } from "@/mocks/accounts.mock.js";
+import { ACCOUNT_CASE_NOT_EXIST } from "@/mocks/newTransferPage.mock.js";
+import { fireEvent } from "@/utils/utils";
 class EntelgyGlobalNewTransferApiDm extends LitElement {
   static properties = {};
 

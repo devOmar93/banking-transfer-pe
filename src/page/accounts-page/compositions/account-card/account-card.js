@@ -1,8 +1,9 @@
 // src/compositions/account-card/account-card.js
 import { html, LitElement } from "lit";
 import { styles } from "./account-card.css.js";
-import "@components/type-icon/type-icon.js";
-import "@components/type-text/type-text.js";
+import "@/components/type-icon/type-icon.js";
+import "@/components/type-text/type-text.js";
+import { getLastFourDigits, maskAccountNumber, getAccessibleAmount, formatAmount } from "@/utils/format.js";
 import { fireEvent } from "@/utils/utils.js";
 
 export class AccountCard extends LitElement {
@@ -11,11 +12,46 @@ export class AccountCard extends LitElement {
    */
 
   static properties = {
+    /**
+     * The name of the account
+     * @type {String}
+     * @default ""
+     **/
     accountName: { type: String },
+
+    /**
+     * The number of the account
+     * @type {String}
+     * @default ""
+     */
     accountNumber: { type: String },
+
+    /**
+     * The type of the account
+     * @type {String}
+     * @default ""
+     */
     accountType: { type: String },
+
+    /**
+     * The type currency of the account
+     * @type {String}
+     * @default ""
+     */
     currency: { type: String },
+
+    /**
+     * The available balance of the account
+     * @type {Number}
+     * @default 0
+     */
     availableBalance: { type: Number },
+
+    /**
+     * The status of the account (e.g., active, inactive)
+     * @type {String}
+     * @default ""
+     */
     status: { type: String },
   };
 
@@ -31,19 +67,18 @@ export class AccountCard extends LitElement {
 
   static styles = styles;
 
-  _formatCurrency(currency = this.currency) {
-    const symbols = {
-      PEN: "S/",
-      USD: "$",
-    };
-    return symbols[currency] || "";
+  get _formattedBalance() {
+    return formatAmount(this.availableBalance, this.currency);
   }
 
-  _formatAmount() {
-    return new Intl.NumberFormat("es-PE", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(this.availableBalance);
+  get _maskedAccountNumber() {
+    return maskAccountNumber(this.accountNumber);
+  }
+  
+  get _accessibleAccount() {
+    return `${this.accountName}. 
+            Cuenta terminada en ${getLastFourDigits(this.accountNumber)}. 
+            Saldo ${getAccessibleAmount(this.availableBalance, this.currency)}.`;
   }
 
   /**
@@ -52,11 +87,11 @@ export class AccountCard extends LitElement {
 
   _renderContent() {
     return html`
-      <div
+      <button
+        type="button"
         class="account-card"
-        role="button"
         tabindex="0"
-        aria-label=${`Cuenta ${this.accountName}, saldo ${this._formatCurrency()}${this._formatAmount()}`}
+        aria-label=${this._accessibleAccount}
         @click=${() => this._onClick()}
         @keydown=${(e) => this._onKeyDown(e)}
       >
@@ -80,7 +115,7 @@ export class AccountCard extends LitElement {
               size="s"
               weight="medium"
               class="p-subtitle"
-              .text=${this.accountNumber}
+              .text=${this._maskedAccountNumber}
             ></type-text>
 
             <type-text
@@ -99,7 +134,7 @@ export class AccountCard extends LitElement {
               tag="p"
               size="ml"
               weight="bold"
-              .text=${`${this._formatCurrency()} ${this._formatAmount()}`}
+              .text=${this._formattedBalance}
             ></type-text>
           </div>
 
@@ -109,7 +144,8 @@ export class AccountCard extends LitElement {
             variant="secondary"
           ></type-icon>
         </div>
-      </div>
+
+      </button>
     `;
   }
 

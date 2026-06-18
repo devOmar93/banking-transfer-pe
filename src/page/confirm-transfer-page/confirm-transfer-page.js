@@ -9,16 +9,54 @@ import "@/page/action-modal/action-modal.js";
 import {
   CONFIRM_TRANSFER_PAGE_CONFIG as CONFIG,
   CONFIRM_TRANSFER_PAGE_LITERALS as LITERALS,
-} from "@utils/confirm-transfer-page/confirmTransferPageConfig.js";
+} from "./utils/confirmTransferPageConfig.js";
 
 export class ConfirmTransferPage extends LitElement {
   static properties = {
+    /**
+     * Holds the transfer details to be displayed in the summary
+     * @type {Object}
+     * @default {}
+     */
     transferData: { type: Object },
-    open: { type: Boolean, reflect: true },
+
+    /** 
+     * Controls the visibility of the confirmation modal
+     * @type {Boolean}
+     * @default false
+     */
+    open: { type: Boolean },
+
+    /** 
+     * Represents the status of the transfer
+     * @type {String}
+     * @default ""
+     */
     transferStatus: { type: String },
-    _retryCount: { state: true },
-    _actionModalOpen: { state: true },
-    _actionType: { state: true },
+
+    /** 
+     * Transfer retry counter 
+     * @type {Number}
+     * @default 0
+     * @private
+     */
+    _retryCount: { type: Number, state: true },
+
+    /** 
+     * Controls the visibility of the action modal
+     * @type {Boolean}
+     * @default false
+     * @private
+     */
+    _actionModalOpen: { type: Boolean, state: true },
+
+    /** 
+     * Defines which type of action modal should be displayed
+     * @type {String}
+     * @default ""
+     * @private
+     */
+    _actionType: { type: String, state: true },
   };
 
   constructor() {
@@ -98,18 +136,19 @@ export class ConfirmTransferPage extends LitElement {
     return html`
       <type-modal
         class="modal-page-primary"
-        .variant=${CONFIG.modalVariant}
+        .variant=${CONFIG.modal.variant}
         ?open=${this.open}
         ?scrollable=${CONFIG.modal.scrollable}
         ?full-height=${CONFIG.modal.fullHeight}
         ?has-footer=${CONFIG.modal.hasFooter}
+        aria-label=${LITERALS.modal.title}
       >
         <div slot="header" class="confirm-transfer-page__header">
           <type-button
             class="confirm-transfer-page__back-btn"
-            type=${CONFIG.backButton.type}
-            text=${LITERALS.backButton.text}
-            variant=${CONFIG.backButton.variant}
+            .type=${CONFIG.backButton.type}
+            .text=${LITERALS.backButton.text}
+            .variant=${CONFIG.backButton.variant}
             icon-name=${CONFIG.backButton.iconName}
             icon-position=${CONFIG.backButton.iconPosition}
             @click=${this._handleCancel}
@@ -122,16 +161,20 @@ export class ConfirmTransferPage extends LitElement {
         <div slot="body">
           <transfer-summary
             .transferData=${this.transferData}
-            amount-label=${LITERALS.transferSummary.amountLabel}
+            .amountLabel=${LITERALS.transferSummary.amountLabel}
+            .sourceAccountLabel=${LITERALS.transferSummary.sourceAccountLabel}
+            .beneficiaryLabel=${LITERALS.transferSummary.beneficiaryLabel}
+            .emptySourceAccountText=${LITERALS.transferSummary.emptySourceAccountText}
+            .emptyBeneficiaryText=${LITERALS.transferSummary.emptyBeneficiaryText}
           ></transfer-summary>
         </div>
 
         <div slot="footer" class="confirm-transfer-page__footer">
           <type-button
-            type=${CONFIG.submitButton.type}
-            text=${LITERALS.submitButton.text}
-            icon-position=${CONFIG.submitButton.iconPosition}
-            variant=${CONFIG.submitButton.variant}
+            .type=${CONFIG.submitButton.type}
+            .text=${LITERALS.submitButton.text}
+            .iconPosition=${CONFIG.submitButton.iconPosition}
+            .variant=${CONFIG.submitButton.variant}
             @click=${this._handleAccept}
           ></type-button>
         </div>

@@ -1,7 +1,7 @@
 import { html, LitElement, nothing } from "lit";
 import { styles } from "./info-card.css.js";
-import "@components/type-icon/type-icon.js";
-import "@components/type-text/type-text.js";
+import "@/components/type-icon/type-icon.js";
+import "@/components/type-text/type-text.js";
 /** @element info-card
  * A simple info card component that displays a message
  * and an icon based on the type of information
@@ -16,11 +16,16 @@ export class InfoCard extends LitElement {
     hasIcon: {
       type: Boolean,
     },
+    messageSize: {
+      type: String,
+      attribute: "message-size",
+    },
   };
   constructor() {
     super();
     this.message = "";
     this.hasIcon = false;
+    this.messageSize = "s";
   }
 
   static get styles() {
@@ -37,7 +42,7 @@ export class InfoCard extends LitElement {
             `
           : nothing}
         <div class="message-container">
-          <type-text .text=${this.message}></type-text>
+          <type-text .size=${this.messageSize} .text=${this.message}></type-text>
         </div>
       </div>
     `;

@@ -1,5 +1,5 @@
 import ES from "@locales/locales.json";
-const lang = ES["es_LA"];
+const lang = ES["es-PE"];
 
 export const NEW_TRANSFER_PAGE_LITERALS = {
   header: {
@@ -15,37 +15,44 @@ export const NEW_TRANSFER_PAGE_LITERALS = {
     text: lang["new-transfer-page-continue-button"],
   },
 
+  fromAccountCard: {
+    fromLabel: lang["new-transfer-page-from-account-label"],
+    availableBalanceLabel: lang["new-transfer-page-available-balance-label"],
+    emptyAccountText: lang["new-transfer-page-empty-account"],
+  },
+
   errors: {
     BLOCKED: {
       title: lang["account-page-errors-blocked-title"],
-      message: lang["account-page-errors-blocked-message"]
+      message: lang["account-page-errors-blocked-message"],
     },
     INACTIVE: {
       title: lang["account-page-errors-inactive-title"],
-      message: lang["account-page-errors-inactive-message"]
+      message: lang["account-page-errors-inactive-message"],
     },
-  }
+  },
+  modal: lang["new-transfer-page-modal-aria"],
 };
 
 export const NEW_TRANSFER_PAGE_CONFIG = {
-  modal:{
+  modal: {
     variant: "page",
     scrollable: true,
     fullHeight: true,
     hasFooter: true,
   },
 
-  backButton:{
+  backButton: {
     iconName: "arrow-left",
     iconPosition: "left",
-    variant: "secondary",
+    variant: "ghost",
     type: "button",
   },
 
-  continueButton:{
+  continueButton: {
     iconName: "arrow-right",
     iconPosition: "right",
     variant: "default",
     type: "button",
   },
-}
+};

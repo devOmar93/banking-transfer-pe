@@ -6,13 +6,6 @@ export default css`
         display: block;
     }
 
-    :host([variant="dialog"]) {
-        --type-modal-width: auto;
-        --type-modal-max-width: 400px;
-        --type-modal-border-radius: 1rem;
-        --type-modal-padding: 1.5rem;
-    }
-
     .type-modal-backdrop {
         position: fixed;
         inset: 0;
@@ -24,7 +17,7 @@ export default css`
         animation: type-modal-backdrop-in 200ms ease-out;
     }
 
-    :host([variant="page"]) .type-modal-backdrop {
+    .type-modal-backdrop--page {
         align-items: stretch;
         justify-content: stretch;
     }
@@ -43,7 +36,7 @@ export default css`
         box-sizing: border-box;
     }
 
-    :host([variant="page"]) .type-modal-content {
+    .type-modal-content--page {
         width: 100%;
         max-width: 100%;
         height: 100dvh;
@@ -51,19 +44,32 @@ export default css`
         animation: type-modal-slide-up 250ms ease-out;
     }
  
-    :host([variant="dialog"]) .type-modal-content {
+    .type-modal-content--dialog {
+        --type-modal-width: auto;
+        --type-modal-max-width: 400px;
+        --type-modal-border-radius: 1rem;
+        --type-modal-padding: 1.5rem;
         max-height: 90dvh;
         animation: type-modal-fade-in 200ms ease-out;
     }
 
-    :host([full-height]) .type-modal-content {
+    .type-modal-content--full-height {
         height: 100dvh;
     }
 
-    :host([scrollable]) .type-modal-body {
+    .type-modal-body--scrollable {
         overflow-y: auto;
         flex: 1 1 auto;
         min-height: 0;
+    }
+
+    .type-modal-body--scrollbar-hidden {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .type-modal-body--scrollbar-hidden::-webkit-scrollbar {
+        display: none;
     }
 
     .type-modal-header,
@@ -97,79 +103,9 @@ export default css`
         to   { transform: translateY(0); }
     }
 
-    :host([variant="page"]) .type-modal-content--closing {
-        animation: type-modal-slide-down 250ms ease-in forwards;
-    }
- 
-    :host([variant="dialog"]) .type-modal-content--closing {
-        animation: type-modal-fade-out 200ms ease-in forwards;
-    }
- 
-    .type-modal-backdrop--closing {
-        animation: type-modal-backdrop-out 250ms ease-in forwards;
-        pointer-events: none;
-    }
- 
-    @keyframes type-modal-slide-down {
-        from { transform: translateY(0); }
-        to   { transform: translateY(100%); }
-    }
- 
-    @keyframes type-modal-fade-out {
-        from {
-            opacity: 1;
-            transform: scale(1);
-        }
-        to {
-            opacity: 0;
-            transform: scale(0.96);
-        }
-    }
- 
-    @keyframes type-modal-backdrop-out {
-        from { opacity: 1; }
-        to   { opacity: 0; }
-    }
-
-    @media (max-width: 768px) {
-        :host([variant="dialog"]) {
-            --type-modal-max-width: 90vw;
-            --type-modal-padding: 1.25rem;
-        }
-
-        .type-modal-content {
-            padding: var(--type-modal-padding);
-            gap: 0.875rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        :host([variant="page"]) .type-modal-content {
-            padding: 1rem;
-        }
-
-        :host([variant="dialog"]) {
-            --type-modal-max-width: 95vw;
-            --type-modal-padding: 1rem;
-        }
-
-        .type-modal-content {
-            padding: var(--type-modal-padding);
-            gap: 0.75rem;
-        }
-
-        .type-modal-header,
-        .type-modal-body,
-        .type-modal-footer {
-            overflow-x: hidden;
-        }
-    }
-
     @media (prefers-reduced-motion: reduce) {
         .type-modal-backdrop,
-        .type-modal-content,
-        .type-modal-backdrop--closing,
-        .type-modal-content--closing {
+        .type-modal-content {
             animation: none;
         }
     }

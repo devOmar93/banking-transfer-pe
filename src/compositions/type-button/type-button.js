@@ -1,18 +1,21 @@
 import { html, LitElement, nothing } from "lit";
+import { createRef, ref } from "lit/directives/ref.js";
 import styles from "./type-button.css";
-import "@components/type-text/type-text.js";
-import "@components/type-icon/type-icon.js";
+import "@/components/type-text/type-text.js";
+import "@/components/type-icon/type-icon.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import {
   validateAllowedProp,
   validateRequiredProp,
-} from "@utils/utils.js";
+} from "@/utils/utils.js";
 
 const ALLOWED_VARIANTS = ["default", "secondary", "ghost"];
 const ALLOWED_POSITIONS = ["left", "right"];
 const ALLOWED_TYPES = ["button", "submit", "reset"];
 
 export class TypeButton extends LitElement {
+  buttonRef = createRef();
+  
   static properties = {
     /**
      * Icon name to display inside the button.
@@ -117,9 +120,14 @@ export class TypeButton extends LitElement {
     return html`${text}${icon}`;
   }
 
+  focus() {
+    this.buttonRef.value?.focus();
+  }
+
   render() {
     return html`
       <button
+        ${ref(this.buttonRef)}
         type=${this.type}
         class="btn"
         ?disabled=${this.disabled}

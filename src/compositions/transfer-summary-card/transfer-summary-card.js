@@ -1,7 +1,9 @@
-import { html, LitElement, nothing } from "lit";
+import { html, LitElement } from "lit";
 import { styles } from "./transfer-summary-card.css.js";
-import "@components/type-text/type-text.js";
-import "@compositions/transfer-summary-list/transfer-summary-list.js";
+import "@/components/type-text/type-text.js";
+import "@/compositions/transfer-summary-list/transfer-summary-list.js";
+import { formatAmount } from "@/utils/format.js";
+import { getAccessibleAmount } from "@/utils/format.js";
 
 class TransferSummaryCard extends LitElement {
   static properties = {
@@ -17,8 +19,6 @@ class TransferSummaryCard extends LitElement {
     originAccountNumber: { type: String },
     beneficiaryName: { type: String },
     beneficiaryLastName: { type: String },
-    concept: { type: String },
-    status: { type: String },
   };
 
   constructor() {
@@ -33,31 +33,36 @@ class TransferSummaryCard extends LitElement {
     this.originAccountNumber = "";
     this.beneficiaryName = "";
     this.beneficiaryLastName = "";
-    this.concept = "";
     this.status = "";
   }
 
   static styles = styles;
 
+  get _formattedAmount() {
+    return formatAmount(this.amount, this.currency);
+  }
+
+  get _accessibleAmount() {
+    return `${this.locale["successful-transfer-page-amount-transferred"]}. 
+      ${getAccessibleAmount(this.amount, this.currency)}.`;
+  }
+
   render() {
     return html`
       <div class="card">
-        <header class="header-container">
-          <type-text
-            size="xs"
-            .text=${this.locale["successful-transfer-page-amount-transferred"]}
-          ></type-text>
-          <div class="amount-container">
+        <header class="header-container" aria-label=${this._accessibleAmount}>
+        <div aria-hidden="true">
             <type-text
-              .text=${this.currency}
-              .weight=${"bold"}
-              size="l"
+              size="xs"
+              .text=${this.locale["successful-transfer-page-amount-transferred"]}
             ></type-text>
-            <type-text
-              .text=${this.amount}
-              .weight=${"bold"}
-              size="l"
-            ></type-text>
+            <div class="amount-container">
+              <type-text
+                .text=${this._formattedAmount}
+                .weight=${"bold"}
+                size="l"
+              ></type-text>
+            </div>
           </div>
         </header>
 
@@ -71,7 +76,6 @@ class TransferSummaryCard extends LitElement {
             .originAccountNumber=${this.originAccountNumber}
             .beneficiaryName=${this.beneficiaryName}
             .beneficiaryLastName=${this.beneficiaryLastName}
-            .concept=${this.concept}
             .status=${this.status}
             .isDataReady=${this.isDataReady}
           ></transfer-summary-list>
