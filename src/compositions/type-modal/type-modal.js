@@ -9,6 +9,7 @@ export class TypeModal extends LitElement {
     scrollable: { type: Boolean },
     fullHeight: { type: Boolean, attribute: "full-height" },
     hasFooter: { type: Boolean, attribute: "has-footer" },
+    ariaLabel: { type: String, attribute: "aria-label" },
   };
 
   constructor() {
@@ -19,6 +20,7 @@ export class TypeModal extends LitElement {
     this.fullHeight = false;
     this.hasFooter = false;
     this._bodyScrollLocked = false;
+    this.ariaLabel = "";
   }
 
   static get styles() {
@@ -93,6 +95,7 @@ export class TypeModal extends LitElement {
           })}
           role="dialog"
           aria-modal="true"
+          aria-label=${this.ariaLabel}
           @click=${this._handleContentClick}
         >
           <header class="type-modal-header">

@@ -10,14 +10,14 @@ export class InfoField extends LitElement {
 
   render() {
     return html`
-      <div class="info-field">
-        <div class="label">
+      <dl class="info-field">
+        <dt class="label">
           <slot name="label"></slot>
-        </div>
-        <div class="value">
+        </dt>
+        <dd class="value">
           <slot name="value"></slot>
-        </div>
-      </div>
+        </dd>
+      </dl>
     `;
   }
 }

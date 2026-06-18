@@ -231,6 +231,7 @@ export class SuccessfulTransferPage extends LitElement {
         class="modal-page-primary"
         .open=${this.isOpen}
         .hasFooter=${true}
+        aria-label=${this.locale["successful-transfer-page-modal-aria"]}
       >
         <div class="modal-body" slot="body">
           <div class="header">

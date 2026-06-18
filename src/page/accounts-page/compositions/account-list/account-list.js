@@ -39,6 +39,7 @@ export class AccountList extends LitElement{
             `
           )
         }
+        <div class="fade-bottom"></div>
       </div>
     `
   }

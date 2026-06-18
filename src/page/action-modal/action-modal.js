@@ -1,4 +1,5 @@
 import { LitElement, html } from "lit";
+import { createRef, ref } from "lit/directives/ref.js";
 import { actionModalStyles } from "./action-modal.css.js";
 import "@/compositions/type-modal/type-modal.js";
 import "@/compositions/type-button/type-button.js";
@@ -6,7 +7,7 @@ import "@/components/type-icon/type-icon.js";
 import { fireEvent } from "@/utils/utils.js";
 import locales from "@/locales/locales.json";
 
-const DEFAULT_LANGUAGE = "es_LA";
+const DEFAULT_LANGUAGE = "es-PE";
 const BUTTON_TYPES = {
   retry: "primary",
   exit: "secondary",
@@ -96,6 +97,8 @@ const ACTION_MODALS = {
   }
 };
 export class ActionModal extends LitElement {
+  firstButtonRef = createRef();
+
   static styles = actionModalStyles;
   static properties = {
     locale: { type: Object },
@@ -108,6 +111,18 @@ export class ActionModal extends LitElement {
     this.locale = null;
     this.open = false;
   }
+
+  willUpdate(changedProps) {
+    if (changedProps.has("open") && this.open) {
+      this._focusFirst();
+    }
+  }
+
+  async _focusFirst() {
+    await this.updateComplete;
+    this.firstButtonRef.value?.focus();
+  }
+
   get actionData() {
     return ACTION_MODALS[this.actionType] || ACTION_MODALS.loadAccountsError;
   }
@@ -116,6 +131,9 @@ export class ActionModal extends LitElement {
   }
   _getText(key) {
     return this._getLocale()?.[key] || key;
+  }
+  _getTitleModal() {
+    return this._getText(`${this.actionData.localePrefix}-modal-aria`);
   }
   _getTitle() {
     return this._getText(`${this.actionData.localePrefix}-title`);
@@ -169,15 +187,18 @@ export class ActionModal extends LitElement {
       ></type-icon>
     `;
   }
-  _renderButton(action) {
+  _renderButton(action, index) {
     const buttonType = this._getButtonType(action);
+    const ariaLabel = `${this._getTitle()}. ${this._getButtonText(action)}`;
     return html`
       <type-button
+        ${index === 0 ? ref(this.firstButtonRef) : null}
         class=${buttonType === "primary" ? "primary-btn" : "secondary-btn"}
         .text=${this._getButtonText(action)}
         .type=${"button"}
         .variant=${this._getButtonVariant(action)}
         .iconPosition=${"right"}
+        aria-label=${ariaLabel}
         @click=${(event) => this._handleButtonClick(action, event)}
       ></type-button>
     `;
@@ -189,6 +210,7 @@ export class ActionModal extends LitElement {
         variant="dialog"
         .hasFooter=${true}
         @click=${this._handleBackdropClick}
+        aria-label=${this._getTitle()}
       >
         <div slot="header" class="modal-header">
           ${this._renderIcon()}
@@ -198,7 +220,7 @@ export class ActionModal extends LitElement {
           <p class="modal-message">${this._getMessage()}</p>
         </div>
         <div slot="footer" class="modal-actions">
-          ${this.actionData.buttons.map((action) => this._renderButton(action))}
+          ${this.actionData.buttons.map((action, index) => this._renderButton(action, index))}
         </div>
       </type-modal>
     `;

@@ -130,6 +130,7 @@ export class TransferForm extends LitElement {
     const invalidStateField = this.formFieldStates[name]?.isValid === false;
     const errorMessageField = this.formFieldStates[name]?.errorMessage ?? "";
     const isRequired = nativeValidation?.required ?? false;
+
     return html`
       <type-input
         class=${classMap({ error: invalidStateField })}
@@ -143,6 +144,7 @@ export class TransferForm extends LitElement {
         .formatCurrency=${formatCurrency ?? ""}
         .errorMessage=${errorMessageField}
         .valid=${this.formFieldStates[name]?.isValid}
+        aria-label=${`Ingresar ${label}`}
       >
         ${hasIcon && this.currency
           ? html`<type-icon
@@ -158,11 +160,14 @@ export class TransferForm extends LitElement {
 
   render() {
     return html`
-      <form class="form-container">
+      <form class="form-container" aria-label="Formulario de transferencia">
         <div class="field-container">
           ${Object.values(this.configFormFields).map((field) =>
             this._renderFormField(field),
           )}
+        </div>
+        <div aria-live="polite" class="sr-only">
+          ${this.stateForm ? "Formulario válido" : ""}
         </div>
         <type-button
           .text=${LITERALS.continueButton.text}
@@ -172,7 +177,11 @@ export class TransferForm extends LitElement {
           @click="${this._onSubmit}"
           .iconPosition=${CONFIG.continueButton.iconPosition}
           ?disabled="${!this.stateForm}"
+          aria-label="Continuar con la transferencia"
         ></type-button>
+        <div aria-live="polite" class="sr-only">
+          ${this.stateForm ? "Formulario válido" : ""}
+        </div>
       </form>
     `;
   }

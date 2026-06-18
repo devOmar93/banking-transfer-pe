@@ -1,4 +1,4 @@
-import { html, LitElement } from "lit";
+import { html, LitElement, nothing } from "lit";
 import { styles } from "./type-text.css.js";
 import { unsafeStatic, html as staticHtml } from "lit/static-html.js";
 import { TYPOGRAPHY_CONFIG, validateText} from "./utils/type-text.utils.js";

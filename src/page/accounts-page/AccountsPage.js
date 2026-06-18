@@ -167,6 +167,7 @@ export class AccountsPage extends LitElement {
         ?full-height=${true}
         ?has-footer=${true}
         class="modal-accounts"
+        aria-label=${ES.modal}
       >
         <type-header
           slot="header"

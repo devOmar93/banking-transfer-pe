@@ -183,15 +183,13 @@ export class NewTransferPage extends LitElement {
   render() {
     return html`
       <type-modal
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-title"
         class="modal-page-primary"
         ?open=${true}
         .variant=${CONFIG.modal.variant}
         ?scrollable=${CONFIG.modal.scrollable}
         ?full-height=${CONFIG.modal.fullHeight}
         ?has-footer=${CONFIG.modal.hasFooter}
+        aria-label=${LITERALS.modal}
       >
         <div slot="header">
           <type-button

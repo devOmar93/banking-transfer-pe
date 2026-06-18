@@ -3,8 +3,8 @@ import { html, LitElement } from "lit";
 import { styles } from "./account-card.css.js";
 import "@/components/type-icon/type-icon.js";
 import "@/components/type-text/type-text.js";
+import { getLastFourDigits, maskAccountNumber, getAccessibleAmount } from "@/utils/format.js";
 import { fireEvent } from "@/utils/utils.js";
-import { maskAccountNumber } from "@/utils/format.js";
 
 export class AccountCard extends LitElement {
   /**
@@ -85,6 +85,12 @@ export class AccountCard extends LitElement {
   get _formatAccountNumber() {
     return maskAccountNumber(this.accountNumber);
   }
+  
+  get _accessibleAccount() {
+    return `${this.accountName}. 
+            Cuenta terminada en ${getLastFourDigits(this.accountNumber)}. 
+            Saldo ${getAccessibleAmount(this.availableBalance, this.currency)}.`;
+  }
 
   /**
    * Renders the account card content
@@ -96,7 +102,7 @@ export class AccountCard extends LitElement {
         type="button"
         class="account-card"
         tabindex="0"
-        aria-label=${`Cuenta ${this.accountName}, saldo ${this._formatCurrency()}${this._formatAmount()}`}
+        aria-label=${this._accessibleAccount}
         @click=${() => this._onClick()}
         @keydown=${(e) => this._onKeyDown(e)}
       >
