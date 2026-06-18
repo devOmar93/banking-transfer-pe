@@ -9,7 +9,7 @@ export const createSuccessfulTransferMock = (transferData) => {
   const { sourceAccount, destinationAccount } = transferData;
 
   return {
-    transactionNumber: `TRX-${Math.floor(100000000 + Math.random() * 900000000)}`,
+    transactionNumber: `TRF${Math.floor(100000000 + Math.random() * 900000000)}`,
     amount: sourceAccount.amount,
     currency: getCurrencySymbol(sourceAccount.currency),
     date: now.toLocaleDateString("es-ES", dateOptions),

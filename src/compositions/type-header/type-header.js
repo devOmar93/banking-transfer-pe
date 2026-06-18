@@ -23,7 +23,7 @@ export class TypeHeader extends LitElement {
       <div class="header">
         <type-text
           tag="h1"
-          size="l"
+          size="sl"
           weight="bold"
           text="${this.title}"
           align="${this.align}"

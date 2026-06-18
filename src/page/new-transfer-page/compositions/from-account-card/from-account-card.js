@@ -85,7 +85,7 @@ export class FromAccountCard extends LitElement {
   render() {
     return html`
       <article class="from-account-card" aria-label=${this._accessibleFromAccount}>
-        <div aria-hidden="true">
+        <div class="from-account-card__content" aria-hidden="true">
           <div class="from-account-card__column">
             <type-text
               tag="p"

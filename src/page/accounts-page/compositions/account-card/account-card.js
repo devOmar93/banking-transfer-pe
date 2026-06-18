@@ -3,7 +3,7 @@ import { html, LitElement } from "lit";
 import { styles } from "./account-card.css.js";
 import "@/components/type-icon/type-icon.js";
 import "@/components/type-text/type-text.js";
-import { getLastFourDigits, maskAccountNumber, getAccessibleAmount } from "@/utils/format.js";
+import { getLastFourDigits, maskAccountNumber, getAccessibleAmount, formatAmount } from "@/utils/format.js";
 import { fireEvent } from "@/utils/utils.js";
 
 export class AccountCard extends LitElement {
@@ -67,22 +67,11 @@ export class AccountCard extends LitElement {
 
   static styles = styles;
 
-  _formatCurrency(currency = this.currency) {
-    const symbols = {
-      PEN: "S/",
-      USD: "$",
-    };
-    return symbols[currency] || "";
+  get _formattedBalance() {
+    return formatAmount(this.availableBalance, this.currency);
   }
 
-  _formatAmount() {
-    return new Intl.NumberFormat("es-PE", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(this.availableBalance);
-  }
-
-  get _formatAccountNumber() {
+  get _maskedAccountNumber() {
     return maskAccountNumber(this.accountNumber);
   }
   
@@ -126,7 +115,7 @@ export class AccountCard extends LitElement {
               size="s"
               weight="medium"
               class="p-subtitle"
-              .text=${this._formatAccountNumber}
+              .text=${this._maskedAccountNumber}
             ></type-text>
 
             <type-text
@@ -145,7 +134,7 @@ export class AccountCard extends LitElement {
               tag="p"
               size="ml"
               weight="bold"
-              .text=${`${this._formatCurrency()} ${this._formatAmount()}`}
+              .text=${this._formattedBalance}
             ></type-text>
           </div>
 

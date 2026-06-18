@@ -63,6 +63,15 @@ export default css`
         min-height: 0;
     }
 
+    .type-modal-body--scrollbar-hidden {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .type-modal-body--scrollbar-hidden::-webkit-scrollbar {
+        display: none;
+    }
+
     .type-modal-header,
     .type-modal-footer {
         flex: 0 0 auto;

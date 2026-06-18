@@ -9,6 +9,7 @@ export class TypeModal extends LitElement {
     scrollable: { type: Boolean },
     fullHeight: { type: Boolean, attribute: "full-height" },
     hasFooter: { type: Boolean, attribute: "has-footer" },
+    hideScrollbar: { type: Boolean, attribute: "hide-scrollbar" },
     ariaLabel: { type: String, attribute: "aria-label" },
   };
 
@@ -19,6 +20,7 @@ export class TypeModal extends LitElement {
     this.scrollable = false;
     this.fullHeight = false;
     this.hasFooter = false;
+    this.hideScrollbar = false;
     this._bodyScrollLocked = false;
     this.ariaLabel = "";
   }
@@ -105,6 +107,7 @@ export class TypeModal extends LitElement {
             class=${classMap({
               "type-modal-body": true,
               "type-modal-body--scrollable": this.scrollable,
+              "type-modal-body--scrollbar-hidden": this.hideScrollbar,
             })}
           >
             <slot name="body"></slot>

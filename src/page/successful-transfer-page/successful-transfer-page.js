@@ -4,6 +4,7 @@ import "@/compositions/type-button/type-button.js";
 import "@/compositions/type-modal/type-modal.js";
 import "@/compositions/info-card/info-card.js";
 import { fireEvent } from "@/utils/utils.js";
+import { formatAmount } from "@/utils/format.js";
 import { generateTransferSummaryPdf } from "./services/generate-transfer-summary-pdf.js";
 import styles from "./successful-transfer-page.css.js";
 
@@ -141,6 +142,10 @@ export class SuccessfulTransferPage extends LitElement {
 
   static styles = styles;
 
+  get _formattedAmount() {
+    return formatAmount(this.amount, this.currency);
+  }
+
   /**
    * Compiles transaction data and triggers the third-party PDF service download wrapper.
    * If an exception occurs, a generic error event is dispatched to the application layout.
@@ -174,7 +179,7 @@ export class SuccessfulTransferPage extends LitElement {
       },
     ];
     try {
-      generateTransferSummaryPdf(this.amount, dataPdf);
+      generateTransferSummaryPdf(this._formattedAmount, dataPdf);
     } catch (error) {
       fireEvent(this, "error-retry", {
         title: "Error al descargar el PDF",
@@ -230,6 +235,8 @@ export class SuccessfulTransferPage extends LitElement {
       <type-modal
         class="modal-page-primary"
         .open=${this.isOpen}
+        .scrollable=${true}
+        .hideScrollbar=${true}
         .hasFooter=${true}
         aria-label=${this.locale["successful-transfer-page-modal-aria"]}
       >
@@ -245,7 +252,7 @@ export class SuccessfulTransferPage extends LitElement {
               .text=${this.locale["successful-transfer-page-title"]}
               tag="h1"
               weight="bold"
-              size="l"
+              size="sl"
               align="center"
             ></type-text>
             <type-text
@@ -296,6 +303,7 @@ export class SuccessfulTransferPage extends LitElement {
           ></type-button>
           <info-card
             .message=${this.locale["successful-transfer-page-message"]}
+            .messageSize=${"xs"}
             ?hasIcon=${false}
           >
           </info-card>
