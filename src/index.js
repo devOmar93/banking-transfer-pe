@@ -272,6 +272,7 @@ export class MyElement extends LitElement {
   }
 
   async _handleConfirmAccept({ detail }) {
+    this._loaded = false;
     const transferData = detail?.transferData ?? {};
     await this.transfersApiDm.value.executeTransfer(transferData);
   }
@@ -291,16 +292,18 @@ export class MyElement extends LitElement {
   }
 
   _handleDataSuccess({ detail }) {
+    this._loaded = true;
     const response = detail.response;
     const accounts = detail.accounts;
     this._transferSummary = { ...response };
-    this._accountsData = [ ...accounts ];
+    this._accountsData = [...accounts];
     this._isDataReady = true;
     this._transferStatus = "";
     this._step = 3;
   }
 
   _handleError() {
+    this._loaded = true;
     this._transferStatus = "error";
   }
 
@@ -396,6 +399,16 @@ export class MyElement extends LitElement {
 
   _renderExitPage() {
     return html`<exit-page .locale=${this.locale}></exit-page>`;
+  }
+
+  _generatePDF({ detail }) {
+    const dataPdf = detail.dataPdf;
+
+    try {
+      generateTransferSummaryPdf(this._formattedAmount, dataPdf);
+    } catch (error) {
+      throw new Error("Error al descargar el PDF");
+    }
   }
 
   _renderStep(page) {

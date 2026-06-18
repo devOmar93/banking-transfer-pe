@@ -1,4 +1,4 @@
-import ES from "@locales/locales.json";
+import ES from "@/locales/locales.json";
 const lang = ES["es-PE"];
 
 export const TRANSFER_FORM_FIELDS = {
@@ -18,7 +18,7 @@ export const TRANSFER_FORM_FIELDS = {
       default: lang["new-transfer-page-field-destination-error-default"],
       minLength: lang["new-transfer-page-field-destination-error-min-Length"],
       maxLength: lang["new-transfer-page-field-destination-error-max-Length"],
-      nonNumericaAccount: lang["new-transfer-page-field-destination-error-not-numerical"],
+      sameAccount: lang["new-transfer-page-field-destination-error-same-account"],
     },
 
     businessValidation: true,

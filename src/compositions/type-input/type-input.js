@@ -1,6 +1,6 @@
 import { html, LitElement, nothing } from "lit";
 import { classMap } from "lit/directives/class-map.js";
-
+import { fireEvent } from "@/utils/utils.js";
 import styles from "./type-input.css.js";
 
 export class TypeInput extends LitElement {
@@ -131,25 +131,21 @@ export class TypeInput extends LitElement {
     }
     this._nativeValid = input.checkValidity();
 
-    this.dispatchEvent(
-      new CustomEvent("text-change", {
-        detail: {
-          name: this.nameField,
-          isValid: this._nativeValid,
-          value: value,
-        },
-        bubbles: true,
-        composed: true,
-      }),
-    );
+   
+  fireEvent(this, "text-change", {
+      name: this.nameField,
+      isValid: this._nativeValid,
+      value: value,
+    });
+
   }
 
-  _validateInput(event) {
+  _validateInput(value) {
     const validateForNameInput = {
-      destinationAccount: this._formatAccountDestinatari(event),
-      amount: this._formatAmount(event),
+      destinationAccount: this._formatAccountDestinatari(value),
+      amount: this._formatAmount(value),
     };
-    return validateForNameInput[this.nameField] ?? event.target.value;
+    return validateForNameInput[this.nameField] ?? value;
   }
 
   _formatAmount(value) {
@@ -215,8 +211,9 @@ export class TypeInput extends LitElement {
             aria-invalid=${invalid ? "true" : "false"}
             aria-describedby=${invalid ? `error-${this.idInput}` : nothing}
             ?required=${this.requiredInput}
-            .value="${this._value}"
+            .value=${this._value}
             @input=${this._onInput}
+            maxlength=${this.nameField === "destinationAccount" ? 20 : -1}
           />
         </div>
         ${invalid && this.errorMessage
