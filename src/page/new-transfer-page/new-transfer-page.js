@@ -144,9 +144,9 @@ export class NewTransferPage extends LitElement {
   _getCurrency(currency) {
     const listCurrency = {
       USD: "dollar-sign",
-      PEN: "dollar-sign",
+      PEN: "sol-sign"
     };
-    return listCurrency[currency] ?? "dollar-sign";
+    return listCurrency[currency] ?? "";
   }
 
   _returnPage() {
