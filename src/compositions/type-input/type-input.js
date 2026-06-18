@@ -2,6 +2,7 @@ import { html, LitElement, nothing } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { fireEvent } from "@/utils/utils.js";
 import styles from "./type-input.css.js";
+import { fireEvent } from "@/utils/utils.js";
 
 export class TypeInput extends LitElement {
   static properties = {

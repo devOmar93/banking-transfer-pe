@@ -296,7 +296,7 @@ export class MyElement extends LitElement {
     const response = detail.response;
     const accounts = detail.accounts;
     this._transferSummary = { ...response };
-    this._accountsData = [ ...accounts ];
+    this._accountsData = [...accounts];
     this._isDataReady = true;
     this._transferStatus = "";
     this._step = 3;
@@ -399,6 +399,16 @@ export class MyElement extends LitElement {
 
   _renderExitPage() {
     return html`<exit-page .locale=${this.locale}></exit-page>`;
+  }
+
+  _generatePDF({ detail }) {
+    const dataPdf = detail.dataPdf;
+
+    try {
+      generateTransferSummaryPdf(this._formattedAmount, dataPdf);
+    } catch (error) {
+      throw new Error("Error al descargar el PDF");
+    }
   }
 
   _renderStep(page) {

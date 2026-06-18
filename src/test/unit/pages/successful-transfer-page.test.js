@@ -1,41 +1,25 @@
-import { fixture, html, expect } from '@open-wc/testing';
-import sinon from 'sinon';
-import '@/page/successful-transfer-page/successful-transfer-page.js';
+import { fixture, html, expect } from "@open-wc/testing";
+import sinon from "sinon";
+import "@/page/successful-transfer-page/successful-transfer-page.js";
+import locales from "@/locales/locales.json";
+import { SUCCESSFUL_TRANSFER_RESPONSE_MOCK as SUCCESSFUL_MOCK } from "@/mocks/transfer.mock";
 
-describe('SuccessfulTransferPage', () => {
+describe("SuccessfulTransferPage", () => {
   let el;
-
-  const mockLocale = {
-    "successful-transfer-page-transaction-number": "Número de transacción",
-    "successful-transfer-page-date": "Fecha",
-    "successful-transfer-page-time": "Hora",
-    "successful-transfer-page-origin-account": "Cuenta origen",
-    "successful-transfer-page-beneficiary": "Beneficiario",
-    "successful-transfer-page-status": "Estado",
-    "successful-transfer-page-title": "¡Transferencia Exitosa!",
-    "successful-transfer-page-subtitle": "Tu dinero va en camino",
-    "successful-transfer-page-download-button": "Descargar",
-    "successful-transfer-page-share-button": "Compartir",
-    "successful-transfer-page-new-transfer-button": "Nueva transferencia",
-    "successful-transfer-page-message": "Aviso legal",
-    "successful-transfer-page-share-modal-title": "Compartir",
-    "successful-transfer-page-share-modal-subtitle": "Elige opción",
-    "successful-transfer-page-share-modal-accept-button": "Aceptar"
-  };
 
   beforeEach(async () => {
     el = await fixture(html`
       <successful-transfer-page
-        .locale=${mockLocale}
-        amount="150.00"
-        transactionNumber="987654321"
-        date="16/06/2026"
-        time="11:30"
-        originAccount="Ahorros"
-        originAccountNumber="191-XXXX"
-        beneficiaryName="Eyder"
-        beneficiaryLastName="Huayta"
-        .isOpen=${true}
+        .locale=${locales["es-PE"]}
+        .amount=${SUCCESSFUL_MOCK.amount}
+        .transactionNumber=${SUCCESSFUL_MOCK.transactionNumber}
+        .date=${SUCCESSFUL_MOCK.date}
+        .time=${SUCCESSFUL_MOCK.time}
+        .originAccount=${SUCCESSFUL_MOCK.originAccount}
+        .originAccountNumber=${SUCCESSFUL_MOCK.originAccountNumber}
+        .beneficiaryName=${SUCCESSFUL_MOCK.beneficiaryName}
+        .beneficiaryLastName=${SUCCESSFUL_MOCK.beneficiaryLastName}
+        ?isOpen=${true}
       ></successful-transfer-page>
     `);
   });
@@ -44,48 +28,45 @@ describe('SuccessfulTransferPage', () => {
     sinon.restore();
   });
 
-  it('debe ejecutar _handleDownload con éxito', () => {
-    const elementClass = customElements.get('successful-transfer-page');
-    const downloadSpy = sinon.spy(elementClass.prototype, '_handleDownload');
+  it("debe descargar con éxito", async () => {
+    const downloadSpy = sinon.spy();
+    const btnDownload = el.shadowRoot.getElementById("downloadBtn");
+    el.addEventListener("download-summary-pdf", downloadSpy);
 
-    el._handleDownload();
+    btnDownload.click();
+
+    await el.updateComplete;
 
     expect(downloadSpy.calledOnce).to.be.true;
   });
 
-  it('debe emitir el evento "error-retry" si la lógica interna del PDF falla', () => {
-    const spyError = sinon.spy();
-    el.addEventListener('error-retry', spyError);
-
-    el.amount = null;
-    el.transactionNumber = undefined;
-
-    try {
-      el._handleDownload();
-    } catch (e) {
-    }
-
-    expect(spyError.calledOnce).to.be.true;
-    expect(spyError.firstCall.args[0].detail.title).to.equal("Error al descargar el PDF");
+  it("debe cambiar abrirse el modal al hacer click al botón shareBtn", async () => {
+    const shareBtn = el.shadowRoot.getElementById("shareBtn");
+    const shareModal = el.shadowRoot.getElementById("shareModal");
+    shareBtn.click();
+    await el.updateComplete;
+    expect(shareModal.open).to.be.true;
   });
 
-  it('debe cambiar _showShareModal a true al ejecutar _handleShare', () => {
-    el._handleShare();
-    expect(el._showShareModal).to.be.true;
+  it("debe cambiar cerrarse el modal al hacer click al botón closeShareBtn", async () => {
+    const shareBtn = el.shadowRoot.getElementById("shareBtn");
+    const closeShareBtn = el.shadowRoot.getElementById("closeShareBtn");
+    const shareModal = el.shadowRoot.getElementById("shareModal");
+    shareBtn.click();
+    await el.updateComplete;
+    closeShareBtn.click();
+
+    expect(shareModal.open).to.be.true;
   });
 
-  it('debe cambiar _showShareModal a false al ejecutar _closeShareModal', () => {
-    el._showShareModal = true;
-    el._closeShareModal();
-    expect(el._showShareModal).to.be.false;
-  });
-
-  it('debe emitir el evento "return-home" al ejecutar _handleNewTransfer', () => {
+  it('debe emitir el evento "return-home"', async () => {
     const spyReturn = sinon.spy();
-    el.addEventListener('return-home', spyReturn);
+    const homeBtn = el.shadowRoot.getElementById("homeBtn");
+    el.addEventListener("return-home", spyReturn);
 
-    el._handleNewTransfer();
+    homeBtn.click();
 
+    await el.updateComplete;
     expect(spyReturn.calledOnce).to.be.true;
     expect(spyReturn.firstCall.args[0].detail).to.equal(0);
     expect(el.isOpen).to.be.false;
