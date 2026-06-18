@@ -1,3 +1,5 @@
+import { getCurrencySymbol } from "@/utils/format";
+
 export const createSuccessfulTransferMock = (transferData) => {
   const now = new Date();
 
@@ -9,7 +11,7 @@ export const createSuccessfulTransferMock = (transferData) => {
   return {
     transactionNumber: `TRX-${Math.floor(100000000 + Math.random() * 900000000)}`,
     amount: sourceAccount.amount,
-    currency: sourceAccount.currency,
+    currency: getCurrencySymbol(sourceAccount.currency),
     date: now.toLocaleDateString("es-ES", dateOptions),
     time: now.toLocaleTimeString("en-US", timeOptions).toLowerCase(),
     status: "Completado",
