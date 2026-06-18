@@ -18,16 +18,16 @@ export class MyElement extends LitElement {
   newTransferApiDm = createRef();
 
   static properties = {
-    /**
+    /** 
      * Localization string for the page, used to display text in different languages based on user preference
      * @type {String}
      * @default ""
      */
     lang: {
-      type: String,
+      type: String
     },
 
-    /**
+    /** 
      * The current step in the transfer process
      * @type {Number}
      * @default 0
@@ -35,10 +35,10 @@ export class MyElement extends LitElement {
      */
     _step: {
       type: Number,
-      state: true,
+      state: true
     },
 
-    /**
+    /** 
      * Customer accounts detail
      * @type {Array}
      * @default []
@@ -46,10 +46,10 @@ export class MyElement extends LitElement {
      */
     _accountsData: {
       type: Array,
-      state: true,
+      state: true
     },
 
-    /**
+    /** 
      * Data from a single customer account
      * @type {Object}
      * @default {}
@@ -57,10 +57,10 @@ export class MyElement extends LitElement {
      */
     _accountCustomer: {
       type: Object,
-      state: true,
+      state: true
     },
 
-    /**
+    /** 
      * Destination account data
      * @type {Object}
      * @default {}
@@ -68,10 +68,10 @@ export class MyElement extends LitElement {
      */
     _destinationAccount: {
       type: Object,
-      state: true,
+      state: true
     },
 
-    /**
+    /** 
      * Transfer summary data
      * @type {Object}
      * @default {}
@@ -79,10 +79,10 @@ export class MyElement extends LitElement {
      */
     _transferSummary: {
       type: Object,
-      state: true,
+      state: true
     },
 
-    /**
+    /** 
      * Data for executing the transfer
      * @type {Object}
      * @default {}
@@ -90,10 +90,10 @@ export class MyElement extends LitElement {
      */
     _transferData: {
       type: Object,
-      state: true,
+      state: true
     },
 
-    /**
+    /** 
      * Status of the transfer process
      * @type {String}
      * @default ""
@@ -101,9 +101,10 @@ export class MyElement extends LitElement {
      */
     _transferStatus: {
       type: String,
+      state: true,
     },
 
-    /**
+    /** 
      * Indicates if the data is ready for use
      * @type {Boolean}
      * @default false
@@ -111,10 +112,10 @@ export class MyElement extends LitElement {
      */
     _isDataReady: {
       type: Boolean,
-      state: true,
+      state: true
     },
 
-    /**
+    /** 
      * Specify whether the loading component should be displayed
      * @type {Boolean}
      * @default false
@@ -122,10 +123,10 @@ export class MyElement extends LitElement {
      */
     _loaded: {
       type: Boolean,
-      state: true,
+      state: true
     },
 
-    /**
+    /** 
      * Number of times the operation has been retried
      * @type {Number}
      * @default 0
@@ -133,10 +134,10 @@ export class MyElement extends LitElement {
      */
     _retryCount: {
       type: Number,
-      state: true,
+      state: true
     },
 
-    /**
+    /** 
      * Specify whether the action modal is open
      * @type {Boolean}
      * @default false
@@ -144,10 +145,10 @@ export class MyElement extends LitElement {
      */
     _actionModalOpen: {
       type: Boolean,
-      state: true,
+      state: true
     },
 
-    /**
+    /** 
      * Indicates if an initial error has occurred
      * @type {Boolean}
      * @default false
@@ -155,7 +156,7 @@ export class MyElement extends LitElement {
      */
     _isInitialError: {
       type: Boolean,
-      state: true,
+      state: true
     },
   };
 
@@ -166,10 +167,9 @@ export class MyElement extends LitElement {
     this._accountCustomer = {};
     this._destinationAccount = {};
     this._transferSummary = {};
-    this._transferData = null;
+    this._transferData = {};
     this._transferStatus = "";
     this._isDataReady = false;
-    this._accountsStatus = "";
     this._accountsData = [];
     this._loaded = false;
     this._retryCount = 0;
@@ -272,6 +272,7 @@ export class MyElement extends LitElement {
   }
 
   async _handleConfirmAccept({ detail }) {
+    this._loaded = false;
     const transferData = detail?.transferData ?? {};
     await this.transfersApiDm.value.executeTransfer(transferData);
   }
@@ -291,6 +292,7 @@ export class MyElement extends LitElement {
   }
 
   _handleDataSuccess({ detail }) {
+    this._loaded = true;
     const response = detail.response;
     const accounts = detail.accounts;
     this._transferSummary = { ...response };
@@ -301,6 +303,7 @@ export class MyElement extends LitElement {
   }
 
   _handleError() {
+    this._loaded = true;
     this._transferStatus = "error";
   }
 

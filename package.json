@@ -10,6 +10,7 @@
     "test": "web-test-runner"
   },
   "dependencies": {
+    "install": "^0.13.0",
     "jspdf": "^4.2.1",
     "lit": "^3.3.2"
   },

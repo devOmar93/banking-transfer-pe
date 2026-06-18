@@ -75,39 +75,41 @@ export class TransferSummary extends LitElement {
       ${this._beneficiaryName}. 
       Cuenta terminada en ${getLastFourDigits(this._data.destinationAccount?.accountNumber)}.`;
   }
- 
-  get _accessibleSummary() {
-    return `
-      ${this._accessibleAmountCard}
-      ${this._accessibleSourceAccount}
-      ${this._accessibleBeneficiary}
-    `.replace(/\s+/g, " ").trim();
+
+  get _accesibleInfoCard(){
+    return `${this._accessibleSourceAccount}. 
+      ${this._accessibleBeneficiary}.`;
   }
 
   _renderAmountCard() {
     return html`
-      <div class="transfer-summary__amount-card">
-        <type-text
-          tag="p"
-          size="s"
-          weight="medium"
-          .text=${this.amountLabel}
-          class="transfer-summary__amount-label"
-        ></type-text>
-        <type-text
-          tag="p"
-          size="xl"
-          weight="bold"
-          .text=${this._formattedAmount}
-          class="transfer-summary__amount-value"
-        ></type-text>
+      <div 
+        class="transfer-summary__amount-card"
+        aria-label=${this._accessibleAmountCard}
+      >
+        <div aria-hidden="true">
+          <type-text
+            tag="p"
+            size="s"
+            weight="medium"
+            .text=${this.amountLabel}
+            class="transfer-summary__amount-label"
+          ></type-text>
+          <type-text
+            tag="p"
+            size="xl"
+            weight="bold"
+            .text=${this._formattedAmount}
+            class="transfer-summary__amount-value"
+          ></type-text>
+        </div>
       </div>
     `;
   }
  
   _renderSourceAccountField() {
     return html`
-      <info-field>
+      <info-field aria-label=${this._accessibleSourceAccount}>
         <type-text
           slot="label"
           tag="p"
@@ -138,7 +140,7 @@ export class TransferSummary extends LitElement {
  
   _renderBeneficiaryField() {
     return html`
-      <info-field>
+      <info-field aria-label=${this._accessibleBeneficiary}>
         <type-text
           slot="label"
           tag="p"
@@ -171,11 +173,10 @@ export class TransferSummary extends LitElement {
     return html`
       <section 
         class="transfer-summary"
-        aria-label=${this._accessibleSummary}
       >
-        <div aria-hidden="true">
-          ${this._renderAmountCard()}
-          <div class="transfer-summary__fields">
+        ${this._renderAmountCard()}
+        <div class="transfer-summary__fields" aria-label=${this._accesibleInfoCard}>
+          <div aria-hidden="true">
             ${this._renderSourceAccountField()}
             ${this._renderBeneficiaryField()}
             <slot></slot>
