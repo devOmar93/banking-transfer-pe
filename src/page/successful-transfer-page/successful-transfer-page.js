@@ -219,16 +219,11 @@ export class SuccessfulTransferPage extends LitElement {
    * Resets open modal attributes.
    * * @private
    */
-  _handleNewTransfer() {
-    this.dispatchEvent(
-      new CustomEvent("return-home", {
-        detail: 0,
-        bubbles: true,
-        composed: true,
-      }),
-    );
-    this.isOpen = false;
-  }
+  
+ _handleNewTransfer() {
+  fireEvent(this, "return-home", 0);
+  this.isOpen = false;
+}
 
   render() {
     return html`

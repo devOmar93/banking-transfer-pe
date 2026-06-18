@@ -3,6 +3,7 @@ import { classMap } from "lit/directives/class-map.js";
 import "@/compositions/type-input/type-input.js";
 import "@/compositions/type-button/type-button.js";
 import "@/components/type-icon/type-icon.js";
+import { fireEvent } from "@/utils/utils.js";
 import {
   NEW_TRANSFER_PAGE_LITERALS as LITERALS,
   NEW_TRANSFER_PAGE_CONFIG as CONFIG,
@@ -75,13 +76,7 @@ export class TransferForm extends LitElement {
 
   _sendForm() {
     const formValues = getFormValues(this.formFieldStates);
-    this.dispatchEvent(
-      new CustomEvent("form-submit", {
-        detail: formValues,
-        bubbles: true,
-        composed: true,
-      }),
-    );
+    fireEvent(this, "form-submit", formValues);
   }
 
   _validateForm() {
