@@ -1,12 +1,12 @@
 {
   "es_LA": {
     "successful-transfer-page-title": "Transferencia exitosa",
-    "successful-transfer-page-subtitle": "Tu dinero ha sido transferido correctamente",
+    "successful-transfer-page-subtitle": "Tu dinero ha sido enviado correctamente",
     "successful-transfer-page-amount-transferred": "Monto transferido",
     "successful-transfer-page-transaction-number": "Número de transacción",
     "successful-transfer-page-date": "Fecha",
     "successful-transfer-page-time": "Hora",
-    "successful-transfer-page-origin-account": "Cuenta de origen",
+    "successful-transfer-page-origin-account": "Cuenta origen",
     "successful-transfer-page-beneficiary": "Beneficiario",
     "successful-transfer-page-status": "Estado",
     "successful-transfer-page-download-button": "Descargar",

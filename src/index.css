@@ -70,8 +70,8 @@
   --field-list-secondary-text-color: #808080;
 
   /* transfer-summary-card */
-  --transfer-summary-card-bg-gradient-start: #7f13fb;
-  --transfer-summary-card-bg-gradient-end: #a824f5;
+  --transfer-summary-card-bg-gradient-start: #6c5ce7;
+  --transfer-summary-card-bg-gradient-end: #8e44ad;
 }
 
 @media (prefers-color-scheme: dark) {

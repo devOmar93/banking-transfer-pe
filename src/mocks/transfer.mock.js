@@ -6,7 +6,7 @@ export const createSuccessfulTransferMock = (transferData) => {
   return {
     currency: transferData.sourceAccount.currency,
     amount: transferData.sourceAccount.amount,
-    transactionNumber: `TRX-${Math.floor(100000000 + Math.random() * 900000000)}`,
+    transactionNumber: `TRF${Math.floor(100000000 + Math.random() * 900000000)}`,
     date: now.toLocaleDateString('es-ES', options),
     time: now.toTimeString().split(" ")[0],
     originAccount: transferData.sourceAccount.accountName || "Cuenta Origen",

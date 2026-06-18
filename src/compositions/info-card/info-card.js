@@ -16,11 +16,16 @@ export class InfoCard extends LitElement {
     hasIcon: {
       type: Boolean,
     },
+    messageSize: {
+      type: String,
+      attribute: "message-size",
+    },
   };
   constructor() {
     super();
     this.message = "";
     this.hasIcon = false;
+    this.messageSize = "s";
   }
 
   static get styles() {
@@ -37,7 +42,7 @@ export class InfoCard extends LitElement {
             `
           : nothing}
         <div class="message-container">
-          <type-text .text=${this.message}></type-text>
+          <type-text .size=${this.messageSize} .text=${this.message}></type-text>
         </div>
       </div>
     `;

@@ -2,6 +2,7 @@ import { html, LitElement } from "lit";
 import { styles } from "./transfer-summary-card.css.js";
 import "@/components/type-text/type-text.js";
 import "@/compositions/transfer-summary-list/transfer-summary-list.js";
+import { formatAmount } from "@/utils/format.js";
 
 class TransferSummaryCard extends LitElement {
   static properties = {
@@ -36,6 +37,10 @@ class TransferSummaryCard extends LitElement {
 
   static styles = styles;
 
+  get _formattedAmount() {
+    return formatAmount(this.amount, this.currency);
+  }
+
   render() {
     return html`
       <div class="card">
@@ -46,12 +51,7 @@ class TransferSummaryCard extends LitElement {
           ></type-text>
           <div class="amount-container">
             <type-text
-              .text=${this.currency}
-              .weight=${"bold"}
-              size="l"
-            ></type-text>
-            <type-text
-              .text=${this.amount}
+              .text=${this._formattedAmount}
               .weight=${"bold"}
               size="l"
             ></type-text>

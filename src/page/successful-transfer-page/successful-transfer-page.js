@@ -4,6 +4,7 @@ import "@/compositions/type-button/type-button.js";
 import "@/compositions/type-modal/type-modal.js";
 import "@/compositions/info-card/info-card.js";
 import { fireEvent } from "@/utils/utils.js";
+import { formatAmount } from "@/utils/format.js";
 import styles from "./successful-transfer-page.css.js";
 import { generateTransferSummaryPdf } from "./services/generate-transfer-summary-pdf.js";
 
@@ -13,6 +14,9 @@ export class SuccessfulTransferPage extends LitElement {
       type: Object,
     },
     current: {
+      type: String,
+    },
+    currency: {
       type: String,
     },
     amount: {
@@ -54,6 +58,7 @@ export class SuccessfulTransferPage extends LitElement {
     super();
     this.locale = {};
     this.current = "";
+    this.currency = "";
     this.amount = "";
     this.transactionNumber = "";
     this.time = "";
@@ -69,6 +74,10 @@ export class SuccessfulTransferPage extends LitElement {
   }
 
   static styles = styles;
+
+  get _formattedAmount() {
+    return formatAmount(this.amount, this.currency);
+  }
 
   _handleDownload() {
     const dataPdf = [
@@ -98,7 +107,7 @@ export class SuccessfulTransferPage extends LitElement {
       },
     ];
     try {
-      generateTransferSummaryPdf(this.amount, dataPdf);
+      generateTransferSummaryPdf(this._formattedAmount, dataPdf);
     } catch (error) {
       fireEvent(this, "error-retry", {
         title: "Error al descargar el PDF",
@@ -169,7 +178,7 @@ export class SuccessfulTransferPage extends LitElement {
           </div>
           <transfer-summary-card
             .locale=${this.locale}
-            .current=${this.current}
+            .currency=${this.currency}
             .amount=${this.amount}
             .transactionNumber=${this.transactionNumber}
             .date=${this.date}
@@ -208,6 +217,7 @@ export class SuccessfulTransferPage extends LitElement {
           ></type-button>
           <info-card
             .message=${this.locale["successful-transfer-page-message"]}
+            .messageSize=${"xs"}
             ?hasIcon=${false}
           >
           </info-card>
