@@ -3,6 +3,7 @@ import { styles } from "./transfer-summary.css.js";
 import "@/components/type-text/type-text.js";
 import "@/compositions/info-field/info-field.js";
 import { formatAmount, maskAccountNumber, getAccessibleAmount } from "@/utils/format.js";
+import { getLastFourDigits } from "@/utils/format.js";
  
 export class TransferSummary extends LitElement {
   static properties = {
@@ -56,10 +57,33 @@ export class TransferSummary extends LitElement {
     return maskAccountNumber(this._data.destinationAccount?.accountNumber);
   }
 
-  get _accessibleAmount() {
-    return getAccessibleAmount( this._data.sourceAccount.amount, this._data.sourceAccount.currency)
+  get _accessibleAmountCard() {
+    return `${this.amountLabel}. ${getAccessibleAmount(
+      this._data.sourceAccount.amount,
+      this._data.sourceAccount.currency
+    )}.`;
+  }
+
+  get _accessibleSourceAccount() {
+    return `${this.sourceAccountLabel}. 
+      ${this._sourceAccountName}. 
+      Cuenta terminada en ${getLastFourDigits(this._data.sourceAccount?.accountNumber)}.`;
+  }
+
+  get _accessibleBeneficiary() {
+    return `${this.beneficiaryLabel}. 
+      ${this._beneficiaryName}. 
+      Cuenta terminada en ${getLastFourDigits(this._data.destinationAccount?.accountNumber)}.`;
   }
  
+  get _accessibleSummary() {
+    return `
+      ${this._accessibleAmountCard}
+      ${this._accessibleSourceAccount}
+      ${this._accessibleBeneficiary}
+    `.replace(/\s+/g, " ").trim();
+  }
+
   _renderAmountCard() {
     return html`
       <div class="transfer-summary__amount-card">
@@ -74,8 +98,7 @@ export class TransferSummary extends LitElement {
           tag="p"
           size="xl"
           weight="bold"
-          .text=${this._formattedAmount}  
-          aria-label=${this._accessibleAmount}
+          .text=${this._formattedAmount}
           class="transfer-summary__amount-value"
         ></type-text>
       </div>
@@ -146,12 +169,17 @@ export class TransferSummary extends LitElement {
  
   render() {
     return html`
-      <section class="transfer-summary">
-        ${this._renderAmountCard()}
-        <div class="transfer-summary__fields">
-          ${this._renderSourceAccountField()}
-          ${this._renderBeneficiaryField()}
-          <slot></slot>
+      <section 
+        class="transfer-summary"
+        aria-label=${this._accessibleSummary}
+      >
+        <div aria-hidden="true">
+          ${this._renderAmountCard()}
+          <div class="transfer-summary__fields">
+            ${this._renderSourceAccountField()}
+            ${this._renderBeneficiaryField()}
+            <slot></slot>
+          </div>
         </div>
       </section>
     `;

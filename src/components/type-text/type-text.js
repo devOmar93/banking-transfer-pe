@@ -39,24 +39,6 @@ export class TypeText extends LitElement {
      * @default ""
      */
     weight: { type: String },
-
-    /**
-     * Aria Label to tag HTML
-     * @type { String }
-     * @default ""
-     * @attribute "aria-label"
-     */
-    ariaLabel: { 
-      type: String, 
-      attribute: "aria-label" 
-    },
-
-    /**
-     * Id to tag HTML
-     * @type { String }
-     * @default ""
-     */
-    id: { type: String },
   };
 
   constructor() {
@@ -66,8 +48,6 @@ export class TypeText extends LitElement {
     this.size = "";
     this.align = "";
     this.weight = "";
-    this.ariaLabel = "";
-    this.id = "";
   }
   
   static styles = styles;
@@ -96,9 +76,7 @@ export class TypeText extends LitElement {
 
     return staticHtml`
       <${tag}
-        id=${this.id || nothing}
         class=${className}
-        aria-label=${this.ariaLabel || nothing}
       >
         ${this.text}
       </${tag}>

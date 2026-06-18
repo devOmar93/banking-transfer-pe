@@ -28,7 +28,6 @@ export function maskAccountNumber(accountNumber) {
   return `****${value.slice(-4)}`;
 }
 
-
 export function getAccessibleAmount(amount, currency) {
   const names = {
     PEN: "soles",
@@ -37,3 +36,9 @@ export function getAccessibleAmount(amount, currency) {
   const currencyName = names[currency] || "";
   return `${amount} ${currencyName}`.trim();
 }
+
+export function getLastFourDigits(accountNumber) {
+  if (!accountNumber) return "";
+  return String(accountNumber).slice(-4);
+}
+

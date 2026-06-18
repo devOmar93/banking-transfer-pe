@@ -3,7 +3,6 @@ import { classMap } from "lit/directives/class-map.js";
 import "@/compositions/type-input/type-input.js";
 import "@/compositions/type-button/type-button.js";
 import "@/components/type-icon/type-icon.js";
-import "@/components/type-text/type-text.js";
 import {
   NEW_TRANSFER_PAGE_LITERALS as LITERALS,
   NEW_TRANSFER_PAGE_CONFIG as CONFIG,
