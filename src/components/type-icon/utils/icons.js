@@ -34,6 +34,9 @@ export const ICONS = {
 
   'share-2': () =>
     fetch('/src/assets/icons/share-2.svg').then(res => res.text()),
+  
+  'sol-sign': () =>
+    fetch('/src/assets/icons/sol-sign.svg').then(res => res.text()),
 
   'triangle-alert': () =>
     fetch('/src/assets/icons/triangle-alert.svg').then(res => res.text()),
