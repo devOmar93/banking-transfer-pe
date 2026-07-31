@@ -1,6 +1,77 @@
 :root {
-  color-scheme: light dark;
   background-color: #ffffff;
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  /* icon-color */
+  --icon-color: #594ae1;
+  --icon-bg-color: #e0e4fd;
+
+  /* text-color */
+  --text-primary: #1a1a1a;
+  --text-secondary: #4d525c;
+  --text-muted: #9ca3af;
+  --text-success: #16a34a;
+  --text-error: #dc2626;
+  --text-link: #7c3aed;
+  --text-color: var(--text-primary);
+  /* info-card-color */
+  --info-card-bg: #ffffff;
+  --info-card-border: rgba(0, 0, 0, 0.1);
+
+  /* button-color */
+  /* default*/
+  --btn-bg-color: #4f38fb;
+  --btn-text-color: #ffffff;
+  --btn-disabled-bg-color: #c5c5c5;
+  --btn-disabled-text-color: #ffffff;
+
+  /* secondary*/
+  --btn-secondary-bg-color: rgb(255, 255, 255);
+  --btn-secondary-text-color: #000000;
+  --btn-secondary-disabled-bg-color: #c5c5c5;
+  --btn-secondary-disabled-text-color: #818181;
+
+  /* ghost*/
+  --btn-ghost-bg-color: transparent;
+  --btn-ghost-text-color: #000000;
+  --btn-ghost-disabled-bg-color: transparent;
+  --btn-ghost-disabled-text-color: #6e6e6e;
+
+  /* type-modal */
+  --surface-page-primary-bg: #e0e4fd;
+  --surface-page-primary-backdrop: #dcf5ff;
+  --type-modal-bg-color: #ffffff;
+  --type-modal-backdrop-color: rgba(0, 0, 0, 0.5);
+  --type-modal-width: 100%;
+  --type-modal-max-width: 100%;
+  --type-modal-min-width: auto;
+  --type-modal-border-radius: 0;
+  --type-modal-padding: 1.5rem;
+  --type-modal-gap: 1rem;
+  --type-modal-z-index: 1000;
+
+  /* loading-overlay */
+  --loading-overlay-bg-color: #ffffffd9;
+  --loading-overlay-spiner-bg-color: #e0e0e0;
+  --loading-overlay-spiner-color: #4f38fb;
+
+  /* type-tag */
+  --type-tag-bg-color: #c8ffdb;
+  --type-tag-text-color: #04a03b;
+
+  /* info-field */
+  --info-field-bg-color: #ffffff;
+  --info-field-label-color: #6b7280;
+  --info-field-value-color: #111827;
+
+  /* field-list */
+  --field-list-primary-text-color: #1f1f1f;
+  --field-list-secondary-text-color: #808080;
+
+  /* transfer-summary-card */
+  --transfer-summary-card-bg-gradient-start: #6c5ce7;
+  --transfer-summary-card-bg-gradient-end: #8e44ad;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,4 +92,40 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  font-family: 'Roboto', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* scroll */
+::-webkit-scrollbar {
+  width: 8px; 
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+  background-clip: padding-box;
+}
+
+@supports (scrollbar-width: thin) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
+  }
 }
