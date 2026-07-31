@@ -125,7 +125,7 @@ export class TransferSummaryList extends LitElement {
 
   render() {
     return html`
-      <ul class="container" aria-label=${this._accessibleList}>
+      <ul class="container">
         ${this._fields.map((item) =>
           this._renderFields(item.label, item.value),
         )}
