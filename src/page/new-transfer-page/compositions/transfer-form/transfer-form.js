@@ -3,6 +3,7 @@ import { classMap } from "lit/directives/class-map.js";
 import "@/compositions/type-input/type-input.js";
 import "@/compositions/type-button/type-button.js";
 import "@/components/type-icon/type-icon.js";
+import { fireEvent } from "@/utils/utils.js";
 import {
   NEW_TRANSFER_PAGE_LITERALS as LITERALS,
   NEW_TRANSFER_PAGE_CONFIG as CONFIG,
@@ -48,6 +49,13 @@ export class TransferForm extends LitElement {
     availableBalance: {
       type: Number,
     },
+    /** The account number of the customer
+     * @type {String}
+     * @default ""
+     */
+    customerAccountNumber: {
+      type: String,
+    },
 
     /** The currency of the available balance for the source account
      * @type {String}
@@ -63,6 +71,7 @@ export class TransferForm extends LitElement {
     this.formFieldStates = {};
     this.configFormFields = {};
     this.availableBalance = 0;
+    this.customerAccountNumber = "";
     this.stateForm = false;
     this.currency = "";
   }
@@ -75,13 +84,7 @@ export class TransferForm extends LitElement {
 
   _sendForm() {
     const formValues = getFormValues(this.formFieldStates);
-    this.dispatchEvent(
-      new CustomEvent("form-submit", {
-        detail: formValues,
-        bubbles: true,
-        composed: true,
-      }),
-    );
+    fireEvent(this, "form-submit", formValues);
   }
 
   _validateForm() {
@@ -101,7 +104,7 @@ export class TransferForm extends LitElement {
         field: event.detail,
         formFieldStates: this.formFieldStates,
         configFormFields: this.configFormFields,
-        context: { availableBalance: this.availableBalance },
+        context: { availableBalance: this.availableBalance, customerAccountNumber: this.customerAccountNumber },
       }),
     };
     event.stopPropagation();

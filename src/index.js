@@ -11,6 +11,7 @@ import "@/page/exit-page/exit-page.js";
 import "@/page/action-modal/action-modal.js";
 import "@/components/loading-overlay/loading-overlay.js";
 import locales from "@/locales/locales.json";
+import { generateTransferSummaryPdf } from "./page/successful-transfer-page/services/generate-transfer-summary-pdf";
 
 export class MyElement extends LitElement {
   transfersApiDm = createRef();
@@ -266,12 +267,14 @@ export class MyElement extends LitElement {
   }
 
   _handleConfirmRequested({ detail }) {
+    console.log(detail)
     this._transferData = detail;
     this._transferStatus = "";
     this._step = 2;
   }
 
   async _handleConfirmAccept({ detail }) {
+    this._loaded = false;
     const transferData = detail?.transferData ?? {};
     await this.transfersApiDm.value.executeTransfer(transferData);
   }
@@ -291,16 +294,18 @@ export class MyElement extends LitElement {
   }
 
   _handleDataSuccess({ detail }) {
+    this._loaded = true;
     const response = detail.response;
     const accounts = detail.accounts;
     this._transferSummary = { ...response };
-    this._accountsData = [ ...accounts ];
+    this._accountsData = [...accounts];
     this._isDataReady = true;
     this._transferStatus = "";
     this._step = 3;
   }
 
   _handleError() {
+    this._loaded = true;
     this._transferStatus = "error";
   }
 
@@ -391,11 +396,23 @@ export class MyElement extends LitElement {
       .beneficiaryLastName=${this._transferSummary.beneficiaryLastName}
       .status=${this._transferSummary.status}
       @accounts-error=${this._handleChildAccountsError}
+      @download-summary-pdf=${this._generatePDF}
     ></successful-transfer-page>`;
   }
 
   _renderExitPage() {
     return html`<exit-page .locale=${this.locale}></exit-page>`;
+  }
+
+  _generatePDF({ detail }) {
+    const dataPdf = detail.dataPdf;
+    const amount = detail.amount;
+
+    try {
+      generateTransferSummaryPdf(amount, dataPdf);
+    } catch (error) {
+      throw new Error("Error al descargar el PDF");
+    }
   }
 
   _renderStep(page) {

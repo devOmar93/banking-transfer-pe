@@ -108,24 +108,6 @@ export class TransferSummaryList extends LitElement {
     ];
   }
   
-  get _accessibleList() {
-    return `
-      ${this.locale["successful-transfer-page-transaction-number"]}. ${this.transactionNumber}.
-      
-      ${this.locale["successful-transfer-page-date"]}. ${this.date}.
-      
-      ${this.locale["successful-transfer-page-time"]}. ${this.time}.
-      
-      ${this.locale["successful-transfer-page-origin-account"]}.
-      ${this.originAccount}.
-      Cuenta terminada en ${getLastFourDigits(this.originAccountNumber)}.
-      
-      ${this.locale["successful-transfer-page-beneficiary"]}.
-      ${this.beneficiaryName} ${this.beneficiaryLastName}.
-      
-      ${this.locale["successful-transfer-page-status"]}. ${this.status}.
-    `.replace(/\s+/g, " ").trim();
-  }
 
   _renderFields(label, value) {
     if (value === nothing) return nothing;
@@ -143,7 +125,7 @@ export class TransferSummaryList extends LitElement {
 
   render() {
     return html`
-      <ul class="container" aria-label=${this._accessibleList}>
+      <ul class="container">
         ${this._fields.map((item) =>
           this._renderFields(item.label, item.value),
         )}

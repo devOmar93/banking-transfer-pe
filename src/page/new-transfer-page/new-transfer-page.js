@@ -39,7 +39,7 @@ export class NewTransferPage extends LitElement {
      */
     _dataForm: {
       type: Object,
-      state: true
+      state: true,
     },
 
     /** Complete information of the source account
@@ -49,7 +49,7 @@ export class NewTransferPage extends LitElement {
      */
     _sourceAccount: {
       type: Object,
-      state: true
+      state: true,
     },
 
     /** Defines which type of action modal should be displayed
@@ -59,7 +59,7 @@ export class NewTransferPage extends LitElement {
      */
     _actionType: {
       type: String,
-      state: true
+      state: true,
     },
 
     /** Controls whether the action modal is visible in the UI
@@ -69,7 +69,7 @@ export class NewTransferPage extends LitElement {
      */
     _actionModalOpen: {
       type: Boolean,
-      state: true
+      state: true,
     },
   };
 
@@ -131,32 +131,22 @@ export class NewTransferPage extends LitElement {
     return ERROR_MODAL_TYPES[idErrorModalType] ?? "";
   }
 
-  _goNextStep(transferData) {
-    this.dispatchEvent(
-      new CustomEvent("confirm-requested", {
-        detail: transferData,
-        bubbles: true,
-        composed: true,
-      }),
-    );
-  }
+_goNextStep(transferData) {
+  fireEvent(this, "confirm-requested", transferData
+  );}
+
 
   _getCurrency(currency) {
     const listCurrency = {
       USD: "dollar-sign",
-      PEN: "dollar-sign",
+      PEN: "sol-sign",
     };
-    return listCurrency[currency] ?? "dollar-sign";
+    return listCurrency[currency] ?? "";
   }
 
   _returnPage() {
-    this.dispatchEvent(
-      new CustomEvent("return-page", {
-        detail: { step: 0 },
-        bubbles: true,
-        composed: true,
-      }),
-    );
+    fireEvent(this, "return-page",
+   { step: 0 });
   }
   _handleActionModalAction() {
     this._actionType = "";
@@ -222,6 +212,7 @@ export class NewTransferPage extends LitElement {
             aria-label="Formulario de transferencia"
             .configFormFields=${TRANSFER_FORM_FIELDS}
             .availableBalance=${this.accountCustomer.availableBalance}
+            .customerAccountNumber=${this.accountCustomer.accountNumber}
             .currency=${this._getCurrency(this.accountCustomer.currency)}
             @form-submit="${this._handleFormSubmit}"
           ></transfer-form>

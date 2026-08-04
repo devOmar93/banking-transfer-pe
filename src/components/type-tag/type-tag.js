@@ -1,6 +1,7 @@
 import { html, LitElement } from "lit";
 import { styles } from "./type-tag.css.js";
 import "@/components/type-text/type-text.js";
+import "@/components/type-icon/type-icon.js";
 
 export class TypeTag extends LitElement {
   static properties = {
@@ -18,9 +19,9 @@ export class TypeTag extends LitElement {
     return html`
       <div class="tag">
         <type-icon
-          .iconName=${"bullet-point"}
-          .variant=${"secondary"}
-          .size=${"s"}
+          icon-name="bullet-point"
+          variant="secondary"
+          size="m"
         ></type-icon>
         <type-text .text=${this.text} .weight=${"semibold"}></type-text>
       </div>
